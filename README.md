@@ -29,13 +29,20 @@
 ## 📁 目录结构
 
 ```
-expr-wiki/
+clear-expression/
 ├── raw/                    # 第 1 层：原始来源（只读）
 │   ├── articles/           #   网页文章剪藏
 │   ├── papers/             #   学术论文
 │   ├── books/              #   书籍章节
 │   ├── notes/              #   个人笔记
 │   └── images/             #   图片素材
+│
+├── reference/              # 外部标准语料（只读参照）
+│   └── ste100/             #   ASD-STE100：原文 PDF、英文提取、中译、解读、白皮书
+│
+├── research/               # 规则来源与研究记录
+│   ├── analysis/           #   现状分析、缺口分析、外部用法评价、推文整理
+│   └── extraction/         #   STE100 规则与词典的结构化提取
 │
 ├── wiki/                   # 第 2 层：Wiki 页面（LLM 写入，人类阅读）
 │   ├── concepts/           #   概念页面
@@ -74,7 +81,7 @@ expr-wiki/
 
 直接用浏览器打开 `viewer/index.html`，即可查看所有示例页面。
 
-也可以用 **Obsidian** 打开 `expr-wiki/` 目录，获得更完整的双链和图谱体验。
+也可以用 **Obsidian** 打开本仓库根目录，获得更完整的双链和图谱体验。
 
 ### 2. 使用命令行工具
 

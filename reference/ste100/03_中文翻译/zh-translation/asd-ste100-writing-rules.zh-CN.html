@@ -1,0 +1,4865 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASD-STE100 写作规则（中文完整版）</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #333;
+    background: #f5f7fa;
+  }
+
+  /* Layout */
+  .container {
+    display: flex;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+
+  /* Sidebar TOC */
+  .toc {
+    width: 300px;
+    flex-shrink: 0;
+    background: #fff;
+    border-right: 1px solid #e1e8ed;
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .toc-header {
+    padding: 0 20px 15px;
+    border-bottom: 2px solid #1a73e8;
+    margin-bottom: 10px;
+  }
+
+  .toc-header h3 {
+    font-size: 17px;
+    color: #1a73e8;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .toggle-all {
+    background: #e8f0fe;
+    border: 1px solid #1a73e8;
+    color: #1a73e8;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+  }
+
+  .toggle-all:hover {
+    background: #1a73e8;
+    color: #fff;
+  }
+
+  .toc-list, .toc-sub {
+    list-style: none;
+  }
+
+  .toc-item {
+    position: relative;
+  }
+
+  .toc-item > a {
+    display: block;
+    padding: 7px 20px 7px 20px;
+    color: #555;
+    text-decoration: none;
+    font-size: 14px;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .toc-item > a:hover {
+    background: #f0f4f8;
+    color: #1a73e8;
+  }
+
+  .toc-item.active > a {
+    background: #e8f0fe;
+    color: #1a73e8;
+    border-left-color: #1a73e8;
+    font-weight: 500;
+  }
+
+  .toc-item.has-children > a {
+    padding-left: 38px;
+  }
+
+  .toc-toggle {
+    position: absolute;
+    left: 18px;
+    top: 8px;
+    cursor: pointer;
+    font-size: 10px;
+    color: #999;
+    user-select: none;
+    transition: transform 0.2s;
+  }
+
+  .toc-toggle.open {
+    transform: rotate(90deg);
+  }
+
+  .toc-sub {
+    display: none;
+  }
+
+  .toc-sub.open {
+    display: block;
+  }
+
+  .toc-sub .toc-item > a {
+    padding-left: 40px;
+    font-size: 13px;
+  }
+
+  .toc-sub .toc-sub .toc-item > a {
+    padding-left: 55px;
+    font-size: 12px;
+    color: #666;
+  }
+
+  /* Main content */
+  .main {
+    flex: 1;
+    padding: 30px 50px;
+    background: #fff;
+    min-width: 0;
+  }
+
+  .meta-header {
+    background: linear-gradient(135deg, #1a73e8 0%, #4285f4 100%);
+    color: #fff;
+    padding: 40px 50px;
+    margin: -30px -50px 30px;
+    border-radius: 0 0 0 0;
+  }
+
+  .meta-header h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .meta-header .subtitle {
+    font-size: 16px;
+    opacity: 0.9;
+    margin-bottom: 15px;
+  }
+
+  .meta-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 13px;
+    opacity: 0.85;
+  }
+
+  .meta-info span {
+    background: rgba(255,255,255,0.15);
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  /* Content typography */
+  .content h1 {
+    font-size: 26px;
+    color: #1a73e8;
+    margin: 40px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e1e8ed;
+  }
+
+  .content h2 {
+    font-size: 22px;
+    color: #1a73e8;
+    margin: 35px 0 18px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e1e8ed;
+  }
+
+  .content h3 {
+    font-size: 18px;
+    color: #202124;
+    margin: 25px 0 12px;
+  }
+
+  .content h4 {
+    font-size: 16px;
+    color: #333;
+    margin: 20px 0 10px;
+  }
+
+  .content p {
+    margin: 10px 0;
+    text-align: justify;
+  }
+
+  .content strong {
+    color: #202124;
+  }
+
+  .content em {
+    color: #5f6368;
+  }
+
+  .content ul, .content ol {
+    margin: 10px 0 10px 25px;
+  }
+
+  .content li {
+    margin: 5px 0;
+  }
+
+  .content hr {
+    border: none;
+    border-top: 1px dashed #e1e8ed;
+    margin: 25px 0;
+  }
+
+  .content blockquote {
+    background: #f8f9fa;
+    border-left: 4px solid #1a73e8;
+    padding: 12px 18px;
+    margin: 15px 0;
+    color: #555;
+    border-radius: 0 4px 4px 0;
+  }
+
+  /* Tables */
+  .content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 14px;
+    table-layout: fixed;
+  }
+
+  .content th, .content td {
+    border: 1px solid #dadce0;
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+    word-wrap: break-word;
+  }
+
+  .content th {
+    background: #f1f3f4;
+    font-weight: 600;
+    color: #202124;
+  }
+
+  /* Example cards */
+  .content table td:first-child {
+    width: 90px;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .content table tr:nth-child(1) td:first-child {
+    background: #fce8e6;
+    color: #d93025;
+  }
+
+  .content table tr:nth-child(2) td:first-child {
+    background: #e6f4ea;
+    color: #137333;
+  }
+
+  /* Rule highlight boxes */
+  .content h3:has(+ p strong),
+  .content h3 {
+    scroll-margin-top: 20px;
+  }
+
+  /* Code */
+  .content code {
+    background: #f1f3f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 13px;
+  }
+
+  .content pre {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 15px 0;
+    border: 1px solid #e1e8ed;
+  }
+
+  /* Scrollbar */
+  .toc::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .toc::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  .toc::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+  }
+
+  .toc::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+  }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    .container {
+      flex-direction: column;
+    }
+    .toc {
+      width: 100%;
+      height: auto;
+      position: relative;
+      border-right: none;
+      border-bottom: 1px solid #e1e8ed;
+    }
+    .main {
+      padding: 20px;
+    }
+    .meta-header {
+      margin: -20px -20px 20px;
+      padding: 25px 20px;
+    }
+    .meta-header h1 {
+      font-size: 22px;
+    }
+  }
+
+  /* Back to top */
+  .back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 45px;
+    height: 45px;
+    background: #1a73e8;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    display: none;
+    transition: all 0.3s;
+    z-index: 1000;
+  }
+
+  .back-to-top:hover {
+    background: #4285f4;
+    transform: translateY(-2px);
+  }
+
+  .back-to-top.show {
+    display: block;
+  }
+
+  /* Mobile toggle */
+  .mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1001;
+    background: #1a73e8;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  @media (max-width: 900px) {
+    .mobile-toggle {
+      display: block;
+    }
+    .toc {
+      position: fixed;
+      left: -100%;
+      top: 0;
+      height: 100vh;
+      z-index: 999;
+      transition: left 0.3s;
+      width: 85%;
+      max-width: 320px;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+    .toc.open {
+      left: 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+<button class="mobile-toggle" onclick="toggleMobileToc()">☰ 目录</button>
+
+<div class="container">
+  <nav class="toc">
+<div class="toc-header">
+<h3>目录导航</h3>
+<button class="toggle-all" onclick="toggleAll()">展开/折叠全部</button>
+</div>
+<ul class="toc-list">
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#第-1-节-词汇" onclick="scrollToId('第-1-节-词汇')">第 1 节 词汇</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则总览" onclick="scrollToId('规则总览')">规则总览</a></li>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#可以使用哪些词" onclick="scrollToId('可以使用哪些词')">可以使用哪些词？</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-1-1-使用以下词汇" onclick="scrollToId('规则-1-1-使用以下词汇')">规则 1.1 使用以下词汇：</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#词性" onclick="scrollToId('词性')">词性</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-1-2-只能按照词典规定的词性使用批准词" onclick="scrollToId('规则-1-2-只能按照词典规定的词性使用批准词')">规则 1.2 只能按照词典规定的词性使用批准词。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#批准词义" onclick="scrollToId('批准词义')">批准词义</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-1-3-只能使用批准词的批准词义" onclick="scrollToId('规则-1-3-只能使用批准词的批准词义')">规则 1.3 只能使用批准词的批准词义。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#动词和形容词的形式" onclick="scrollToId('动词和形容词的形式')">动词和形容词的形式</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-1-4-只能使用批准的动词和形容词形式" onclick="scrollToId('规则-1-4-只能使用批准的动词和形容词形式')">规则 1.4 只能使用批准的动词和形容词形式。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#技术名词" onclick="scrollToId('技术名词')">技术名词</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-1-5-可以使用归入技术名词类别的词汇" onclick="scrollToId('规则-1-5-可以使用归入技术名词类别的词汇')">规则 1.5 可以使用归入技术名词类别的词汇。</a></li>
+<li class="toc-item"><a href="#规则-1-6-只有当某个词是技术名词或技术名词的一部分时-才能使用词典中未批准的词" onclick="scrollToId('规则-1-6-只有当某个词是技术名词或技术名词的一部分时-才能使用词典中未批准的词')">规则 1.6 只有当某个词是技术名词或技术名词的一部分时，才能使用词典中未批准的词。</a></li>
+<li class="toc-item"><a href="#规则-1-7-不得将技术名词用作动词" onclick="scrollToId('规则-1-7-不得将技术名词用作动词')">规则 1.7 不得将技术名词用作动词。</a></li>
+<li class="toc-item"><a href="#规则-1-8-使用贵公司-行业或专业领域批准的技术名词" onclick="scrollToId('规则-1-8-使用贵公司-行业或专业领域批准的技术名词')">规则 1.8 使用贵公司、行业或专业领域批准的技术名词。</a></li>
+<li class="toc-item"><a href="#规则-1-9-必须选用技术名词时-选择简短且易于理解的" onclick="scrollToId('规则-1-9-必须选用技术名词时-选择简短且易于理解的')">规则 1.9 必须选用技术名词时，选择简短且易于理解的。</a></li>
+<li class="toc-item"><a href="#规则-1-10-不得使用地域性-俚语或行话词汇作为技术名词" onclick="scrollToId('规则-1-10-不得使用地域性-俚语或行话词汇作为技术名词')">规则 1.10 不得使用地域性、俚语或行话词汇作为技术名词。</a></li>
+<li class="toc-item"><a href="#规则-1-11-同一物品不得使用不同的技术名词" onclick="scrollToId('规则-1-11-同一物品不得使用不同的技术名词')">规则 1.11 同一物品不得使用不同的技术名词。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#技术动词" onclick="scrollToId('技术动词')">技术动词</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-1-12-可以使用归入技术动词类别的动词" onclick="scrollToId('规则-1-12-可以使用归入技术动词类别的动词')">规则 1.12 可以使用归入技术动词类别的动词。</a></li>
+<li class="toc-item"><a href="#规则-1-13-不得将技术动词用作名词" onclick="scrollToId('规则-1-13-不得将技术动词用作名词')">规则 1.13 不得将技术动词用作名词。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#拼写" onclick="scrollToId('拼写')">拼写</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-1-14-使用美式英语拼写-除非其他官方指令另有规定" onclick="scrollToId('规则-1-14-使用美式英语拼写-除非其他官方指令另有规定')">规则 1.14 使用美式英语拼写，除非其他官方指令另有规定。</a></li>
+</ul>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#第-2-节-多词名词" onclick="scrollToId('第-2-节-多词名词')">第 2 节 多词名词</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则总览" onclick="scrollToId('规则总览')">规则总览</a></li>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#多词名词" onclick="scrollToId('多词名词')">多词名词</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-2-1-多词名词的长度不超过三个词" onclick="scrollToId('规则-2-1-多词名词的长度不超过三个词')">规则 2.1 多词名词的长度不超过三个词。</a></li>
+<li class="toc-item"><a href="#规则-2-2-如果技术名词超过三个词-先完整写出-然后可以使用以下方法之一使技术名词更清晰" onclick="scrollToId('规则-2-2-如果技术名词超过三个词-先完整写出-然后可以使用以下方法之一使技术名词更清晰')">规则 2.2 如果技术名词超过三个词，先完整写出。然后可以使用以下方法之一使技术名词更清晰：</a></li>
+</ul>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#第-3-节-动词" onclick="scrollToId('第-3-节-动词')">第 3 节 动词</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则总览" onclick="scrollToId('规则总览')">规则总览</a></li>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#动词形式和时态" onclick="scrollToId('动词形式和时态')">动词形式和时态</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-3-1-只能使用词典中给出的动词形式" onclick="scrollToId('规则-3-1-只能使用词典中给出的动词形式')">规则 3.1 只能使用词典中给出的动词形式。</a></li>
+<li class="toc-item"><a href="#规则-3-2-只能使用以下动词形式和时态" onclick="scrollToId('规则-3-2-只能使用以下动词形式和时态')">规则 3.2 只能使用以下动词形式和时态：</a></li>
+<li class="toc-item"><a href="#规则-3-3-将过去分词形式用作形容词" onclick="scrollToId('规则-3-3-将过去分词形式用作形容词')">规则 3.3 将过去分词形式用作形容词。</a></li>
+<li class="toc-item"><a href="#规则-3-4-不得使用助动词构成复杂的动词结构" onclick="scrollToId('规则-3-4-不得使用助动词构成复杂的动词结构')">规则 3.4 不得使用助动词构成复杂的动词结构。</a></li>
+<li class="toc-item"><a href="#规则-3-5-动词的-ing-形式只能用作技术名词或技术名词中的修饰语" onclick="scrollToId('规则-3-5-动词的-ing-形式只能用作技术名词或技术名词中的修饰语')">规则 3.5 动词的 "-ing" 形式只能用作技术名词或技术名词中的修饰语。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#主动语态" onclick="scrollToId('主动语态')">主动语态</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-3-6-使用主动语态-在描述性写作中-只有当施动者不明时-才能使用被动语态" onclick="scrollToId('规则-3-6-使用主动语态-在描述性写作中-只有当施动者不明时-才能使用被动语态')">规则 3.6 使用主动语态。在描述性写作中，只有当施动者不明时，才能使用被动语态。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#如何描述动作" onclick="scrollToId('如何描述动作')">如何描述动作</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-3-7-使用批准的动词描述动作-而不是名词或其他词性" onclick="scrollToId('规则-3-7-使用批准的动词描述动作-而不是名词或其他词性')">规则 3.7 使用批准的动词描述动作，而不是名词或其他词性。</a></li>
+</ul>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#第-4-节-句子" onclick="scrollToId('第-4-节-句子')">第 4 节 句子</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则总览" onclick="scrollToId('规则总览')">规则总览</a></li>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#短句和清晰的句子结构" onclick="scrollToId('短句和清晰的句子结构')">短句和清晰的句子结构</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-4-1-写简短清晰的句子" onclick="scrollToId('规则-4-1-写简短清晰的句子')">规则 4.1 写简短清晰的句子。</a></li>
+<li class="toc-item"><a href="#规则-4-2-不得为了使句子更短而省略词语或使用缩略形式" onclick="scrollToId('规则-4-2-不得为了使句子更短而省略词语或使用缩略形式')">规则 4.2 不得为了使句子更短而省略词语或使用缩略形式。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#垂直列表" onclick="scrollToId('垂直列表')">垂直列表</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-4-3-复杂文本使用垂直列表" onclick="scrollToId('规则-4-3-复杂文本使用垂直列表')">规则 4.3 复杂文本使用垂直列表。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#连接词和连接短语" onclick="scrollToId('连接词和连接短语')">连接词和连接短语</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-4-4-使用连接词和连接短语连接包含相关主题的句子" onclick="scrollToId('规则-4-4-使用连接词和连接短语连接包含相关主题的句子')">规则 4.4 使用连接词和连接短语连接包含相关主题的句子。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#冠词和指示形容词" onclick="scrollToId('冠词和指示形容词')">冠词和指示形容词</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-4-5-在适用情况下-在名词或多词名词前使用冠词-the-a-an-或指示形容词-this-these" onclick="scrollToId('规则-4-5-在适用情况下-在名词或多词名词前使用冠词-the-a-an-或指示形容词-this-these')">规则 4.5 在适用情况下，在名词或多词名词前使用冠词（the, a, an）或指示形容词（this, these）。</a></li>
+</ul>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#第-5-节-程序性写作" onclick="scrollToId('第-5-节-程序性写作')">第 5 节 程序性写作</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则总览" onclick="scrollToId('规则总览')">规则总览</a></li>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#句子" onclick="scrollToId('句子')">句子</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-5-1-写短句-每个句子最多使用-20-个词" onclick="scrollToId('规则-5-1-写短句-每个句子最多使用-20-个词')">规则 5.1 写短句。每个句子最多使用 20 个词。</a></li>
+<li class="toc-item"><a href="#规则-5-2-每个句子只写一条指令-除非两个或多个动作同时发生" onclick="scrollToId('规则-5-2-每个句子只写一条指令-除非两个或多个动作同时发生')">规则 5.2 每个句子只写一条指令，除非两个或多个动作同时发生。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#程序中的动词" onclick="scrollToId('程序中的动词')">程序中的动词</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-5-3-用祈使-命令-形式写指令" onclick="scrollToId('规则-5-3-用祈使-命令-形式写指令')">规则 5.3 用祈使（命令）形式写指令。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#指令中的描述性陈述" onclick="scrollToId('指令中的描述性陈述')">指令中的描述性陈述</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-5-4-当有读者必须首先了解的条件时-以描述性陈述开头-然后-用逗号将描述性陈述与命令分开" onclick="scrollToId('规则-5-4-当有读者必须首先了解的条件时-以描述性陈述开头-然后-用逗号将描述性陈述与命令分开')">规则 5.4 当有读者必须首先了解的条件时，以描述性陈述开头。然后，用逗号将描述性陈述与命令分开。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#注释" onclick="scrollToId('注释')">注释</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-5-5-注释仅用于提供信息-不用于提供指令" onclick="scrollToId('规则-5-5-注释仅用于提供信息-不用于提供指令')">规则 5.5 注释仅用于提供信息，不用于提供指令。</a></li>
+</ul>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#第-6-节-描述性写作" onclick="scrollToId('第-6-节-描述性写作')">第 6 节 描述性写作</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则总览" onclick="scrollToId('规则总览')">规则总览</a></li>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#内容结构" onclick="scrollToId('内容结构')">内容结构</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-6-1-逐步提供信息" onclick="scrollToId('规则-6-1-逐步提供信息')">规则 6.1 逐步提供信息。</a></li>
+<li class="toc-item"><a href="#规则-6-2-使用关键词和关键短语为文本赋予逻辑结构" onclick="scrollToId('规则-6-2-使用关键词和关键短语为文本赋予逻辑结构')">规则 6.2 使用关键词和关键短语为文本赋予逻辑结构。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#句子" onclick="scrollToId('句子')">句子</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-6-3-写短句-每个句子最多使用-25-个词" onclick="scrollToId('规则-6-3-写短句-每个句子最多使用-25-个词')">规则 6.3 写短句。每个句子最多使用 25 个词。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#段落" onclick="scrollToId('段落')">段落</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-6-4-使用段落来展示相关信息" onclick="scrollToId('规则-6-4-使用段落来展示相关信息')">规则 6.4 使用段落来展示相关信息。</a></li>
+<li class="toc-item"><a href="#规则-6-5-确保每个段落只有一个主题" onclick="scrollToId('规则-6-5-确保每个段落只有一个主题')">规则 6.5 确保每个段落只有一个主题。</a></li>
+<li class="toc-item"><a href="#规则-6-6-确保段落不超过六个句子" onclick="scrollToId('规则-6-6-确保段落不超过六个句子')">规则 6.6 确保段落不超过六个句子。</a></li>
+</ul>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#第-7-节-安全说明" onclick="scrollToId('第-7-节-安全说明')">第 7 节 安全说明</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则总览" onclick="scrollToId('规则总览')">规则总览</a></li>
+<li class="toc-item"><a href="#定义" onclick="scrollToId('定义')">定义</a></li>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#如何撰写安全说明" onclick="scrollToId('如何撰写安全说明')">如何撰写安全说明</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-7-1-使用相应的词-例如-警告-或-小心-来标识风险等级" onclick="scrollToId('规则-7-1-使用相应的词-例如-警告-或-小心-来标识风险等级')">规则 7.1 使用相应的词（例如"警告"或"小心"）来标识风险等级。</a></li>
+<li class="toc-item"><a href="#规则-7-2-以清晰准确的命令或条件开头" onclick="scrollToId('规则-7-2-以清晰准确的命令或条件开头')">规则 7.2 以清晰准确的命令或条件开头。</a></li>
+<li class="toc-item"><a href="#规则-7-3-给出解释以说明风险或可能的结果" onclick="scrollToId('规则-7-3-给出解释以说明风险或可能的结果')">规则 7.3 给出解释以说明风险或可能的结果。</a></li>
+</ul>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#第-8-节-标点与词数" onclick="scrollToId('第-8-节-标点与词数')">第 8 节 标点与词数</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则总览" onclick="scrollToId('规则总览')">规则总览</a></li>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#标点" onclick="scrollToId('标点')">标点</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-8-1-可以使用所有标准英语标点符号-但分号-除外" onclick="scrollToId('规则-8-1-可以使用所有标准英语标点符号-但分号-除外')">规则 8.1 可以使用所有标准英语标点符号，但分号（;）除外。</a></li>
+<li class="toc-item"><a href="#规则-8-2-使用连字符-连接直接相关的词" onclick="scrollToId('规则-8-2-使用连字符-连接直接相关的词')">规则 8.2 使用连字符（-）连接直接相关的词。</a></li>
+<li class="toc-item"><a href="#规则-8-3-可以使用括号" onclick="scrollToId('规则-8-3-可以使用括号')">规则 8.3 可以使用括号：</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#词数" onclick="scrollToId('词数')">词数</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-8-4-在垂直列表中-冒号-对词数的影响与句号相同-表示句子结束" onclick="scrollToId('规则-8-4-在垂直列表中-冒号-对词数的影响与句号相同-表示句子结束')">规则 8.4 在垂直列表中，冒号（:）对词数的影响与句号相同，表示句子结束。</a></li>
+<li class="toc-item"><a href="#规则-8-5-将文本放在括号中时-该文本在该句子中算作一个词" onclick="scrollToId('规则-8-5-将文本放在括号中时-该文本在该句子中算作一个词')">规则 8.5 将文本放在括号中时，该文本在该句子中算作一个词。</a></li>
+<li class="toc-item"><a href="#规则-8-6-以下每个元素算作一个词" onclick="scrollToId('规则-8-6-以下每个元素算作一个词')">规则 8.6 以下每个元素算作一个词：</a></li>
+<li class="toc-item"><a href="#规则-8-7-带连字符的词算作一个词" onclick="scrollToId('规则-8-7-带连字符的词算作一个词')">规则 8.7 带连字符的词算作一个词。</a></li>
+</ul>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#第-9-节-写作实践" onclick="scrollToId('第-9-节-写作实践')">第 9 节 写作实践</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则总览" onclick="scrollToId('规则总览')">规则总览</a></li>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#不同的句子结构" onclick="scrollToId('不同的句子结构')">不同的句子结构</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-9-1-当逐词替换不足以表达时-使用不同的句子结构来写句子" onclick="scrollToId('规则-9-1-当逐词替换不足以表达时-使用不同的句子结构来写句子')">规则 9.1 当逐词替换不足以表达时，使用不同的句子结构来写句子。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#如何正确使用批准词" onclick="scrollToId('如何正确使用批准词')">如何正确使用批准词</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-9-2-正确使用每个批准词" onclick="scrollToId('规则-9-2-正确使用每个批准词')">规则 9.2 正确使用每个批准词。</a></li>
+<li class="toc-item"><a href="#规则-9-3-将两个词一起使用时-不要构成短语动词" onclick="scrollToId('规则-9-3-将两个词一起使用时-不要构成短语动词')">规则 9.3 将两个词一起使用时，不要构成短语动词。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#一致的风格" onclick="scrollToId('一致的风格')">一致的风格</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#规则-9-4-选择术语或措辞时-始终使用一致的风格" onclick="scrollToId('规则-9-4-选择术语或措辞时-始终使用一致的风格')">规则 9.4 选择术语或措辞时，始终使用一致的风格。</a></li>
+</ul>
+<li class="toc-item has-children"><span class="toc-toggle" onclick="toggleToc(this)">▸</span><a href="#一般建议" onclick="scrollToId('一般建议')">一般建议</a>
+<ul class="toc-sub">
+<li class="toc-item"><a href="#gr-1-连词-that" onclick="scrollToId('gr-1-连词-that')">GR-1 连词 "that"</a></li>
+<li class="toc-item"><a href="#gr-2-介词-with" onclick="scrollToId('gr-2-介词-with')">GR-2 介词 "with"</a></li>
+<li class="toc-item"><a href="#gr-3-如何使用代词" onclick="scrollToId('gr-3-如何使用代词')">GR-3 如何使用代词</a></li>
+<li class="toc-item"><a href="#gr-4-代词-this" onclick="scrollToId('gr-4-代词-this')">GR-4 代词 "this"</a></li>
+<li class="toc-item"><a href="#gr-5-假朋友-形近义异词" onclick="scrollToId('gr-5-假朋友-形近义异词')">GR-5 假朋友（形近义异词）</a></li>
+<li class="toc-item"><a href="#gr-6-拉丁语缩写" onclick="scrollToId('gr-6-拉丁语缩写')">GR-6 拉丁语缩写</a></li>
+<li class="toc-item"><a href="#gr-7-包容性语言" onclick="scrollToId('gr-7-包容性语言')">GR-7 包容性语言</a></li>
+<li class="toc-item"><a href="#gr-8-所有格形式" onclick="scrollToId('gr-8-所有格形式')">GR-8 所有格形式</a></li>
+</ul>
+</ul>
+</ul>
+</nav>
+
+  <div class="main">
+    <div class="meta-header">
+      <h1>ASD-STE100 写作规则（中文完整版）</h1>
+      <div class="subtitle">Simplified Technical English Issue 9</div>
+      <div class="meta-info">
+        <span>📄 来源：ASD-STE100 Issue 9, Part 1 - Writing rules</span>
+        <span>📅 翻译日期：2026-10-04</span>
+        <span>🌐 语言：简体中文</span>
+      </div>
+    </div>
+
+    <div class="content">
+      <h1 id="asd-ste100">ASD-STE100 简化技术英语写作规则（中文完整版）</h1>
+<p><strong>Simplified Technical English (STE) Issue 9 — Part 1: Writing Rules</strong></p>
+<blockquote>
+<p>本文档为 ASD-STE100 Issue 9 第一部分"写作规则"的完整中文翻译。译文力求准确、清晰，同时遵循 STE 本身的简洁写作原则。</p>
+</blockquote>
+<hr />
+<h2 id="1">第 1 节 词汇</h2>
+<h3 id="_1">规则总览</h3>
+<p><strong>可以使用哪些词？</strong>
+- <strong>规则 1.1</strong> 使用以下词汇：词典中的批准词、技术名词、技术动词。</p>
+<p><strong>词性</strong>
+- <strong>规则 1.2</strong> 只能按照词典规定的词性使用批准词。</p>
+<p><strong>批准词义</strong>
+- <strong>规则 1.3</strong> 只能使用批准词的批准词义。</p>
+<p><strong>动词和形容词的形式</strong>
+- <strong>规则 1.4</strong> 只能使用批准的动词和形容词形式。</p>
+<p><strong>技术名词</strong>
+- <strong>规则 1.5</strong> 可以使用归入技术名词类别的词汇。
+- <strong>规则 1.6</strong> 只有当某个词是技术名词或技术名词的一部分时，才能使用词典中未批准的词。
+- <strong>规则 1.7</strong> 不得将技术名词用作动词。
+- <strong>规则 1.8</strong> 使用贵公司、行业或专业领域批准的技术名词。
+- <strong>规则 1.9</strong> 必须选用技术名词时，选择简短且易于理解的。
+- <strong>规则 1.10</strong> 不得使用地域性、俚语或行话词汇作为技术名词。
+- <strong>规则 1.11</strong> 同一物品不得使用不同的技术名词。</p>
+<p><strong>技术动词</strong>
+- <strong>规则 1.12</strong> 可以使用归入技术动词类别的动词。
+- <strong>规则 1.13</strong> 不得将技术动词用作名词。</p>
+<p><strong>拼写</strong>
+- <strong>规则 1.14</strong> 使用美式英语拼写，除非其他官方指令另有规定。</p>
+<hr />
+<h3 id="_2">可以使用哪些词？</h3>
+<h4 id="11">规则 1.1 使用以下词汇：</h4>
+<ul>
+<li>词典中的批准词</li>
+<li>技术名词</li>
+<li>技术动词</li>
+</ul>
+<p>简化技术英语（STE）拥有一部受控词典（第 2 部分），收录了技术写作中最常用的词汇。如果某个词可以归入规定的技术名词或技术动词类别，即使不在词典中也可以使用。</p>
+<p><strong>技术名词</strong>是指特定概念的名词术语，适用于某个专业领域。<strong>技术动词</strong>是指特定概念或过程的动词术语，适用于某个专业领域。</p>
+<p><strong>示例：</strong>
+- "use"（使用）是词典中的批准动词。
+- "engine"（发动机）是一个技术名词。
+- "ream"（铰孔）是一个技术动词。</p>
+<p>词典还列出了部分未批准的词汇，并提供了如何使用替代词的示例。</p>
+<blockquote>
+<p>在 ISO 1087:2019 的语境中，"专业领域"指具有专门词汇的特定知识领域或范围。</p>
+<p>技术名词和技术动词通常收录在贵公司的术语表或术语数据库中。选词时请始终参考这些资料以及本节的规定规则。</p>
+</blockquote>
+<hr />
+<h3 id="_3">词性</h3>
+<h4 id="12">规则 1.2 只能按照词典规定的词性使用批准词。</h4>
+<p>词典中每个批准词都有规定的词性。使用批准词时，确保只按规定的词性使用。</p>
+<p><strong>示例：</strong></p>
+<p>"Test"（测试）是批准的名词，但不是批准的动词。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Test the system for leaks.</td>
+<td>测试系统是否泄漏。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Do the leak test of the system.</td>
+<td>进行系统泄漏测试。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Do a test for leaks in the system.</td>
+<td>对系统做一次泄漏测试。</td>
+</tr>
+</tbody>
+</table>
+<p>"Dim"（昏暗的）是批准的形容词，但不是批准的动词。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Dim the lights.</td>
+<td>调暗灯光。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Set the lights to the dim position.</td>
+<td>将灯光设置到昏暗位置。</td>
+</tr>
+</tbody>
+</table>
+<p>有些词被批准为多种词性。例如，"clean"（清洁）既是批准的动词，也是批准的形容词。单词在句子中的位置表明了它的功能（和词义），因为动词和形容词在句中的位置不同。</p>
+<blockquote>
+<p><strong>STE 例句：</strong> Clean the inner surface of the container.（清洁容器的内表面。）——此处 "clean" 是动词。</p>
+<p><strong>STE 例句：</strong> Make sure that the area is clean.（确保该区域清洁。）——此处 "clean" 是形容词。</p>
+</blockquote>
+<p>"Acceptable"（可接受的）是未批准的形容词。词典给出了三个词性相同的批准替代词。你可以用其中一个替代词进行逐词替换。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>A value of 2 mm is acceptable.</td>
+<td>2 毫米的值是可接受的。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>A value of 2 mm is permitted.</td>
+<td>2 毫米的值是允许的。</td>
+</tr>
+</tbody>
+</table>
+<p>"Operable"（可操作的）是未批准的形容词。词典给出了一个词性不同的批准替代词：动词 "operate"（操作）。因此，你必须使用不同的句子结构。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Make sure that the valve is operable.</td>
+<td>确保阀门是可操作的。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Make sure that the valve can operate.</td>
+<td>确保阀门能够操作。</td>
+</tr>
+</tbody>
+</table>
+<p>替换词汇时，务必确保所选的批准替代词不会改变句子的意思。如果意思发生变化，请选择不同的词或使用不同的句子结构。</p>
+<blockquote>
+<p>词典中每个词的词性都标注在括号中，缩写方式见词典导言。</p>
+<p>如果你想使用的词不在词典中：
+- 在英语词典中查找该词
+- 找出 STE 词典中批准的最佳同义词
+- 使用批准的 STE 词汇，或用其他批准词构建不同的句子结构</p>
+</blockquote>
+<hr />
+<h3 id="_4">批准词义</h3>
+<h4 id="13">规则 1.3 只能使用批准词的批准词义。</h4>
+<p>词典中每个批准词都有规定的批准词义。与标准英语相比，部分批准词的词义可能更受限制。请始终只使用批准词的批准词义。</p>
+<p><strong>示例：</strong></p>
+<p>动词 "follow" 的批准词义是"跟随、跟在后面"。</p>
+<blockquote>
+<p><strong>STE 例句：</strong> Do the procedures that follow:（执行以下程序：）
+<strong>STE 例句：</strong> Follow the green lights to the nearest staircase.（沿着绿灯走到最近的楼梯。）</p>
+</blockquote>
+<p>动词 "follow" 不得用于其他未批准的词义。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Follow the safety instructions.</td>
+<td>遵循安全说明。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Obey the safety instructions.</td>
+<td>遵守安全说明。</td>
+</tr>
+</tbody>
+</table>
+<p>在本句中，应使用 "obey"（遵守），其批准词义为"执行程序或说明所要求的事项"。</p>
+<hr />
+<h3 id="_5">动词和形容词的形式</h3>
+<h4 id="14">规则 1.4 只能使用批准的动词和形容词形式。</h4>
+<p>词典列出了每个批准动词及其批准形式。词典还列出了批准形容词的基本形式，以及适用时括号中的比较级和最高级形式。</p>
+<p><strong>示例 — 动词：</strong></p>
+<pre><code>REMOVE (v),    REMOVES,    REMOVED,    REMOVED
+</code></pre>
+<p>该词条表示批准动词 "remove"（移除）可以以下列形式使用：</p>
+<table>
+<thead>
+<tr>
+<th>不定式/祈使形式</th>
+<th>一般现在时</th>
+<th>一般过去时</th>
+<th>过去分词形式（用作形容词）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(To) Remove / Remove</td>
+<td>Remove(s)</td>
+<td>Removed</td>
+<td>Removed</td>
+</tr>
+</tbody>
+</table>
+<p>动词的过去分词形式通常与一般过去时相同。因此，词典中会列出两次。</p>
+<p><strong>示例 — 形容词：</strong></p>
+<pre><code>SLOW (adj)    (SLOWER, SLOWEST)
+</code></pre>
+<p>该词条表示批准形容词 "slow"（慢的）可以以下列形式使用：</p>
+<table>
+<thead>
+<tr>
+<th>基本形式</th>
+<th>比较级形式</th>
+<th>最高级形式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Slow</td>
+<td>Slower</td>
+<td>Slowest</td>
+</tr>
+</tbody>
+</table>
+<p>使用 "more" 和 "most" 构成比较级和最高级的形容词在词典中不列出这些形式，因为 "more" 和 "most" 本身就是批准词。</p>
+<hr />
+<h3 id="_6">技术名词</h3>
+<h4 id="15">规则 1.5 可以使用归入技术名词类别的词汇。</h4>
+<p>技术名词是指特定概念的名词术语，适用于某个专业领域。</p>
+<p>词典不收录技术名词，因为数量太多，且每个专业领域使用不同的技术名词。</p>
+<p>你可以在贵公司的术语表或术语数据库中找到许多技术名词。</p>
+<p>STE 提供了一份带示例的类别清单，以帮助你：
+- 选择技术名词录入公司术语表或术语数据库
+- 正确使用技术名词</p>
+<p>如果技术名词可以归入以下二十二个类别中的一个或多个，就可以在程序性和描述性写作中使用。</p>
+<hr />
+<p><strong>类别 1：官方零部件信息</strong></p>
+<p>指所有设计项目的术语。例如，图解零件目录或工程图纸中包含的技术名词。</p>
+<blockquote>
+<p>bolt（螺栓）, cable（电缆）, clip（卡箍）, conductor（导体）, contact（触点）, engine（发动机）, ferry tank（渡运油箱）, filter（过滤器）, hatch（舱口）, hazard lights（危险警示灯）, indicator（指示器）, light（灯）, logo（标识）, oil seal（油封）, prelubricated seal（预润滑密封件）, pipe（管道）, propeller（螺旋桨）, retractor link（收缩连杆）, screw（螺钉）, switch（开关）, transceiver（收发器）</p>
+</blockquote>
+<p><strong>类别 2：车辆或机器及其部位</strong></p>
+<p>指各类车辆、机器及其组成部位的术语。</p>
+<blockquote>
+<p>aircraft（航空器）, aircraft carrier（航空母舰）, airframe（机身）, airplane（飞机）, bicycle（自行车）, cabin（客舱）, car（汽车）, cargo compartment（货舱）, cargo hold（货舱）, cockpit（驾驶舱）, deck（甲板）, engine room（机舱）, fuselage（机身）, helicopter（直升机）, galley（厨房）, lifeboat（救生艇）, overhead panel（头顶面板）, ship（船舶）, submarine（潜艇）, tank（坦克/油箱）, train（火车）, truck（卡车）, wing（机翼）, wing root（翼根）</p>
+</blockquote>
+<p><strong>类别 3：工具和保障设备及其部件与部位</strong></p>
+<p>指各类工具、保障设备及其部件和组成部位的术语。</p>
+<blockquote>
+<p>access ladder（登机梯）, blade（刀片/叶片）, brush（刷子）, cap（盖）, chock（轮挡）, clamp（夹具）, cover（罩）, display（显示器）, drill（钻头/钻）, file（锉刀）, gauge / gage（仪表）, graduated beaker（刻度烧杯）, handle（手柄）, jack（千斤顶）, label（标签）, rigging pin（装配销）, roller（滚轮）, rope（绳索）, rung（梯蹬）, shaft（轴）, stand（支架）, tag（标牌）, test rig（试验台）, torque wrench（扭矩扳手）, trestle（栈桥）</p>
+</blockquote>
+<p><strong>类别 4：材料、消耗品和多余物</strong></p>
+<p>指材料、消耗品及其他可能造成污染或故障的物质的术语。</p>
+<blockquote>
+<p>acid（酸）, adhesive（胶粘剂）, aluminum alloy（铝合金）, ammunition（弹药）, compound（化合物）, copper（铜）, debris（碎屑）, detergent（清洁剂）, dirt（污垢）, disinfectant（消毒剂）, dust（灰尘）, foam（泡沫）, foreign object（外来物）, fuel（燃油）, grease（润滑脂）, hazardous substances（有害物质）, hazardous waste（危险废物）, metal（金属）, metallic coating（金属涂层）, oil（油）, paint（油漆）, penetrant spray（渗透剂喷雾）, plastic（塑料）, primer（底漆）, sealant（密封剂）, sealing（密封）, soap（肥皂）, stainless steel（不锈钢）, tape（胶带）, waste（废料）, water（水）, wire（金属丝）</p>
+</blockquote>
+<p><strong>类别 5：设施、基础设施和物流程序</strong></p>
+<p>指实体设施、基础设施系统和物流程序的管理、结构和运营相关术语。例如，公用系统区域、运输网络、仓储、配送流程和运营物流工作流。</p>
+<blockquote>
+<p>airport（机场）, apron（停机坪）, base（基地）, building（建筑）, camp（营地）, dock（码头）, engine shop floor（发动机车间）, flight simulator（飞行模拟器）, gate（登机口）, handling（装卸）, hangar（机库）, packaging（包装）, packing（打包）, port（港口）, service bay（维修工位）, shipping（发运）, shop（车间）, store（库房）, storage（存储）, transport（运输）</p>
+</blockquote>
+<p><strong>类别 6：系统、组件和电路及其功能、配置和部件</strong></p>
+<p>指结构、运行、组成和系统设计相关术语。</p>
+<blockquote>
+<p>air conditioning（空调）, amplifying circuit（放大电路）, armament（武器装备）, audio（音频）, aural warning system（音响警告系统）, collapsed position（收起位置）, exhaust（排气）, flight management（飞行管理）, hardware（硬件）, inhibiting signal（禁止信号）, injection（喷射）, inlet（进气口）, input frequency（输入频率）, latch（锁闩）, pedal（踏板）, power unit（动力装置）, pump（泵）, reverse mode（反向模式）, reverse position（反向位置）, standby mode（待机模式）, upright position（直立位置）, vent（通风口）</p>
+</blockquote>
+<p><strong>类别 7：数学、科学、工程术语和公式</strong></p>
+<p>指概念、设计、计算或方法论相关术语。</p>
+<blockquote>
+<p>acceleration（加速度）, allowance（余量）, astronomy（天文学）, atom（原子）, average（平均值）, biochemistry（生物化学）, biology（生物学）, biome（生物群系）, burr（毛刺）, capacitance（电容）, carbon（碳）, category（类别）, cavitation（气蚀）, center（中心）, circle（圆）, coefficient（系数）, combination（组合）, configuration（配置）, conversion（转换）, count（计数）, critical temperature（临界温度）, curve（曲线）, cycle（循环）, defect（缺陷）, degree（度/等级）, deceleration（减速度）, density（密度）, diameter（直径）, displacement（位移/排量）, duty cycle（工作循环）, elapsed time（经过时间）, electricity（电）, energy（能量）, exponent（指数）, failure（故障）, ferry flight（渡运飞行）, flutter（颤振）, force（力）, fumes（烟气）, genetics（遗传学）, geology（地质学）, geophysics（地球物理学）, graph（图表）, gravity（重力）, hardness（硬度）, heat treatment（热处理）, idle speed（怠速）, ignition（点火）, inhibition（抑制）, instrumentation（仪表系统）, interference（干扰）, issue（期号）, light（光）, line replaceable unit（航线可更换件）, load（载荷）, loss（损失）, measurement（测量）, modification（改装）, momentum（动量）, motoring（冷转）, overhaul（大修）, oversized hole（超差孔）, oxygen（氧气）, performance（性能）, phase（相位）, polarity（极性）, power（功率/动力）, pressure（压力）, process（过程）, radius（半径）, rating（额定值）, ratio（比率）, reduction（减少）, relative angular position（相对角位置）, resistance（电阻）, scan（扫描）, shutdown（停车）, signal（信号）, specific gravity（比重）, stall（失速/停转）, standard（标准）, steam（蒸汽）, stiffness（刚度）, strength（强度）, suction（吸力）, temperature（温度）, tension（张力）, thread（螺纹）, tightness（密封性）, torque（扭矩）, toxic property（毒性）, vapor（蒸汽）, voltage（电压）, water vapor（水蒸气）, "C = (A - B) - 0.063 mm"</p>
+</blockquote>
+<p><strong>类别 8：导航和地理术语</strong></p>
+<p>指与制图、航线或空间方位相关的位置、方向或地点的术语。</p>
+<blockquote>
+<p>air（空中）, altitude（高度）, attitude（姿态）, axis（轴）, bank（坡度）, clearance（净距）, climb（爬升）, coordinates（坐标）, critical approach（临界进近）, datum（基准面）, delay（延迟）, deviation（偏差）, drag（阻力）, east（东）, France（法国）, glideslope（下滑道）, gradient（梯度）, heading（航向）, landing（着陆）, leeway（偏航）, Lima（利马）, north（北）, pitch（俯仰）, roll（滚转）, skid（侧滑）, south（南）, west（西）</p>
+</blockquote>
+<p><strong>类别 9：数字、计量单位和时间（及其符号）</strong></p>
+<p>指定量数据、测量或时间相关信息的术语。</p>
+<blockquote>
+<p>92, 303, ampere (A)（安培）, degree (°)（度）, first (1st)（第一）, half (½)（一半）, hour (h)（小时）, kilogram (kg)（千克）, knot（节）, liter (L or l)（升）, meter (m)（米）, mile（英里）, minute (')（分）, month（月）, ohm (Ω)（欧姆）, one（一）, one-quarter (¼)（四分之一）, second (″)（秒）, second (s)（秒）, second (2nd)（第二）, square inch (sq.in.)（平方英寸）, spring（弹簧）, third (3rd)（第三）, three（三）, year（年）, winter（冬季）, zero（零）</p>
+</blockquote>
+<p><strong>类别 10：引用文本</strong></p>
+<p>指技术写作中不可更改的文本。例如，标牌、标签、标志、标记和显示装置上的文字。</p>
+<blockquote>
+<p>abort button（中止按钮）, EXIT sign（出口标志）, INOP system（不工作系统）, OXYGEN pushbutton switch（氧气按钮开关）, ON position（ON 位置）, NEXT button（下一页按钮）, FAULT legend（故障字样）, NO STEP marking（禁止踩踏标记）, FASTEN SAFETY BELT sign（系好安全带标志）, WEAR PROTECTIVE CLOTHING sign（穿戴防护服标志）</p>
+</blockquote>
+<p><strong>类别 11：专业角色、个人、团体、组织和地缘政治实体</strong></p>
+<p>指专业职能、人员姓名、组织、公司、团队、主权国家或与流程、职责或决策相关实体的术语。</p>
+<blockquote>
+<p>air traffic control（空中交通管制）, British Broadcasting Corporation (BBC)（英国广播公司）, captain（机长/船长）, commander（指挥官）, copilot（副驾驶）, crew（机组/船员）, crew chief（机务长）, European Aviation Safety Agency (EASA)（欧洲航空安全局）, Federal Aviation Administration (FAA)（美国联邦航空管理局）, John Kirkman, manufacturer（制造商）, operator（运营人）, Transport Canada Civil Aviation (TCCA)（加拿大运输部民航局）, United States of America (USA)（美利坚合众国）</p>
+</blockquote>
+<p><strong>类别 12：身体部位</strong></p>
+<p>指与医学、生物学或人体工程学相关的解剖学特征或功能的术语。</p>
+<blockquote>
+<p>blood（血液）, digestive system（消化系统）, ear（耳朵）, eyes（眼睛）, hair（头发）, hand（手）, head（头）, lung（肺）, mouth（嘴）, respiratory tract（呼吸道）, skin（皮肤）, stomach（胃）</p>
+</blockquote>
+<p><strong>类别 13：常见个人物品、食品和饮料</strong></p>
+<p>指日常个人物品和各类食品饮料的术语。</p>
+<blockquote>
+<p>beans（豆子）, bread（面包）, cigarette lighter（打火机）, clothing（衣物）, coffee（咖啡）, flour（面粉）, footwear（鞋类）, high-heeled shoes（高跟鞋）, jewelry（首饰）, lipstick（口红）, matches（火柴）, milk（牛奶）, mineral water（矿泉水）, nail scissors（指甲剪）, perfume（香水）, pizza（披萨）, shampoo（洗发水）, wine（葡萄酒）</p>
+</blockquote>
+<p><strong>类别 14：医学术语</strong></p>
+<p>指医疗状况、程序或解剖结构的术语。</p>
+<blockquote>
+<p>allergy（过敏）, aspirin（阿司匹林）, asthma（哮喘）, blood poisoning（血液中毒）, breathing（呼吸）, circulation（循环）, dermatitis（皮炎）, diabetes（糖尿病）, dizziness（头晕）, female（女性）, hallucination（幻觉）, headache（头痛）, heart rate（心率）, irritation（刺激）, male（男性）, medication（药物）, nausea（恶心）, pneumonia（肺炎）, pregnancy（怀孕）, pulse（脉搏）, skin irritation（皮肤刺激）, virus（病毒）</p>
+</blockquote>
+<p><strong>类别 15：官方文件、文档组成部分、标准和指南</strong></p>
+<p>指各类官方文件及其结构组成部分的术语。例如，手册、技术记录、标准、规范和法规要求。</p>
+<blockquote>
+<p>Acceptance Test（验收测试）, Activation/Deactivation（激活/停用）, Allowable Damage（允许损伤）, attention（注意）, caution（小心）, chapter（章节）, Checklist（检查单）, Class（等级）, Cleaning（清洁）, Compass Correction Card（罗盘校正卡）, danger（危险）, data module（数据模块）, Description and Operation（描述与操作）, diagram（图）, engine logbook（发动机记录簿）, Federal Aviation Regulations（联邦航空条例）, Fault Isolation（故障隔离）, figure（图）, flowchart（流程图）, font（字体）, Functional Test（功能测试）, Ice and Rain Protection（防冰防雨）, Inspection/Check（检查/校验）, issue（期号）, language policy（语言政策）, letter（信函）, maintenance planning（维修计划）, maintenance practice（维修实践）, maintenance records（维修记录）, Normal Braking（正常刹车）, note（注）, notice（通知）, packaging（包装）, page（页）, paragraph（段落）, parentheses（括号）, post-flight report（飞行后报告）, post-mod（改装后）, pre-mod（改装前）, prerequisite（前提条件）, preservation（封存）, reference（参考）, Removal/Installation（拆卸/安装）, Required Conditions（所需条件）, Repair Scheme（修理方案）, recommendation（建议）, revision（修订）, section（节）, Service Bulletin（服务通告）, Standard Practices Manual（标准实践手册）, storage（存储）, Structural Repair Manual（结构修理手册）, table（表）, test procedure（测试程序）, training material（培训材料）, Transportation（运输）, valid welding certificate（有效焊接证书）, warning（警告）</p>
+</blockquote>
+<p><strong>类别 16：环境和运行条件</strong></p>
+<p>指与系统或流程相关的外部因素和运行参数的术语。</p>
+<blockquote>
+<p>atmosphere（大气）, cloud（云）, day（白天）, daylight（日光）, ice（冰）, hail（冰雹）, humidity（湿度）, lightning（闪电）, moisture（湿气）, night（夜晚）, rain（雨）, relative humidity（相对湿度）, sand（沙）, snow（雪）, storm（风暴）, turbulence（颠簸）, volcanic ash（火山灰）, wind（风）</p>
+</blockquote>
+<p><strong>类别 17：颜色</strong></p>
+<p>指标识颜色相关属性或在不同语境中表示颜色特征的术语。</p>
+<blockquote>
+<p>beige（米色）, black（黑色）, cyan blue（青蓝色）, dark brown（深棕色）, gray（灰色）, green（绿色）, magenta（品红色）, light green（浅绿色）, orange（橙色）, red（红色）, white（白色）, yellow（黄色）</p>
+<p>颜色是形容词，但 STE 将其归类为技术名词。颜色的比较级和最高级形式（如 blacker、the reddest）在 STE 中不允许使用。</p>
+</blockquote>
+<p><strong>类别 18：损伤术语</strong></p>
+<p>指各类缺陷或劣化，并提供故障相关信息的术语。</p>
+<blockquote>
+<p>buckle（翘曲）, chafing（磨损）, corrosion（腐蚀）, crack（裂纹）, crack propagation（裂纹扩展）, deformation（变形）, dent（凹痕）, discoloration（变色）, distortion（扭曲）, erosion（侵蚀）, fracture（断裂）, fraying（磨损散开）, galling（咬合磨损）, kink（扭结）, nick（刻痕）, score（划痕）, scratch（刮伤）, stain（污渍）, spurious fault message（虚假故障信息）</p>
+</blockquote>
+<p><strong>类别 19：计算机科学、信息和通信技术</strong></p>
+<p>指该专业领域中技术概念、系统或组件的术语。</p>
+<blockquote>
+<p>add-in（外接程序）, add-on（附加组件）, AI（人工智能）, arrow（箭头）, artificial intelligence（人工智能）, authentication（身份验证）, backup（备份）, backup file（备份文件）, bookmark（书签）, chatbot（聊天机器人）, content（内容）, cursor（光标）, cybersecurity（网络安全）, database（数据库）, deep learning（深度学习）, dialog check box（对话框复选框）, digitalization（数字化）, digitization（数字化）, e-mail（电子邮件）, embedding（嵌入）, field（字段）, file（文件）, firewall（防火墙）, hallucination（幻觉）, HTML, icon（图标）, interface（界面）, internet（互联网）, laptop（笔记本电脑）, large language model（大语言模型）, local operation（本地操作）, machine learning（机器学习）, memory（内存）, menu（菜单）, metadata（元数据）, mouse（鼠标）, network（网络）, operating system（操作系统）, phone（手机）, plug-in（插件）, pre-loaded software（预装软件）, preset value（预设值）, prompt engineering（提示工程）, remote operation（远程操作）, screen（屏幕）, search engine（搜索引擎）, smartphone（智能手机）, status bar（状态栏）, store（商店/存储）, tablet（平板电脑）, token（令牌）, toolbar（工具栏）, touchscreen（触摸屏）, tweet（推文）, tuning（调谐）, update（更新）, voice mail（语音邮件）, XML</p>
+</blockquote>
+<p><strong>类别 20：民用和军事运营</strong></p>
+<p>指民用和军事运营中的概念与活动、服务交付、产品管理以及客户和全生命周期支持的术语。</p>
+<blockquote>
+<p>armed forces（武装部队）, assault（突击）, bomb（炸弹）, bullet（子弹）, checkpoint（检查站）, combat plan（作战计划）, contractor（承包商）, customer（客户）, customer support（客户支持）, customer service（客户服务）, deployment（部署）, echelon（梯队）, ejection seat（弹射座椅）, end item（最终产品）, end user（最终用户）, evacuation（撤离）, formation（编队）, ground zero（爆心投影点）, gun（枪）, Integrated Product Support (IPS)（集成产品支持）, know-how（专有技术）, lifecycle（生命周期）, machine gun（机枪）, maintenance concept（维修理念）, mission（任务）, obsolescence（过时）, operator（运营人）, Original Equipment Manufacturer (OEM)（原始设备制造商）, patrol（巡逻）</p>
+</blockquote>
+<p><strong>类别 21：法律和法规</strong></p>
+<p>指法律和法规文本的术语。例如，合同、保修文本、证书、标准和规范以及法律文件。</p>
+<blockquote>
+<p>action（诉讼）, ambiguity（歧义）, appeal（上诉）, arbitration（仲裁）, bankruptcy（破产）, communication（沟通）, competence（能力）, compliance（合规）, concession（让步）, contract（合同）, court（法院）, damages（损害赔偿）, explanation（解释）, explanatory text（说明文字）, impeachment（弹劾）, jury（陪审团）, law（法律）, judgement（判决）, jurisdiction（管辖权）, purpose（目的）, recommendation（建议）, scope（范围）, serious incident（严重事件）, serious offense（严重违法行为）, signature（签名）, statute（法规）, term（条款）, trade（贸易）, waiver（豁免）, wording（措辞）</p>
+</blockquote>
+<p><strong>类别 22：动物、植物和其他生命形式</strong></p>
+<p>指技术和环境语境中的生物实体术语。</p>
+<blockquote>
+<p>bacteria（细菌）, bird（鸟）, cassowary（鹤鸵）, cat（猫）, conifer（针叶树）, cow（牛）, dog（狗）, emu（鸸鹋）, fern（蕨类）, ferret（雪貂）, fungi（真菌）, horse（马）, insect（昆虫）, leopard（豹）, monkey（猴子）, moss（苔藓）, mouse（老鼠）, pocket gopher（囊地鼠）, rose（玫瑰）, termite（白蚁）, wombat（袋熊）</p>
+</blockquote>
+<hr />
+<blockquote>
+<p>上述各类别中的技术名词仅为示例。规则 1.5 并未给出所有可能的技术名词的完整清单。各类别中列出的词汇仅在必要时使用大写字母（如官方标识、标题和缩写）。</p>
+</blockquote>
+<hr />
+<h4 id="16">规则 1.6 只有当某个词是技术名词或技术名词的一部分时，才能使用词典中未批准的词。</h4>
+<p>词典中包含一些不能使用的词，因为它们未获批准。但如果这些词可以归入相应的技术名词类别，就可以在某些语境中作为技术名词使用。</p>
+<p><strong>示例：</strong></p>
+<p>"base" 一词在词典中未获批准，其替代词是 "bottom (n)"（底部）。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Make sure that the two spigots at the base of the unit engage.（"base" 用于表示表面相关含义时不允许。）</td>
+<td>确保装置底部的两个插销啮合。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Make sure that the two spigots at the bottom of the unit engage.</td>
+<td>确保装置底部的两个插销啮合。</td>
+</tr>
+</tbody>
+</table>
+<p>但你可以将 "base" 用作技术名词。</p>
+<blockquote>
+<p><strong>STE 例句：</strong> The base of the triangle is 5 cm.（三角形的底边为 5 厘米。）
+（"base" 是技术名词，类别 7：数学、科学、工程术语和公式。）</p>
+</blockquote>
+<p>同一个词 "base" 可以归入不同的技术名词类别。当 "base" 在不同语境中表示不同含义时，就会出现这种情况。</p>
+<p><strong>示例：</strong></p>
+<blockquote>
+<p><strong>STE 例句：</strong> Access to the base is permitted between 9 a.m. and 6 p.m.（进入基地的时间为上午 9 点至下午 6 点。）
+（"base" 是技术名词，类别 5：设施、基础设施和物流程序。）</p>
+</blockquote>
+<p>"Backup"（备份）在词典中未获批准，其替代词是 "emergency (n)"（紧急情况）和 "auxiliary (adj)"（辅助的）。但你可以将 "backup" 用作技术名词。</p>
+<p><strong>示例：</strong></p>
+<blockquote>
+<p><strong>STE 例句：</strong> Do the backup of the computer at regular intervals.（定期对计算机进行备份。）
+（"backup" 是技术名词，类别 19：计算机科学、信息和通信技术。）</p>
+</blockquote>
+<p>"Backup" 是单词技术名词。但你也可以写 "backup file"（备份文件），这是一个双词技术名词。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✓ STE</td>
+<td>Keep the backup file in a safe area.（"backup file" 是技术名词，类别 19）</td>
+<td>将备份文件保存在安全区域。</td>
+</tr>
+<tr>
+<td>❌ 非 STE</td>
+<td>For this procedure, make sure that one person is available as backup.（"backup" 在此语境中不允许使用。）</td>
+<td>此程序须确保有一人作为备用。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Two persons are necessary to do this procedure.（不同的句子结构）</td>
+<td>执行此程序需要两人。</td>
+</tr>
+</tbody>
+</table>
+<p>"Main"（主要的）是未批准词，其替代词是 "primary (adj)"（主要的）。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The laptop has these main parts:（"main part" 不是技术名词，应用 "primary" 替换。）</td>
+<td>笔记本电脑有以下主要部件：</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>The laptop has these primary parts:</td>
+<td>笔记本电脑有以下主要部件：</td>
+</tr>
+</tbody>
+</table>
+<p>但你可以将 "main" 用作技术名词的一部分。</p>
+<blockquote>
+<p><strong>STE 例句：</strong> Retract the main landing gear.（收起主起落架。）
+（"main landing gear" 是技术名词。此处不能用 "primary" 替换 "main"，因为 "primary landing gear" 不是贵公司、行业或专业领域批准的技术名词。）</p>
+</blockquote>
+<p>如果某个词不在词典中，但它是技术名词的一部分，则可以使用。在下面的示例中，"angular"（角的）和 "position"（位置）是批准词，但 "relative"（相对的）不在词典中。</p>
+<blockquote>
+<p><strong>STE 例句：</strong> This procedure gives instructions to identify the relative angular positions of the power-turbine rotor disks.（本程序说明如何确定动力涡轮转子盘的相对角位置。）
+（你可以将 "relative" 用作技术名词的一部分，类别 7：数学、科学、工程术语和公式。）</p>
+</blockquote>
+<hr />
+<h4 id="17">规则 1.7 不得将技术名词用作动词。</h4>
+<p>技术名词只能用作名词，或用作另一个技术名词中的形容词。不得将同一个词用作动词。</p>
+<p><strong>示例：</strong></p>
+<p>"Oil"（油）是技术名词（类别 4：材料、消耗品和多余物）。不得将 "oil" 用作动词。应使用不同的句子结构，让 "oil" 以技术名词的形式出现。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Oil the steel surfaces.</td>
+<td>给钢表面上油。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Apply oil to the steel surfaces.</td>
+<td>在钢表面涂油。</td>
+</tr>
+</tbody>
+</table>
+<p>"Snow"（雪）是技术名词（类别 16：环境和运行条件）。不得将 "snow" 用作动词。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>If you think it will snow, make sure that the vehicle is in the applicable configuration.</td>
+<td>如果认为会下雪，确保车辆处于适用构型。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>If you think that snow will fall, make sure that the vehicle is in the applicable configuration.</td>
+<td>如果认为会下雪，确保车辆处于适用构型。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>可同时作技术名词和技术动词的词</strong></p>
+<p>在某些语境中，同一个词既可以是技术名词也可以是技术动词。当该词既可归入技术名词类别（规则 1.5）又可归入技术动词类别（规则 1.12）时，就会出现这种情况。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>If the surface is hard, use a carbide drill.（如果表面坚硬，使用硬质合金钻头。）
+（"drill" 是技术名词，规则 1.5，类别 3：工具和保障设备及其部件与部位。）</p>
+<p>Drill a hole at the intersection of the two lines.（在两条线的交点处钻孔。）
+（"drill" 是技术动词，规则 1.12，类别 1a：制造工艺—去除材料。）</p>
+</blockquote>
+<hr />
+<h4 id="18">规则 1.8 使用贵公司、行业或专业领域批准的技术名词。</h4>
+<p>如果贵公司、行业或专业领域对某个系统、组件、部件或流程有批准的技术名词，请使用该技术名词。通常，这类技术名词收录在官方零部件信息和公司文档中。</p>
+<p><strong>示例：</strong></p>
+<blockquote>
+<p><strong>STE 例句：</strong> The front panel of the phone has a touchscreen and a home button.（手机的前面板有触摸屏和主屏幕按钮。）
+（"touchscreen" 和 "home button" 是贵公司、行业或专业领域批准的技术名词。）</p>
+</blockquote>
+<hr />
+<h4 id="19">规则 1.9 必须选用技术名词时，选择简短且易于理解的。</h4>
+<p>如果贵公司、行业或专业领域没有批准的技术名词，请选择简短（不超过三个词）且易于理解的。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Remove the four stainless steel pan head machine screws (10) that attach the metallic machined flange (15) to the front housing cover (20).</td>
+<td>拆下将金属加工法兰 (15) 固定到前壳体盖 (20) 的四个不锈钢盘头机器螺钉 (10)。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Remove the four screws (10) that attach the flange (15) to the cover (20).</td>
+<td>拆下将法兰 (15) 固定到盖 (20) 的四颗螺钉 (10)。</td>
+</tr>
+</tbody>
+</table>
+<p>在此示例中，使用 "screws"（螺钉）、"flange"（法兰）和 "cover"（盖）就足够了，因为这些零件有索引号，相关插图能清晰识别它们。反之，可以给名词添加一两个形容词来帮助读者理解。</p>
+<hr />
+<h4 id="110">规则 1.10 不得使用地域性、俚语或行话词汇作为技术名词。</h4>
+<p>有些技术词汇只有特定地区或地理区域的人才使用，这些词汇对来自其他地区的人来说不易理解。选择技术名词时，请始终使用广为人知的词汇。</p>
+<p>本规则也适用于技术俚语或行话词汇。如果只有少数人理解某个词，就会造成混淆和无效沟通。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>During logging operations, attach a choker to the heavy machinery to hold the logs in their position.（"choker" 是集材作业中用于固定原木的一种缆绳，是北美、加拿大、北欧和新西兰部分地区使用的术语，含义对读者来说不直观。）</td>
+<td>集材作业期间，将捆木索系到重型机械上以固定原木。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>During logging operations, attach a cable to the heavy machinery to hold the logs in their position.</td>
+<td>集材作业期间，将缆绳系到重型机械上以固定原木。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>After the firmware update, do not brick the router.（"brick" 是信息技术中的技术俚语，意为"使设备无法工作"，含义不直观。）</td>
+<td>固件更新后，不要把路由器变砖。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>After the firmware update, do not set the router to OFF.</td>
+<td>固件更新后，不要将路由器设为关闭。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Remove your gear from the work area.（"gear" 是指代工具和设备的技术行话，含义不直观。）</td>
+<td>把你的装备从工作区移走。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Remove your tools and equipment from the work area.</td>
+<td>把你的工具和设备从工作区移走。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="111">规则 1.11 同一物品不得使用不同的技术名词。</h4>
+<p>选定一个技术名词后，不得在文本的其他部分使用不同的技术名词来指代同一物品。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>1. Make sure that the servo control unit is in the open position.<br>2. Do the operational test of the actuator.<br>3. Disconnect the control unit from the test rig.</td>
+<td>1. 确保伺服控制单元处于打开位置。<br>2. 执行执行机构的操作测试。<br>3. 从试验台上断开控制单元。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>1. Make sure that the actuator is in the open position.<br>2. Do the operational test of the actuator.<br>3. Disconnect the actuator from the test rig.</td>
+<td>1. 确保执行机构处于打开位置。<br>2. 执行执行机构的操作测试。<br>3. 从试验台上断开执行机构。</td>
+</tr>
+</tbody>
+</table>
+<p>在非 STE 示例中，"servo control unit"（伺服控制单元）、"actuator"（执行机构）和 "control unit"（控制单元）指的是同一个物品。请使用贵公司、行业或专业领域批准的技术名词。如果像示例中一样，技术名词是 "actuator"，则在文本中始终使用该词。</p>
+<hr />
+<h3 id="_7">技术动词</h3>
+<h4 id="112">规则 1.12 可以使用归入技术动词类别的动词。</h4>
+<p>技术动词是指特定概念或过程的动词术语，适用于某个专业领域。</p>
+<p>词典不收录技术动词，因为数量太多，且每个专业领域使用不同的技术动词。</p>
+<p>你可以在贵公司的术语表或术语数据库中找到许多技术动词。</p>
+<p>STE 提供了一份带示例的类别清单，以帮助你：
+- 选择技术动词录入公司术语表或术语数据库
+- 正确使用技术动词</p>
+<p>技术动词必须遵守 STE 中其他批准动词的相同规则。参见第 3 节。</p>
+<p>如果技术动词可以归入以下四个类别中的一个或多个，就可以在程序性和描述性文本中使用。</p>
+<hr />
+<p><strong>类别 1：制造工艺</strong></p>
+<p>用于以下方面的指令和信息的术语：</p>
+<p><strong>a) 去除材料：</strong></p>
+<blockquote>
+<p>drill（钻孔）, grind（磨削）, mill（铣削）, ream（铰孔）, unsolder（拆焊）</p>
+</blockquote>
+<p><strong>b) 添加材料：</strong></p>
+<blockquote>
+<p>flame（火焰喷涂）, insulate（绝缘）, remetal（重铸金属）, retread（翻新轮胎）</p>
+</blockquote>
+<p><strong>c) 连接材料：</strong></p>
+<blockquote>
+<p>braze（钎焊）, crimp（压接）, solder（锡焊）, weld（焊接）</p>
+</blockquote>
+<p><strong>d) 改变材料的机械强度、结构或物理性质：</strong></p>
+<blockquote>
+<p>anneal（退火）, cure（固化）, decay（衰变）, freeze（冷冻）, heat-treat（热处理）, magnetize（磁化）, normalize（正火）, vaporize（汽化）</p>
+</blockquote>
+<p><strong>e) 改变材料的表面光洁度：</strong></p>
+<blockquote>
+<p>buff（抛光）, burnish（磨光）, dress（修整）, passivate（钝化）, plate（电镀）, polish（打磨）</p>
+</blockquote>
+<p><strong>f) 改变材料的形状：</strong></p>
+<blockquote>
+<p>blend（混合）, cast（铸造）, extrude（挤压）, spin（旋压）, stamp（冲压）</p>
+</blockquote>
+<p><strong>类别 2：计算机流程和应用</strong></p>
+<p>用于以下方面的指令和信息的术语：</p>
+<p><strong>a) 输入和输出流程：</strong></p>
+<blockquote>
+<p>click（点击）, digitize（数字化）, enter（输入）, press（按下）, print（打印）, swipe（滑动）, tap（轻触）, type（键入）</p>
+</blockquote>
+<p><strong>b) 用户界面和应用流程：</strong></p>
+<blockquote>
+<p>clear（清除）, close（关闭）, copy（复制）, cut（剪切）, delete（删除）, deselect（取消选择）, disable（禁用）, drag（拖动）, drag and drop（拖放）, enable（启用）, encrypt（加密）, erase（擦除）, filter（筛选）, highlight（高亮）, invalidate（失效）, maximize（最大化）, minimize（最小化）, navigate（导航）, open（打开）, paste（粘贴）, save（保存）, scroll（滚动）, sort（排序）, store（存储）, tweet（发推文）, validate（验证）, zoom in（放大）, zoom out（缩小）</p>
+</blockquote>
+<p><strong>c) 系统操作：</strong></p>
+<blockquote>
+<p>abort（中止）, boot（启动）, communicate（通信）, debug（调试）, download（下载）, format（格式化）, install（安装）, load（加载）, manage（管理）, process（处理）, reboot（重启）, update（更新）, upgrade（升级）, upload（上传）</p>
+</blockquote>
+<p><strong>类别 3：适用专业领域的指令和信息</strong></p>
+<p>在以下语境中提供指令和信息的术语：</p>
+<p><strong>a) 工程、数学和科学</strong></p>
+<blockquote>
+<p>bisect（二等分）, compensate for（补偿）, convert（转换）, detect（检测）, float（浮动）, modulate（调制）, radiate（辐射）, transform（变换）, sink（下沉/吸收）</p>
+</blockquote>
+<p><strong>b) 医学</strong></p>
+<blockquote>
+<p>disinfect（消毒）, intubate（插管）, operate（手术）, prescribe（开处方）, sanitize（消毒）, sterilize（灭菌）</p>
+</blockquote>
+<p><strong>c) 民用和军事运营</strong></p>
+<blockquote>
+<p>aim（瞄准）, arm（武装）, detect（探测）, disable（使失效）, dry-motor（干转电动机）, enable（使能）, explode（爆炸）, fire（发射）, inhibit（禁止）, intercept（拦截）, lase（激光照射）, load（装载）, lock on（锁定）, unlatch（解锁）, unload（卸载）, wet-motor（湿转电动机）, parachute（跳伞）</p>
+</blockquote>
+<p><strong>d) 导航</strong></p>
+<blockquote>
+<p>approach（进近）, descend（下降）, deviate（偏离）, fly（飞行）, hover（悬停）, land（着陆）, maintain（保持）, navigate（导航）, retrim（重新配平）, take off（起飞）, trim（配平）, respond（回应）, taxi（滑行）</p>
+</blockquote>
+<p><strong>e) 汽车和铁路</strong></p>
+<blockquote>
+<p>accelerate（加速）, brake（制动）, couple（连接）, crank（起动）, crash（碰撞）, decouple（解耦）, dispatch（调度）, drift（漂移）, inflate（充气）, park（停放）, qualify（合格）, steer（转向）</p>
+</blockquote>
+<p><strong>f) 能源、石油和天然气</strong></p>
+<blockquote>
+<p>compress（压缩）, distill（蒸馏）, drill（钻探）, emit（排放）, extract（抽取）, inject（注入）, pump（泵送）</p>
+</blockquote>
+<p><strong>类别 4：法律和法规</strong></p>
+<p>仅用于法律和法规文本的指令和信息的术语。例如，合同、保修文本、证书、标准和规范以及法律文件。</p>
+<blockquote>
+<p>acknowledge（确认）, comply with（遵守）, communicate（沟通）, conform to（符合）, describe（描述）, enforce（执行）, explain（解释）, meet (a requirement)（满足（要求））, inform（通知）, modify（修改）, notify（告知）, omit（省略）, regulate（监管）, sign（签署）, supersede（取代）, understand（理解）, waive (for inspection and requirements)（放弃（检查和要求））</p>
+</blockquote>
+<hr />
+<blockquote>
+<p>上述各类别中的技术动词仅为示例。规则 1.12 并未给出所有可能的技术动词的完整清单。</p>
+</blockquote>
+<p>如果词典中有一个批准动词能准确表达指令或信息，请使用批准动词。如果能用词典中批准的词汇（动词和其他相关词）写出相同的句子，就不要使用技术动词。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>If you detect broken wires, repair them.（"detect" 在此语境中未获批准，且不能作为技术动词。）</td>
+<td>如果检测到断线，进行修理。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>If you find broken wires, repair them.</td>
+<td>如果发现断线，进行修理。</td>
+</tr>
+</tbody>
+</table>
+<p>但你可以写：</p>
+<blockquote>
+<p><strong>STE 例句：</strong> The security scanner detects metal objects.（安检扫描仪探测金属物品。）
+（"detect" 在此语境中是正确的技术动词。）</p>
+</blockquote>
+<p>如果必须使用技术动词，请只使用在语境中正确的技术动词。不要使用笼统或不明确的技术动词。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Machine the hole until it has a diameter of 8.00 +/- 0.003 mm.</td>
+<td>机加工该孔直到直径为 8.00 ± 0.003 毫米。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Ream the hole until it has a diameter of 8.00 +/- 0.003 mm.</td>
+<td>铰孔至直径为 8.00 ± 0.003 毫米。</td>
+</tr>
+</tbody>
+</table>
+<p>非必要时不要使用技术动词。如果可能，请使用词典中批准的动词和相应的技术名词。</p>
+<p><strong>示例：</strong></p>
+<p>"Clamp"（夹具）是技术名词（类别 1：官方零部件信息）。不得将 "clamp" 用作技术动词。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Clamp the cable in position.</td>
+<td>将电缆夹紧到位。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Put clamps on the cable to hold it in position.</td>
+<td>在电缆上安装夹具以将其固定到位。</td>
+</tr>
+</tbody>
+</table>
+<p>"Grease"（润滑脂）是技术名词（类别 4：材料、消耗品和多余物）。不得将 "grease" 用作技术动词。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Grease the fasteners.</td>
+<td>给紧固件涂润滑脂。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Apply grease to the fasteners.</td>
+<td>在紧固件上涂润滑脂。</td>
+</tr>
+</tbody>
+</table>
+<p>"Wire"（金属丝）是技术名词（类别 1：官方零部件信息）。不得将 "wire" 用作技术动词。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Wire the cable to the structure.</td>
+<td>用金属丝将电缆绑到结构上。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Attach the cable to the structure with wire.</td>
+<td>用金属丝将电缆固定到结构上。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>未获批准但可作技术动词的词</strong></p>
+<p>词典中有些词虽然未获批准，但如果可以归入规定的类别，则可以作为技术动词。</p>
+<p><strong>示例：</strong></p>
+<blockquote>
+<p><strong>STE 例句：</strong> Enter your password.（输入你的密码。）
+（"enter" 是技术动词，类别 2a：计算机流程和应用—输入和输出流程。）</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Do not enter the engine test area without approval.（"enter" 在其他语境中不允许。）</td>
+<td>未经批准不得进入发动机试验区。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Do not go into the engine test area without approval.</td>
+<td>未经批准不得进入发动机试验区。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>STE 例句：</strong> If the tower does not respond, use a different channel.（如果塔台没有回应，使用其他频道。）
+（"respond" 是技术动词，类别 3d：适用专业领域的指令和信息—导航。）</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>If the instrument fails to respond, do a test.（"respond" 在其他语境中不允许。）</td>
+<td>如果仪表没有响应，进行测试。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>If the instrument does not operate correctly, do a test.</td>
+<td>如果仪表不能正常工作，进行测试。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="113">规则 1.13 不得将技术动词用作名词。</h4>
+<p>在英语中，拼写相同的词在句子中的功能不一定相同。技术动词只能用作动词，不能用作名词。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Give the hole 0.20-inch ream.</td>
+<td>给孔 0.20 英寸的铰孔。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Ream the hole to a 0.20-inch dimension.</td>
+<td>将孔铰至 0.20 英寸尺寸。</td>
+</tr>
+</tbody>
+</table>
+<p>但你可以将技术动词的过去分词形式用作形容词。</p>
+<blockquote>
+<p><strong>STE 例句：</strong> Lubricate the reamed hole.（润滑铰过的孔。）
+（形容词 "reamed" 是技术动词 "ream" 的过去分词形式。"Reamed hole" 是技术名词。）</p>
+</blockquote>
+<p><strong>可同时作技术动词和技术名词的词</strong></p>
+<p>在某些语境中，同一个词既可以是技术动词也可以是技术名词。当该词既可归入技术动词类别（规则 1.12）又可归入技术名词类别（规则 1.5）时，就会出现这种情况。</p>
+<p><strong>示例：</strong></p>
+<blockquote>
+<p><strong>STE 例句：</strong> Make sure that the plate is not damaged.（确保板材没有损坏。）
+（"plate" 是技术名词，类别 1：官方零部件信息。）</p>
+<p><strong>STE 例句：</strong> There are two methods to plate the ring nut (2).（有两种方法给环形螺母 (2) 电镀。）
+（"plate" 是技术动词，类别 1c：制造工艺—连接材料。）</p>
+</blockquote>
+<hr />
+<h3 id="_8">拼写</h3>
+<h4 id="114">规则 1.14 使用美式英语拼写，除非其他官方指令另有规定。</h4>
+<p>使用 STE 词典中规定的拼写（美式英语拼写）。</p>
+<p>只有在其他技术出版物规范、风格指南、合同或其他官方指令适用时，才使用不同的拼写。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The door is made of carbon fibre reinforced plastic.（"fibre" 是英式英语拼写。）</td>
+<td>门由碳纤维增强塑料制成。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>The door is made of carbon-fiber-reinforced plastic.（"fiber" 是美式英语拼写。）</td>
+<td>门由碳纤维增强塑料制成。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Change the colour of the display.（"colour" 是英式英语拼写。）</td>
+<td>更改显示器的颜色。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Change the color of the display.（"color" 是美式英语拼写。）</td>
+<td>更改显示器的颜色。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>如果引用文本中包含英式英语拼写（例如在计算机屏幕上），请勿更改拼写。保持引用文本原样。参见规则 8.6，其中说明了如何正确使用引用文本。</p>
+</blockquote>
+<hr />
+<h2 id="2">第 2 节 多词名词</h2>
+<h3 id="_9">规则总览</h3>
+<p><strong>多词名词</strong>
+- <strong>规则 2.1</strong> 多词名词的长度不超过三个词。
+- <strong>规则 2.2</strong> 如果技术名词超过三个词，先完整写出。然后可以使用以下方法之一使技术名词更清晰：
+  - 给出技术名词的较短形式
+  - 在作为一个单元使用的词之间使用连字符（-）</p>
+<hr />
+<h3 id="_10">多词名词</h3>
+<h4 id="21">规则 2.1 多词名词的长度不超过三个词。</h4>
+<p>在英语中，可以用一个或多个词来描述或修饰名词。技术文本中可能包含一长串词，它们在句子中起一个词性的作用。通常，这些词组由名词和/或形容词组成，在句子中作主语或宾语。这类词组称为<strong>多词名词</strong>。</p>
+<p><strong>一般示例：</strong>
+- Horizontal cylinder pivot bearing（水平圆柱枢轴轴承）——4 个词的多词名词
+- Stainless steel corrosion protection strips（不锈钢防腐蚀条）——5 个词的多词名词
+- Actuator operating rod（执行机构操作杆）——3 个词的多词名词</p>
+<p>长的多词名词不易理解，因为多词名词中的词之间可以有不同的连接方式。词组的主要名词（中心名词）通常是多词名词的最后一个词。当词与词之间的连接不明确时，就会产生歧义。因此，短的多词名词更容易理解。</p>
+<blockquote>
+<p>Runway light connection（跑道灯连接）——这是一个短的多词名词（3 个词），主要名词是 "connection"。</p>
+<p>Runway light connection resistance calibration（跑道灯连接电阻校准）——这是一个长的多词名词（5 个词），主要名词是 "calibration"。</p>
+</blockquote>
+<p>上例中的长多词名词没有告诉读者 "runway"（跑道）和 "calibration"（校准）之间的关系。读者必须在主要名词 "calibration" 之前理解四个修饰语。</p>
+<p>长多词名词会给非英语母语的读者造成困难，因为在某些语言中，主要名词位于多词名词的开头。多词名词越长，清晰度越低。</p>
+<p>为了帮助读者，请将多词名词最多限制为三个词。</p>
+<p>要保持多词名词简短，可以使用介词（如 "of"、"on"、"in" 和 "for"）来解释多词名词。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Runway light connection resistance calibration.（5 个词）</td>
+<td>跑道灯连接电阻校准。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Calibration of the resistance of the runway light connection.（1 个词、1 个词和 3 个词）</td>
+<td>跑道灯连接的电阻校准。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Install the forward turbine overheat thermocouple terminal tags.（6 个词）</td>
+<td>安装前涡轮过热热电偶端子标牌。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Install the terminal tags on the forward overheat thermocouple of the turbine.（2 个词和 3 个词）</td>
+<td>在涡轮的前过热热电偶上安装端子标牌。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Remove the engine transmission housing attachment bolts.（5 个词）</td>
+<td>拆下发动机变速器壳体连接螺栓。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Remove the bolts that attach the transmission housing to the engine.（1 个词、1 个词、2 个词和 1 个词）</td>
+<td>拆下将变速器壳体固定到发动机的螺栓。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Adjust to obtain door operating rod alignment with the attachment point.（4 个词）</td>
+<td>调整以获得门操作杆与连接点的对准。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Adjust the door operating rod until it aligns with the attachment point.（3 个词和 1 个词）</td>
+<td>调整门操作杆，直至其与连接点对准。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="22">规则 2.2 如果技术名词超过三个词，先完整写出。然后可以使用以下方法之一使技术名词更清晰：</h4>
+<ul>
+<li>给出技术名词的较短形式</li>
+<li>在作为一个单元使用的词之间使用连字符（-）</li>
+</ul>
+<p>长的多词名词可以是一个长技术名词，也可以是多个较短技术名词的组合。通常，技术名词不能拆分为更小的部分，因为它们是贵公司、行业或专业领域使用的技术名词。因此，必须按其批准形式完整写出技术名词。</p>
+<p><strong>方法 1 — 技术名词的较短形式</strong></p>
+<p>如果长技术名词来自官方文件（如工程图纸或图解零件目录），在文本中首次出现时完整写出。然后，如果可能，对技术名词进行说明，在文档剩余部分使用较短形式或批准的缩写。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Before you do this procedure, engage the ramp service door safety connector pin (the pin that holds the ramp service door, referred to in this procedure as the "safety connector pin").
+（执行此程序前，接合舷梯服务门安全连接销（固定舷梯服务门的销，本程序中简称"安全连接销"）。）</p>
+</blockquote>
+<p>在此示例中，先完整写出 "ramp service door safety connector pin"（舷梯服务门安全连接销），然后在说明后给出较短的技术名词："safety connector pin"（安全连接销）。这个较短的技术名词有三个词，符合规则 2.1。</p>
+<blockquote>
+<p>The Main Fuel Metering Unit (MFMU) is an aluminum alloy unit that includes a Main Engine Control Unit (MECU) and a Distribution Block (DB). The MFMU is installed in the engine bypass duct and operates in the engine fuel system. The function of the MFMU is to meter and supply the fuel from the Main Engine Fuel Pump (MEFP) to the fuel manifolds and the starter jets. The Digital Engine Control Unit (DECU) sends electrical signals to operate the MFMU.</p>
+<p>（主燃油计量装置（MFMU）是一个铝合金装置，包括主发动机控制单元（MECU）和分配块（DB）。MFMU 安装在发动机旁路管道中，在发动机燃油系统中工作。MFMU 的功能是将来自主发动机燃油泵（MEFP）的燃油计量并供应到燃油歧管和起动喷口。数字发动机控制单元（DECU）发送电信号以操作 MFMU。）</p>
+</blockquote>
+<p>在此示例中，无需额外说明，因为文本提供了关于该装置的所有必要信息。所有超过三个名词的官方技术名词在首次出现时都完整写出，然后在文本的其余部分使用其相关的批准缩写。</p>
+<p>如果批准的技术名词包含三个词或更少，则无需使用缩写。</p>
+<p><strong>示例：</strong></p>
+<p>不要写：</p>
+<blockquote>
+<p>The primary parts of the valve are:
+- The DA (8)
+- The PVA (15)
+- The BA (17)
+- The VB (20).</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>The primary parts of the valve are:
+- The diaphragm assembly (8)
+- The poppet valve assembly (15)
+- The bush assembly (17)
+- The valve body (20).</p>
+<p>（阀门的主要部件有：
+- 膜片组件 (8)
+- 提升阀组件 (15)
+- 衬套组件 (17)
+- 阀体 (20)。）</p>
+</blockquote>
+<p>你可以使用来自贵公司官方文件的缩写，但要小心。程序中满是缩写的文本虽然更短，但不易阅读。</p>
+<p><strong>示例：</strong></p>
+<p>不要写：</p>
+<blockquote>
+<p>A. Remove the DA (8) from the VB (20).
+B. Remove the PVA (15) from its seat.
+C. Remove the BA (17) from the VB (20).</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>A. Remove the diaphragm assembly (8) from the valve body (20).
+B. Remove the poppet valve assembly (15) from its seat.
+C. Remove the bush assembly (17) from the valve body (20).</p>
+<p>（A. 从阀体 (20) 上拆下膜片组件 (8)。
+B. 从其座上拆下提升阀组件 (15)。
+C. 从阀体 (20) 上拆下衬套组件 (17)。）</p>
+</blockquote>
+<p><strong>方法 2 — 在作为一个单元使用的词之间使用连字符（-）</strong></p>
+<p>连字符是连接词或词的一部分的标点符号。可以在词与词之间使用连字符，以表示相关词如何作为一个单元发挥作用。这种方法将使你使用的多词名词符合规则 2.1。带连字符的词始终算作一个词。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Make sure that the cutoff-switch power connection is safe.（确保切断开关的电源连接安全。）——3 个词</p>
+<p>Inspection of the lavatory rapid-decompression device.（检查盥洗室快速减压装置。）——3 个词</p>
+</blockquote>
+<p>确保不要将不相关的词连接起来，因为连字符会改变多词名词的含义。如果不确定，只需对多词名词进行说明，然后使用较短形式或官方批准的缩写。</p>
+<p>如果批准的技术名词包含连字符，请勿更改。如果太长，首次出现时完整写出，然后使用本规则规定的推荐方法（较短的技术名词）。</p>
+<p>不要使用连字符来构成超过三个词的词组。如果对所有词都使用连字符，该多词名词将不易阅读和理解。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Move the main-gear-door-retraction-winch handle.（2 个词，但不正确）</td>
+<td>移动主起落架门收放绞盘手柄。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Move the main-gear-door retraction-winch handle.（3 个词）</td>
+<td>移动主起落架门收放绞盘手柄。</td>
+</tr>
+</tbody>
+</table>
+<p>如果批准的技术名词包含三个词或更少（例如 "poppet valve assembly" 提升阀组件和 "diaphragm assembly" 膜片组件），则无需使用连字符。</p>
+<p><strong>示例：</strong></p>
+<p>不要写：</p>
+<blockquote>
+<p>A. Remove the diaphragm-assembly (8) from the valve body (20).
+B. Remove the poppet-valve assembly (15) from its seat.</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>A. Remove the diaphragm assembly (8) from the valve body (20).
+B. Remove the poppet valve assembly (15) from its seat.</p>
+<p>（A. 从阀体 (20) 上拆下膜片组件 (8)。
+B. 从其座上拆下提升阀组件 (15)。）</p>
+</blockquote>
+<p>但是，如果批准的技术名词包含连字符（例如 "inward-outward valve" 向内向外阀），请勿移除连字符。保留来自贵公司官方文件的技术名词。</p>
+<p><strong>示例：</strong></p>
+<p>不要写：</p>
+<blockquote>
+<p>The inward outward valve is part of the fuel system.</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>The inward-outward valve is part of the fuel system.</p>
+<p>（向内向外阀是燃油系统的一部分。）</p>
+</blockquote>
+<hr />
+<h2 id="3">第 3 节 动词</h2>
+<h3 id="_11">规则总览</h3>
+<p><strong>动词形式和时态</strong>
+- <strong>规则 3.1</strong> 只能使用词典中给出的动词形式。
+- <strong>规则 3.2</strong> 只能使用以下动词形式和时态：
+  - 不定式形式
+  - 祈使形式（命令形式）
+  - 一般现在时
+  - 一般过去时
+  - 一般将来时
+  - 过去分词形式（用作形容词）
+- <strong>规则 3.3</strong> 将过去分词形式用作形容词。
+- <strong>规则 3.4</strong> 不得使用助动词构成复杂的动词结构。
+- <strong>规则 3.5</strong> 动词的 "-ing" 形式只能用作技术名词或技术名词中的修饰语。</p>
+<p><strong>主动语态</strong>
+- <strong>规则 3.6</strong> 使用主动语态。在描述性写作中，只有当施动者不明时，才能使用被动语态。</p>
+<p><strong>如何描述动作</strong>
+- <strong>规则 3.7</strong> 使用批准的动词描述动作，而不是名词或其他词性。</p>
+<hr />
+<h3 id="_12">动词形式和时态</h3>
+<h4 id="31">规则 3.1 只能使用词典中给出的动词形式。</h4>
+<p>STE 词典为每个批准动词提供了可以使用的动词形式。</p>
+<p><strong>示例：</strong></p>
+<pre><code>REMOVE (v)    REMOVES,    REMOVED,    REMOVED
+GIVE (v)      GIVES,      GAVE,       GIVEN
+</code></pre>
+<p>第 2 部分的词典导言提供了更多关于动词形式以及如何使用批准动词的信息。</p>
+<hr />
+<h4 id="32">规则 3.2 只能使用以下动词形式和时态：</h4>
+<ul>
+<li>不定式形式</li>
+<li>祈使形式（命令形式）</li>
+<li>一般现在时</li>
+<li>一般过去时</li>
+<li>一般将来时</li>
+<li>过去分词形式（用作形容词）</li>
+</ul>
+<p>只能使用批准的动词形式和时态。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>不定式形式（基本形式）</th>
+<th>祈使形式（命令形式）</th>
+<th>一般现在时</th>
+<th>一般过去时</th>
+<th>一般将来时</th>
+<th>过去分词形式（用作形容词）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(To) Adjust（调整）<br>（规则动词）</td>
+<td>Adjust + 宾语</td>
+<td>You/we/they adjust<br>It adjusts</td>
+<td>You/we/they adjusted<br>It adjusted</td>
+<td>You/we/they will adjust<br>It will adjust</td>
+<td>The adjusted linkage（调整过的连杆）</td>
+</tr>
+<tr>
+<td>(To) Give（给）<br>（不规则动词）</td>
+<td>Give + 宾语</td>
+<td>You/we/they give<br>It gives</td>
+<td>You/we/they gave<br>It gave</td>
+<td>You/we/they will give<br>It will give</td>
+<td>The given information（给定的信息）</td>
+</tr>
+</tbody>
+</table>
+<p>不得使用其他未批准的形式和时态，例如：
+- 现在完成时（have/has adjusted）
+- 过去完成时（had adjusted）
+- 现在/过去进行时（is/was adjusting）
+- 以及所有其他复杂的动词结构。</p>
+<hr />
+<h4 id="33">规则 3.3 将过去分词形式用作形容词。</h4>
+<p>当你将过去分词形式用作形容词时，它表示某物的状态。这不是被动语态。</p>
+<p>动词的过去分词形式用作形容词的情况如下：
+- 在名词之前
+- 在动词 "to be"、"to become" 或 "to stay" 的动词形式之后</p>
+<p>如果过去分词形式不在词典中，则不得使用。</p>
+<p><strong>示例：</strong></p>
+<blockquote>
+<p><strong>STE 例句：</strong> Examine all parts of the disassembled unit for damage.（检查已拆解装置的所有部件是否有损伤。）
+（"Disassembled" 是名词 "unit" 之前的形容词，表示装置的状态。）</p>
+<p><strong>STE 例句：</strong> When the unit is fully disassembled, clean all the parts.（当装置完全拆解后，清洁所有部件。）
+（"Disassembled" 是动词 "to be" 之后的形容词，表示装置的状态。）</p>
+</blockquote>
+<p>词典中还有一些批准的形容词是未批准动词的过去分词形式。例如 "permitted"（允许的）和 "damaged"（损坏的）。它们在词典中的批准词性是 "(adj)"，因此可以使用。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Do not put more than the permitted weight on the trolley.（手推车上放置的重量不得超过允许重量。）</p>
+<p>Make sure that the mating surfaces are not damaged.（确保配合面没有损坏。）</p>
+</blockquote>
+<hr />
+<h4 id="34">规则 3.4 不得使用助动词构成复杂的动词结构。</h4>
+<p>不得将过去分词形式与助动词 "have" 一起用作动词形式，这种结构会构成未批准的时态。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The operator has adjusted the linkage.（现在完成时未获批准。）</td>
+<td>操作员已经调整了连杆。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>The operator adjusted the linkage.（一般过去时获批准。）</td>
+<td>操作员调整了连杆。</td>
+</tr>
+</tbody>
+</table>
+<p>某些复杂动词结构包含其他助动词，且过去分词形式用作动词。带有这些结构的句子会变成被动语态的复杂句。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The seat is to be installed before you install the cushion.</td>
+<td>座椅必须在安装坐垫之前安装。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Before you install the cushion, install the seat.</td>
+<td>安装坐垫前，先安装座椅。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The volume control can be adjusted.</td>
+<td>音量控制可以被调整。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>You can adjust the volume control.</td>
+<td>你可以调整音量控制。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The temperature must be adjusted.</td>
+<td>温度必须被调整。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Adjust the temperature.</td>
+<td>调整温度。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The sleeve will be adjusted by the robot.</td>
+<td>套筒将由机器人调整。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>The robot will adjust the sleeve.</td>
+<td>机器人将调整套筒。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="35-ing">规则 3.5 动词的 "-ing" 形式只能用作技术名词或技术名词中的修饰语。</h4>
+<p>在英语中，具有 "-ing" 形式的词在句子中可以有不同的功能（不同的词性）。</p>
+<p><strong>一般示例：</strong></p>
+<p>具有 "-ing" 形式的词可以是动词的一部分，描述正在进行的动作。</p>
+<blockquote>
+<p>Be careful while the door is opening.（门打开时要小心。）</p>
+</blockquote>
+<p>它们也可以是形容词。</p>
+<blockquote>
+<p>An opening door can be dangerous.（正在打开的门可能有危险。）</p>
+</blockquote>
+<p>它们可以是名词或名词短语的一部分。</p>
+<blockquote>
+<p>Opening a door can be dangerous.（开门可能有危险。）</p>
+</blockquote>
+<p>它们可以构成一长串修饰语、名词短语和从句。</p>
+<blockquote>
+<p>A mechanic opening a door without obeying the specified safety precautions can easily cause injury to persons standing near the door.（一名机械师在不遵守规定安全预防措施的情况下开门，很容易对站在门附近的人造成伤害。）</p>
+</blockquote>
+<p>具有 "-ing" 形式的词的这些不同功能经常会导致歧义或冗长复杂的句子。因此，具有 "-ing" 形式的词通常不允许使用。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>When you are doing this procedure, obey all the safety precautions.</td>
+<td>当你正在执行此程序时，遵守所有安全预防措施。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>When you do this procedure, obey all the safety precautions.</td>
+<td>执行此程序时，遵守所有安全预防措施。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Mechanics wearing insufficient protective clothing and opening containers containing hazardous materials in areas where there is a lack of ventilation, using inappropriate tools without observing the manufacturer's instructions, are in danger of coming into contact with these materials and thus suffering from skin irritation and breathing problems.</td>
+<td>穿着不足防护服并在通风不良区域打开装有危险材料容器的机械师，使用不当工具而不遵守制造商说明，有接触这些材料从而遭受皮肤刺激和呼吸问题的危险。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Before you use dangerous materials, obey these precautions:<br>(1) Read the manufacturer's instructions.<br>(2) Make sure that there is sufficient airflow in the work area.<br>(3) Put on a face mask and protective clothing.<br>(4) Get the correct tools to open the containers for these materials.<br><br>If you do not obey these precautions, injury to your skin and your lungs can occur.</td>
+<td>使用危险材料前，请遵守以下预防措施：<br>(1) 阅读制造商的说明。<br>(2) 确保工作区域有足够的空气流通。<br>(3) 戴上面罩和防护服。<br>(4) 准备正确的工具来打开这些材料的容器。<br><br>如果不遵守这些预防措施，可能会对皮肤和肺部造成伤害。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>作为技术名词或技术名词一部分的 "-ing" 形式的词</strong></p>
+<p>你可以将具有 "-ing" 形式的词用作技术名词（例如，在程序标题或标题中）。</p>
+<p><strong>示例：</strong></p>
+<blockquote>
+<p>Cleaning（清洁）, Testing and Fault Isolation（测试与故障隔离）, Handling（搬运）, Packaging（包装）, Shipping（发运）, Troubleshooting（故障排除）</p>
+</blockquote>
+<p>你也可以将动词的 "-ing" 形式用作技术名词中的修饰语。该修饰语是与系统、组件、部件、工具、材料或设备的功能相关的形容词。</p>
+<p><strong>示例：</strong></p>
+<blockquote>
+<p>Air-conditioning system（空调系统）, degreasing agent（脱脂剂）, grinding wheel（砂轮）, polishing disc（抛光盘）, sanding machine（打磨机）, switching relay（切换继电器）, welding torch（焊炬）</p>
+</blockquote>
+<p><strong>具有 "-ing" 形式的批准词</strong></p>
+<p>词典中只有少数批准词具有 "-ing" 形式。它们是：
+- 名词（lighting 照明、opening 开口、routing 路由、servicing 维修）
+- 形容词（mating 配合的、missing 缺失的、remaining 剩余的）
+- 代词（something 某物）
+- 介词（during 在……期间）</p>
+<hr />
+<h3 id="_13">主动语态</h3>
+<h4 id="36">规则 3.6 使用主动语态。在描述性写作中，只有当施动者不明时，才能使用被动语态。</h4>
+<p>技术文本包括程序性写作和描述性写作。用 STE 写作时，始终使用主动语态。在描述性写作中，只有当施动者（执行动作的人或物）不明时，才允许使用被动语态。</p>
+<p><strong>什么是主动语态？</strong></p>
+<p>在主动语态中，句子的主语执行句子的动作（"A" 做 "B"）。因此，语法主语（A）也是逻辑主语（施动者）。</p>
+<p><strong>什么是被动语态？</strong></p>
+<p>在被动语态中，句子的主语接受动作（"B" 被 "A" 做）。此处，语法主语是 B，逻辑主语或施动者是 A。</p>
+<p><strong>一般示例：</strong>
+- 主动：The manufacturer gives the safety procedures.（制造商提供安全程序。）
+- 被动：The safety procedures are given by the manufacturer.（安全程序由制造商提供。）
+- 主动：The side stay holds the main gear leg.（侧撑杆固定主起落架支柱。）
+- 被动：The main gear leg is held by the side stay.（主起落架支柱由侧撑杆固定。）</p>
+<p><strong>如何判断句子是否为被动语态？</strong></p>
+<p>判断被动语态的最佳方法是思考"由谁或由什么？"（施动者）这个问题。如果你的文本给出了这个问题的答案，那么文本就是被动语态。当句子包含介词 "by" 时，这是一个很好的被动语态指示。介词 "by" 的宾语就是施动者，你可以将施动者用作主动语态句子的主语。在以下示例中，下划线文字标识了施动者。</p>
+<p>在每个被动示例中，你都可以思考"由谁或由什么？"这个问题。</p>
+<blockquote>
+<p>The safety procedures are given by the manufacturer.（安全程序由制造商提供。）
+The main gear leg is held by the side stay.（主起落架支柱由侧撑杆固定。）</p>
+</blockquote>
+<p>但被动结构并不总是包含施动者。</p>
+<blockquote>
+<p>The dimensions are given in the table.（尺寸在表中给出。）
+The main gear leg is held in its position.（主起落架支柱固定在其位置上。）</p>
+</blockquote>
+<p>主动语态的句子总是有语法主语（施动者），但在下面示例的被动句中，施动者不明（我们不知道数据损坏的原因）。在主动句中，施动者（"transmission" 传输）是不正确的（"传输"不是数据损坏的原因），句子的含义也不同。因此，主动句在技术上变得不正确。</p>
+<p><strong>示例：</strong>
+- 被动：During transmission, the data was corrupted.（传输期间，数据损坏了。）——正确，施动者不明。
+- 主动：During transmission, something corrupted the data.（传输期间，某物损坏了数据。）——正确，你不知道 "something" 的身份，但可以将其用作施动者。
+- 主动：Transmission corrupted the data.（传输损坏了数据。）——不正确，"传输"不是正确的施动者。</p>
+<p>在示例中，如果你使用 "something"（"未确定或未指定的事物"）作为施动者，主动语态在技术上将是正确的。</p>
+<p><strong>如何将被动语态的句子改为主动语态？</strong></p>
+<p>要将句子从被动语态改为主动语态，可以使用以下四种方法之一：</p>
+<p><strong>方法 1</strong></p>
+<p>当句子给出施动者（通常是介词 "by" 的宾语）时，将施动者放在句首。然后，将施动者用作主语。主语必须始终是句子中执行动作的名词。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The circuits are connected by a switching relay.（被动）</td>
+<td>电路由切换继电器连接。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>A switching relay connects the circuits.（主动）</td>
+<td>切换继电器连接电路。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>方法 2</strong></p>
+<p>将不定式动词改为主动动词。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>These values are used by the computer to calculate the energy consumption.（被动）</td>
+<td>这些值被计算机用来计算能耗。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>The computer calculates the energy consumption from these values.（主动）</td>
+<td>计算机根据这些值计算能耗。</td>
+</tr>
+</tbody>
+</table>
+<p>"are used by" 这个结构在这里没有提供重要信息。因此，可以使用动词 "calculate"（计算）将句子写成主动语态。</p>
+<p><strong>方法 3</strong></p>
+<p>在程序性写作中，将动词改为祈使（命令）形式。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The test can be continued by the operator.（被动）</td>
+<td>测试可以由操作员继续。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Continue the test.（主动）</td>
+<td>继续测试。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Oil and grease are to be removed with a degreasing agent.（被动）</td>
+<td>油和润滑脂要用脱脂剂去除。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Remove oil and grease with a degreasing agent.（主动）</td>
+<td>用脱脂剂去除油和润滑脂。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>方法 4</strong></p>
+<p>当句子中没有给出施动者（执行动作的人或物）时，可以用代词 "you" 或 "we" 作为主动形式的主语。如果施动者是读者，用 "you"。如果施动者是你的公司或组织，用 "we"。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>On the ground, the valve can be opened with the override handle.（被动）</td>
+<td>在地面上，可以用超控手柄打开阀门。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>On the ground, you can open the valve with the override handle.（主动）</td>
+<td>在地面上，你可以用超控手柄打开阀门。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Additives are not used in this type of fuel.（被动）</td>
+<td>这种燃油中不使用添加剂。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>We do not use additives in this type of fuel.（主动）</td>
+<td>我们不在这种燃油中使用添加剂。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>This type of fuel does not contain additives.</td>
+<td>这种燃油不含添加剂。</td>
+</tr>
+</tbody>
+</table>
+<p>当你发现包含助动词的被动语态复杂句时，先确定你想写程序性句子还是描述性句子。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The volume control can be adjusted.</td>
+<td>音量控制可以被调整。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Adjust the volume control.（程序性句子）</td>
+<td>调整音量控制。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>You can adjust the volume control.（描述性句子）</td>
+<td>你可以调整音量控制。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The oil temperature must be adjusted before the start of the test.</td>
+<td>油温必须在测试开始前被调整。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Before you start the test, adjust the oil temperature.（程序性句子）</td>
+<td>开始测试前，调整油温。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Before the start of the test, the operator must adjust the oil temperature.（描述性句子）</td>
+<td>测试开始前，操作员必须调整油温。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The valve will be adjusted during the test.</td>
+<td>阀门将在测试期间被调整。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>During the test, adjust the valve.（程序性句子）</td>
+<td>测试期间，调整阀门。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>NOTE: You will adjust the valve during the test.（描述性句子）</td>
+<td>注：你将在测试期间调整阀门。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The component is to be installed before you do the test.</td>
+<td>组件必须在你做测试前被安装。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Before you do the test, install the component.（程序性句子）</td>
+<td>做测试前，安装组件。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Before the test, the operator must install the component.（描述性句子）</td>
+<td>测试前，操作员必须安装组件。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_14">如何描述动作</h3>
+<h4 id="37">规则 3.7 使用批准的动词描述动作，而不是名词或其他词性。</h4>
+<p>在 STE 中，提供相同信息可以有不同的解决方案。如果有一个批准的动词可以描述某个动作，请使用该批准动词。动词比名词或其他词性更能清晰地描述动作。</p>
+<p><strong>示例：</strong></p>
+<p>不要写：</p>
+<blockquote>
+<p>The ohmmeter gives an indication of 450 ohms.（欧姆表给出 450 欧姆的指示。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>The ohmmeter shows 450 ohms.（欧姆表显示 450 欧姆。）</p>
+</blockquote>
+<p>不要写：</p>
+<blockquote>
+<p>Before the removal of the unit, make sure that the power supply is OFF.（在装置拆卸之前，确保电源关闭。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>Before you remove the unit, make sure that the power supply is OFF.（拆卸装置前，确保电源关闭。）</p>
+</blockquote>
+<p>在示例中，所有句子都符合 STE，但使用直接动词的句子更清晰地描述了动作。</p>
+<p>如果某个词在词典中未被批准为动词，请勿将其用作动词。使用不同的句子结构来表达相同的信息。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Check the laptop battery.</td>
+<td>检查笔记本电脑电池。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Do a check of the laptop battery.</td>
+<td>对笔记本电脑电池进行检查。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4">第 4 节 句子</h2>
+<h3 id="_15">规则总览</h3>
+<p><strong>短句和清晰的句子结构</strong>
+- <strong>规则 4.1</strong> 写简短清晰的句子。
+- <strong>规则 4.2</strong> 不得为了使句子更短而省略词语或使用缩略形式。</p>
+<p><strong>垂直列表</strong>
+- <strong>规则 4.3</strong> 复杂文本使用垂直列表。</p>
+<p><strong>连接词和连接短语</strong>
+- <strong>规则 4.4</strong> 使用连接词和连接短语连接包含相关主题的句子。</p>
+<p><strong>冠词和指示形容词</strong>
+- <strong>规则 4.5</strong> 在适用情况下，在名词或多词名词前使用冠词（the, a, an）或指示形容词（this, these）。</p>
+<hr />
+<h3 id="_16">短句和清晰的句子结构</h3>
+<p>STE 的基本原则是使文本易于阅读和理解。因此，你必须写短句并使用清晰的句子结构。</p>
+<p>在 STE 中，程序中的句子写法（第 5 节）和描述性文本中的句子写法（第 6 节）有不同的规则。第 4 节包含适用于这两种写作类型的通用规则。</p>
+<hr />
+<h4 id="41">规则 4.1 写简短清晰的句子。</h4>
+<p>写简短清晰的句子，提供准确的指令和信息。</p>
+<p>在程序中，直接向读者给出简短清晰的指令（祈使形式）。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>To remove the cover assembly (9), first remove the four screws (10) that attach the cover (11) to the housing (12), and then, after taking the cover (11) off the housing (12), remove the preformed packing (13) and throw it away.</td>
+<td>要拆卸盖组件 (9)，首先拆下将盖 (11) 固定到壳体 (12) 的四颗螺钉 (10)，然后将盖 (11) 从壳体 (12) 上取下后，拆下预成型密封垫 (13) 并丢弃。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>1. Remove the cover assembly (9) as follows:<br>A. Remove the four screws (10) that attach the cover (11) to the housing (12).<br>B. Remove the cover (11) from the housing (12).<br>C. Remove and discard the preformed packing (13).</td>
+<td>1. 按以下步骤拆卸盖组件 (9)：<br>A. 拆下将盖 (11) 固定到壳体 (12) 的四颗螺钉 (10)。<br>B. 从壳体 (12) 上拆下盖 (11)。<br>C. 拆下并丢弃预成型密封垫 (13)。</td>
+</tr>
+</tbody>
+</table>
+<p>在描述性文本中，确保每个句子只有一个主题（主语或思想），且不包含祈使形式。然后，在后续句子中逐步提供关于该主题的信息。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The side stay assembly has two folding toggles hinged together and attached with hinges between the main gear strut and the side stay bracket.（此句子包含多个主题。为使信息更清晰，可以为每个主题写一个新句子。）</td>
+<td>侧撑杆组件有两个折叠肘节，它们铰接在一起，并通过铰链连接在主起落架支柱和侧撑杆支架之间。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>The side stay assembly has two folding toggles. The folding toggles are attached together with hinges. These folding toggles are also attached with hinges between the main gear strut and the side stay bracket.（新文本有三个句子，每个句子都有其主题。）</td>
+<td>侧撑杆组件有两个折叠肘节。折叠肘节通过铰链连接在一起。这些折叠肘节还通过铰链连接在主起落架支柱和侧撑杆支架之间。</td>
+</tr>
+</tbody>
+</table>
+<p>对于这两种写作类型，始终确保你的文本不是抽象的。确保它清楚地说明如何执行任务或系统如何运行。要准确。不要提供不准确或可能有不同含义的信息。</p>
+<p><strong>示例：</strong></p>
+<p>不要写：</p>
+<blockquote>
+<p>No leaks are permitted.（不允许泄漏。）
+（这个句子没有告诉读者动作是什么。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>Make sure that there are no leaks.（确保没有泄漏。）
+（这个句子直接告诉读者动作是什么。）</p>
+</blockquote>
+<p>不要写：</p>
+<blockquote>
+<p>Different temperatures will change the cure time.（不同的温度会改变固化时间。）
+（这是一个抽象句子，因为它没有提供固化时间如何变化的信息。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>When the temperature increases, the cure time will decrease.（温度升高时，固化时间会缩短。）
+（这个句子告诉读者固化时间如何变化的正确信息。要使写作更准确，请给出具体温度和相关固化时间。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>The cure time is 2 hours at a temperature of 20 °C.（在 20°C 温度下，固化时间为 2 小时。）</p>
+</blockquote>
+<hr />
+<h4 id="42">规则 4.2 不得为了使句子更短而省略词语或使用缩略形式。</h4>
+<p>每个句子必须包含其所有组成部分。写句子时，不要省略词语或使用缩略形式（如 "don't"、"isn't"、"aren't"）。如果这样做，句子会更短，但不会更容易阅读。请完整写出所有词语。</p>
+<p>不要省略名词来造短句，因为读者不容易理解句子的意思。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Can be a maximum of five inches long.</td>
+<td>最长可达五英寸。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Cracks can have a maximum length of five inches.</td>
+<td>裂纹的最大长度可达五英寸。</td>
+</tr>
+</tbody>
+</table>
+<p>不要省略动词，因为读者将无法理解动作。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Rotary switch to INPUT.</td>
+<td>旋转开关至 INPUT。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Set the rotary switch to INPUT.</td>
+<td>将旋转开关设为 INPUT。</td>
+</tr>
+</tbody>
+</table>
+<p>不要省略主语，因为读者将无法理解动作。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>If installed, remove the shims.</td>
+<td>如果已安装，拆下垫片。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>If shims are installed, remove them.</td>
+<td>如果安装了垫片，将其拆下。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>WARNING: MAKE SURE THAT THE POTABLE WATER SYSTEM IS NOT PRESSURIZED. IF NOT, THIS CAN CAUSE INJURY TO PERSONS.</td>
+<td>警告：确保饮用水系统不加压。如果不是，这可能导致人员伤害。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>WARNING: MAKE SURE THAT THE POTABLE WATER SYSTEM IS NOT PRESSURIZED. A PRESSURIZED SYSTEM CAN CAUSE INJURY TO PERSONS.</td>
+<td>警告：确保饮用水系统不加压。加压系统可能导致人员伤害。</td>
+</tr>
+</tbody>
+</table>
+<p>不要省略冠词来使句子更短，因为省略冠词会导致歧义。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Remove the bolt and stop.</td>
+<td>拆下螺栓并停止。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Remove the bolt and the stop.</td>
+<td>拆下螺栓和挡块。</td>
+</tr>
+</tbody>
+</table>
+<p>不要省略单词的一部分来构成缩略形式，因为缩略形式不易理解。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>If your hands are wet, don't touch the USB power adapter.</td>
+<td>如果手湿，不要触摸 USB 电源适配器。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>If your hands are wet, do not touch the USB power adapter.</td>
+<td>如果手湿，请勿触摸 USB 电源适配器。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_17">垂直列表</h3>
+<h4 id="43">规则 4.3 复杂文本使用垂直列表。</h4>
+<p>当句子很长且必须包含许多不同项目（例如组件、零件或文档的列表）或动作时，可以将它们放在垂直列表中。垂直列表使冗长复杂的文本更易于阅读和理解。</p>
+<p>制作垂直列表时：
+- 在第一个句子末尾、垂直列表第一项之前加冒号（:）。
+- 用数字、字母、标点符号或符号标识垂直列表中的每一项。例如，可以使用：
+  - 破折号（-）
+  - 项目符号（•）
+  - 字母（a, b, c…）
+  - 数字（1, 2, 3…）
+- 垂直列表中的每一项以大写字母开头。
+- 在适用情况下，在作为垂直列表每项主语的名词前使用冠词。
+- 如果垂直列表中的项是完整句子，在末尾加句号。
+- 如果垂直列表中的项不是完整句子，不要在末尾加句号。
+- 不要在垂直列表项的末尾加逗号或分号。
+- 在垂直列表最后一项的末尾加句号。</p>
+<blockquote>
+<p>要了解使用哪些标记或符号，请参阅适用的技术出版物规范、风格指南和其他官方指令。</p>
+</blockquote>
+<p><strong>示例：</strong></p>
+<p>在以下两个示例中，垂直列表列出了零件和文档。破折号和项目符号标识了这些零件和文档。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The wheel assembly comprises the tire, the tube, the spokes, the spoke fittings, the valve, and the hub.</td>
+<td>车轮组件包括轮胎、内胎、辐条、辐条接头、气门和轮毂。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>The wheel assembly has these parts:<br>- The tire<br>- The tube<br>- The spokes<br>- The spoke fittings<br>- The valve<br>- The hub.</td>
+<td>车轮组件有以下部件：<br>- 轮胎<br>- 内胎<br>- 辐条<br>- 辐条接头<br>- 气门<br>- 轮毂。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The report must include each of the following: a completed REC-1 form, a three-view drawing of the unit, a photograph of the unit, a copy of the source data.</td>
+<td>报告必须包括以下各项：已填写的 REC-1 表格、装置的三视图、装置的照片、源数据副本。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>The report must include:<br>• A completed REC-1 form<br>• A three-view drawing of the unit<br>• A photograph of the unit<br>• A copy of the source data.</td>
+<td>报告必须包括：<br>• 已填写的 REC-1 表格<br>• 装置的三视图<br>• 装置的照片<br>• 源数据副本。</td>
+</tr>
+</tbody>
+</table>
+<p>在以下两个示例中，垂直列表给出了一个程序和一段描述。字母和数字标识每个工作步骤。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>If the RAT is retracted, remove the tag, open the isolating valves and, ensuring that there is no possibility of fouling, slowly extend the RAT to its full stroke. Close the isolating valves; tag "DO NOT OPERATE." Release the DOWN pressure.</td>
+<td>如果冲压空气涡轮（RAT）处于收起状态，取下标牌，打开隔离阀，确保没有卡滞的可能性，然后将 RAT 缓慢伸出至最大行程。关闭隔离阀；挂上"禁止操作"标牌。释放 DOWN 压力。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>If the Ram Air Turbine (RAT) is retracted:<br>(a) Remove the tag.<br>(b) Open the isolating valves.<br>(c) Slowly and fully extend the RAT and make sure that it does not touch other parts.<br>(d) Close the isolating valves.<br>(e) Tag the isolating valves with "DO NOT OPERATE."<br>(f) Release the DOWN pressure.</td>
+<td>如果冲压空气涡轮（RAT）处于收起状态：<br>(a) 取下标牌。<br>(b) 打开隔离阀。<br>(c) 缓慢完全伸出 RAT，并确保其不触碰其他部件。<br>(d) 关闭隔离阀。<br>(e) 在隔离阀上挂上"禁止操作"标牌。<br>(f) 释放 DOWN 压力。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>During the final movement of the landing gear retraction, the door operating bar located on the leg contacts and turns the latch, withdrawing the roller from the slot and the second roller entraps the door operating bar.</td>
+<td>在起落架收起的最后阶段，位于支柱上的舱门操作杆接触并转动锁闩，将滚轮从槽中抽出，而第二个滚轮卡住舱门操作杆。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>When the landing gear retracts:<br>(1) The door operating bar on the leg touches and turns the latch.<br>(2) The roller moves out of the slot.<br>(3) The second roller keeps the door operating bar in position.</td>
+<td>起落架收起时：<br>(1) 支柱上的舱门操作杆接触并转动锁闩。<br>(2) 滚轮移出槽。<br>(3) 第二个滚轮将舱门操作杆固定到位。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>你可以在程序性和描述性写作中使用垂直列表，但不能在同一个垂直列表中混合两种写作类型。</p>
+</blockquote>
+<p>在安全说明中，必要时在垂直列表的每一项中包含否定命令（DO NOT）。这种方法将使安全说明更直接、更易于理解。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>CAUTION: WHEN YOU GET ACCESS TO THE REAR FUSELAGE THROUGH THE ACCESS PANEL, DO NOT:<br>- PUT YOUR FEET ON THE APU LINE.<br>- USE THE APU LINE AS A HANDLE.</td>
+<td>小心：通过检修面板进入后机身时，请勿：<br>- 将脚放在 APU 管路上。<br>- 将 APU 管路用作把手。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>CAUTION: WHEN YOU GET ACCESS TO THE REAR FUSELAGE THROUGH THE ACCESS PANEL:<br>- DO NOT PUT YOUR FEET ON THE APU LINE.<br>- DO NOT USE THE APU LINE AS A HANDLE.</td>
+<td>小心：通过检修面板进入后机身时：<br>- 请勿将脚放在 APU 管路上。<br>- 请勿将 APU 管路用作把手。</td>
+</tr>
+</tbody>
+</table>
+<p>始终确保垂直列表中的每一项都与列表的第一部分（冒号之前的文本）清晰正确地连接。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Do not use acetone for cleaning these parts after the repair:<br>- the service cabinet,<br>- the toilet shrouds with the supports,<br>- parts made of polycarbonate.</td>
+<td>修理后不要用丙酮清洁这些部件：<br>- 服务柜，<br>- 带支架的马桶护罩，<br>- 聚碳酸酯制成的部件。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>After the repair, do not use acetone to clean:<br>- The service cabinet<br>- The toilet shrouds<br>- The toilet shroud supports<br>- Parts made of polycarbonate.</td>
+<td>修理后，不要用丙酮清洁：<br>- 服务柜<br>- 马桶护罩<br>- 马桶护罩支架<br>- 聚碳酸酯制成的部件。</td>
+</tr>
+</tbody>
+</table>
+<p>始终确保垂直列表的布局易于阅读。在以下示例中，主垂直列表中包含了第二个垂直列表。请对垂直列表中的所有项目使用同一层级。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Remove these parts:<br>- The four screws (3)<br>- The four washers (4)<br>- The flange (2) that includes:<br>&nbsp;&nbsp;- The two O-rings (6)<br>&nbsp;&nbsp;- The seals (7)<br>&nbsp;&nbsp;- The shims (8)<br>- The spring (9).</td>
+<td>拆下以下部件：<br>- 四颗螺钉 (3)<br>- 四个垫圈 (4)<br>- 法兰 (2)，包括：<br>&nbsp;&nbsp;- 两个 O 形圈 (6)<br>&nbsp;&nbsp;- 密封件 (7)<br>&nbsp;&nbsp;- 垫片 (8)<br>- 弹簧 (9)。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Remove these parts:<br>- The four screws (3)<br>- The four washers (4)<br>- The flange (2) (that includes the two O-rings (6) and the seals (7))<br>- The shims (8)<br>- The spring (9).</td>
+<td>拆下以下部件：<br>- 四颗螺钉 (3)<br>- 四个垫圈 (4)<br>- 法兰 (2)（包括两个 O 形圈 (6) 和密封件 (7)）<br>- 垫片 (8)<br>- 弹簧 (9)。</td>
+</tr>
+</tbody>
+</table>
+<p>垂直列表中的项可以包含动词但不是完整句子。此时，该项末尾不使用句号。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The middle part of the reservoir has the components that follow:<br>- One check valve that prevents the backflow of fluid.<br>- One air relief valve that opens at a pressure of 25 psi.<br>- One transfer pipe connected to the pressurization manifold.</td>
+<td>储液器的中部有以下组件：<br>- 一个防止流体回流的单向阀。<br>- 一个在 25 psi 压力下打开的空气释放阀。<br>- 一根连接到增压歧管的输送管。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>The middle part of the reservoir has the components that follow:<br>- One check valve that prevents the backflow of fluid<br>- One air relief valve that opens at a pressure of 25 psi<br>- One transfer pipe connected to the pressurization manifold.</td>
+<td>储液器的中部有以下组件：<br>- 一个防止流体回流的单向阀<br>- 一个在 25 psi 压力下打开的空气释放阀<br>- 一根连接到增压歧管的输送管。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_18">连接词和连接短语</h3>
+<h4 id="44">规则 4.4 使用连接词和连接短语连接包含相关主题的句子。</h4>
+<p>连接词和连接短语将一个句子中的主题与下一个句子中的思想连接起来。</p>
+<p>在描述性文本中，连接词和连接短语为你的写作提供逻辑结构，使信息易于理解。</p>
+<p>词典中批准的一些连接词有 "and"（和）、"but"（但是）、"then"（然后）和 "thus"（因此）。</p>
+<p>"As a result"（因此）和 "at the same time"（同时）是可以使用的连接短语的例子。</p>
+<p><strong>STE 示例：</strong>（下划线为连接词和连接短语）</p>
+<blockquote>
+<p>The localizer course aligns with the centerline of the runway. <strong>And</strong> the glideslope path is at a constant angle to the threshold of the runway.
+（航向道与跑道中心线对齐。<strong>而且</strong>下滑道与跑道入口成恒定角度。）</p>
+<p>These safety precautions are the minimum necessary for work in the pit lane. <strong>But</strong> the local regulations can give other necessary safety precautions.
+（这些安全预防措施是维修区工作的最低必要要求。<strong>但</strong>地方法规可能规定其他必要的安全预防措施。）</p>
+<p>If the pressure increases, it changes the electrical currents in the transmitter. <strong>Thus</strong>, the power unit supplies currents to the indicator on the related panel.
+（如果压力升高，会改变变送器中的电流。<strong>因此</strong>，动力装置向相关面板上的指示器供电。）</p>
+<p>When the hydraulic pressure is released, the sequence valve moves to the open position. <strong>As a result</strong>, the actuators are connected to the hydraulic return.
+（当液压释放时，顺序阀移动到打开位置。<strong>因此</strong>，执行机构连接到液压回油。）</p>
+</blockquote>
+<p>你也可以使用指示形容词作为连接词，来连接相关句子中的思想。</p>
+<p>在程序中，当某个工作步骤之后需要解释时，可以使用这些连接词。在安全说明中，连接词对于连接相关句子或使文本清晰也可能是必要的。</p>
+<p><strong>STE 示例：</strong>（下划线为连接词）</p>
+<blockquote>
+<p>Tag the disassembled parts. <strong>This</strong> method will help you during the subsequent procedures.
+（给拆解的部件做标记。<strong>这种</strong>方法将在后续程序中对你有所帮助。）</p>
+<p>WARNING: ALWAYS USE PROTECTIVE EQUIPMENT IN THIS AREA. <strong>THIS</strong> PRECAUTION WILL PREVENT INJURY.
+（警告：在此区域始终使用防护设备。<strong>此</strong>预防措施将防止伤害。）</p>
+</blockquote>
+<hr />
+<h3 id="_19">冠词和指示形容词</h3>
+<h4 id="45-the-a-anthis-these">规则 4.5 在适用情况下，在名词或多词名词前使用冠词（the, a, an）或指示形容词（this, these）。</h4>
+<p>冠词和指示形容词表明名词和多词名词在句子中的位置。正确使用冠词和指示形容词，不要为了使文本更短而省略它们。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Turn shaft assembly.</td>
+<td>转动轴组件。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Turn the shaft assembly.</td>
+<td>转动轴组件。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Data module tells you how to operate unit.</td>
+<td>数据模块告诉你如何操作装置。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>This data module tells you how to operate the unit.</td>
+<td>本数据模块说明如何操作该装置。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>STE 例句：</strong> You can use equivalent alternatives for these items.（你可以对这些项目使用等效替代方案。）</p>
+</blockquote>
+<p>在名词前加冠词并不总是正确的英语。在一般性陈述或概念中不要使用冠词。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Solvents can cause damage to paint.（溶剂会对油漆造成损伤。）
+（"solvents" 或 "paint" 前没有冠词。语境没有指明特定的溶剂或油漆。）</p>
+<p>The machine operates with high efficiency.（机器以高效率运行。）
+（"high efficiency" 前没有冠词。句子指的是一个一般概念。）</p>
+<p>This software increases performance.（该软件提升性能。）
+（"performance" 前没有冠词，因为它指的是一种抽象属性。）</p>
+</blockquote>
+<p>在短句中，在所有名词前使用冠词可能更清晰。</p>
+<blockquote>
+<p>Install the nuts (2) and the bolts (3).（安装螺母 (2) 和螺栓 (3)。）</p>
+</blockquote>
+<p>但是，包含一长串项目的句子中，只在系列的第一个名词前使用冠词会更清晰。</p>
+<blockquote>
+<p>Discard the O-rings (3), gaskets (4), seals (7), and washers (9).（丢弃 O 形圈 (3)、垫片 (4)、密封件 (7) 和垫圈 (9)。）</p>
+</blockquote>
+<p>在一系列项目中使用冠词时，始终确保形容词不会引起歧义。</p>
+<blockquote>
+<p>Install the new O-rings (15), spacers (14), nut (13), and safety pin (12).（安装新的 O 形圈 (15)、隔圈 (14)、螺母 (13) 和安全销 (12)。）
+（本指令中的冠词表明系列中的所有项目都是新的。）</p>
+<p>Install the new O-rings (15), the spacers (14), the nut (13), and the safety pin (12).（安装新的 O 形圈 (15)、隔圈 (14)、螺母 (13) 和安全销 (12)。）
+（本指令中的冠词表明只有 O 形圈 (15) 是新的。）</p>
+</blockquote>
+<p>当名词后面跟有字母数字标识符时，在名词前使用定冠词是不正确的。这是因为字母数字标识符表明它是一个专有名词。</p>
+<p><strong>示例：</strong>
+- 不正确：Tag the circuit breaker 36L7.
+- 正确：Tag circuit breaker 36L7.（标记断路器 36L7。）</p>
+<blockquote>
+<p>如果你不确定如何在写作中正确使用冠词，请参阅全面的语法书，例如 Michael Swan 著的《Practical English Usage》（《实用英语用法》）。这类资源提供了关于语法主题的清晰解释，包括如何以及何时在文本中正确使用冠词。</p>
+</blockquote>
+<hr />
+<h2 id="5">第 5 节 程序性写作</h2>
+<h3 id="_20">规则总览</h3>
+<p><strong>句子</strong>
+- <strong>规则 5.1</strong> 写短句。每个句子最多使用 20 个词。
+- <strong>规则 5.2</strong> 每个句子只写一条指令，除非两个或多个动作同时发生。</p>
+<p><strong>程序中的动词</strong>
+- <strong>规则 5.3</strong> 用祈使（命令）形式写指令。</p>
+<p><strong>指令中的描述性陈述</strong>
+- <strong>规则 5.4</strong> 当有读者必须首先了解的条件时，以描述性陈述开头。然后，用逗号将描述性陈述与命令分开。</p>
+<p><strong>注释</strong>
+- <strong>规则 5.5</strong> 注释仅用于提供信息，不用于提供指令。</p>
+<hr />
+<h3 id="_21">句子</h3>
+<h4 id="51-20">规则 5.1 写短句。每个句子最多使用 20 个词。</h4>
+<p>程序给出告诉你如何完成任务的指令。工作步骤中的长句子不易理解。</p>
+<p>在 STE 中，程序性句子的最大长度为 20 个词。</p>
+<p>警告、小心和其他安全说明也必须遵守此规则。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Install the three auxiliary screws (2) in the flange of the motor assembly (9).
+（将三颗辅助螺钉 (2) 安装到电机组件 (9) 的法兰中。）
+（本句有 14 个词。）</p>
+<p>CAUTION: WHEN YOU REMOVE THE SHROUD (26), BE CAREFUL NOT TO CAUSE DAMAGE TO THE SURFACE OF THE FLANGE ASSEMBLY (22).
+（小心：拆卸护罩 (26) 时，小心不要损坏法兰组件 (22) 的表面。）
+（本句有 20 个词。）</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Put preservation oil into the unit through the vent hole until the oil level is approximately 6 mm (0.24 inches) below the surface of the flange cover.（25 个词）</td>
+<td>通过通气孔向装置中注入保护油，直到油位大约在法兰盖表面下方 6 毫米（0.24 英寸）处。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Put preservation oil into the unit through the vent hole.（10 个词） Continue until the oil level is approximately 6 mm (0.24 in) below the surface of the flange cover.（16 个词）</td>
+<td>通过通气孔向装置中注入保护油。继续注入，直到油位大约在法兰盖表面下方 6 毫米（0.24 英寸）处。</td>
+</tr>
+</tbody>
+</table>
+<p>在最后一个 STE 示例中，长句被分成两个较短的句子，更易于阅读。你不能将此指令分成两个不同的工作步骤，因为这两个动作同时发生。</p>
+<blockquote>
+<p>第 8 节给出了所有关于词数的规则。</p>
+<p>注释（规则 5.5）不遵守规则 5.1。注释在程序中很重要，但它们只包含信息。因此，注释中句子的最大长度为 25 个词。</p>
+</blockquote>
+<hr />
+<h4 id="52">规则 5.2 每个句子只写一条指令，除非两个或多个动作同时发生。</h4>
+<p>如果一个句子中有太多指令，句子就不易阅读和理解。每个句子只写一条指令，并（通常用数字或字母）清楚地显示工作步骤的顺序。程序中可以使用任意数量的工作步骤。</p>
+<p><strong>示例：</strong></p>
+<blockquote>
+<p><strong>STE：</strong> (1) Set the TEST switch to the middle position.（(1) 将 TEST 开关设到中间位置。）
+(2) Make sure that all the switches on the control panel are OFF.（(2) 确保控制面板上的所有开关都处于 OFF 状态。）
+（两个工作步骤）</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Set the TEST switch to the middle position and release the SHORT-CIRCUIT TEST switch.</td>
+<td>将 TEST 开关设到中间位置，然后释放 SHORT-CIRCUIT TEST 开关。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>A. Set the TEST switch to the middle position.<br>B. Release the SHORT-CIRCUIT TEST switch.</td>
+<td>A. 将 TEST 开关设到中间位置。<br>B. 释放 SHORT-CIRCUIT TEST 开关。</td>
+</tr>
+</tbody>
+</table>
+<p>（原句被分成两个不同的工作步骤，因为这两个动作不是同时发生的。）</p>
+<p>当两个动作同时发生时，可以在一个句子中写多条指令。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Hold the panel in its open position and install the fastener.
+（将面板保持在打开位置，然后安装紧固件。）</p>
+<p>Slowly extend the rod fully and make sure that it does not touch other parts.
+（缓慢完全伸出活塞杆，并确保其不触碰其他部件。）</p>
+<p>Cut and remove the wire.
+（切断并移除金属丝。）</p>
+<p>Remove and discard the seal.
+（拆下并丢弃密封件。）</p>
+</blockquote>
+<p>在一个工作步骤中可以写多个句子：
+- 当动作同时发生时
+- 当动作后立即产生结果时</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Make sure that the locking torque of each of the four bolts (6) is a minimum of 0.30 Nm. Then, torque each of the four bolts (6) to 4.20 Nm.
+（确保四颗螺栓 (6) 中每颗的锁紧扭矩最小为 0.30 Nm。然后，将四颗螺栓 (6) 中每颗扭矩拧紧至 4.20 Nm。）
+（在扭矩程序中，扭矩动作紧接在锁紧扭矩检查之后，作为一个动作完成。因此，不能将句子分成两个不同的工作步骤。）</p>
+<p>Measure the leakage from the outlet port. The leakage must not be more than 0.5 cc/minute.
+（测量出口的泄漏量。泄漏量不得超过 0.5 毫升/分钟。）
+（第二句给出了测试结果的限值。该工作步骤在一个动作中完成，不能将句子分成两个不同的工作步骤。）</p>
+</blockquote>
+<hr />
+<h3 id="_22">程序中的动词</h3>
+<h4 id="53">规则 5.3 用祈使（命令）形式写指令。</h4>
+<p>指令告诉读者要做某事。将动词写成祈使（命令）形式。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Set the switch to ON.（将开关设为 ON。）
+Remove the four bolts.（拆下四颗螺栓。）
+Increase the pressure to 60 psi.（将压力增至 60 psi。）
+Inflate the tires.（给轮胎充气。）
+Install the new O-ring.（安装新的 O 形圈。）</p>
+</blockquote>
+<p>祈使形式给读者清晰的指令。如果你使用其他类型的句子结构，可能会造成歧义。因此，读者将不知道：
+- 某个工作步骤是否重要
+- 是否是其他人完成了该工作步骤
+- 是否是其他人必须在将来完成该工作步骤</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The test can be continued.</td>
+<td>测试可以继续。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Continue the test.</td>
+<td>继续测试。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Oil and grease are to be removed with a degreasing agent.</td>
+<td>油和润滑脂要用脱脂剂去除。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Remove oil and grease with a degreasing agent.</td>
+<td>用脱脂剂去除油和润滑脂。</td>
+</tr>
+</tbody>
+</table>
+<p>不要在祈使形式前使用动词 "must"（必须），除非该指令对安全非常重要（例如在安全说明中）或当你给出重要条件时。</p>
+<p><strong>示例：</strong></p>
+<p>不要写：</p>
+<blockquote>
+<p>Before you remove the clamp, you must disconnect the hose.（拆卸夹具前，你必须断开软管。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>Before you remove the clamp, disconnect the hose.（拆卸夹具前，断开软管。）</p>
+<p><strong>STE：</strong> WARNING: IF YOU MUST CUT THE WIRE, ALWAYS USE A PROTECTIVE MASK. PIECES OF WIRES CAN CAUSE INJURY.
+（警告：如果你必须切割金属丝，务必使用防护面罩。金属碎片可能造成伤害。）</p>
+</blockquote>
+<hr />
+<h3 id="_23">指令中的描述性陈述</h3>
+<h4 id="54">规则 5.4 当有读者必须首先了解的条件时，以描述性陈述开头。然后，用逗号将描述性陈述与命令分开。</h4>
+<p>如果某个工作步骤需要特殊条件，读者必须先了解该条件。将条件写在句子前面，然后用逗号表示条件的结束和指令的开始。</p>
+<p><strong>示例：</strong></p>
+<p>不要写：</p>
+<blockquote>
+<p>Set the switch to NORMAL when the light comes on.（灯亮时将开关设为 NORMAL。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>When the light comes on, set the switch to NORMAL.（灯亮时，将开关设为 NORMAL。）</p>
+</blockquote>
+<p>不要写：</p>
+<blockquote>
+<p>Apply the primer when the surface is dry.（表面干燥时涂底漆。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>When the surface is dry, apply the primer.（表面干燥时，涂底漆。）</p>
+</blockquote>
+<p>不要写：</p>
+<blockquote>
+<p>Disconnect the Constant Speed Drive (CSD) from the gearbox, if it does not operate correctly.（如果恒速传动装置（CSD）不能正常工作，将其从齿轮箱上断开。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>If the Constant Speed Drive (CSD) does not operate correctly, disconnect it from the gearbox.（如果恒速传动装置（CSD）不能正常工作，将其从齿轮箱上断开。）</p>
+</blockquote>
+<p>逗号很重要。使用时要小心，因为逗号的位置会改变句子的意思。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>If the Constant Speed Drive (CSD) does not operate correctly, disconnect it from the gearbox.
+（如果恒速传动装置（CSD）不能正常工作，将其从齿轮箱上断开。）</p>
+<p>If the Constant Speed Drive (CSD) does not operate, correctly disconnect it from the gearbox.
+（如果恒速传动装置（CSD）不工作，正确地将其从齿轮箱上断开。）</p>
+</blockquote>
+<p>示例中的两个句子都是正确的，但它们的意思不同。在第一句中，"correctly" 后面的逗号表明副词修饰动词 "operate"（工作）。在第二句中，"operate" 后面的逗号表明副词修饰动词 "disconnect"（断开）。</p>
+<hr />
+<h3 id="_24">注释</h3>
+<h4 id="55">规则 5.5 注释仅用于提供信息，不用于提供指令。</h4>
+<p>注释仅提供信息，帮助读者在程序中操作。它们包含描述性文本，并遵守描述性写作的规则。</p>
+<p>注释不得给出指令、要求或限制。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>NOTE: The gyroscope will become stable after approximately 15 seconds.
+（注：陀螺仪将在大约 15 秒后稳定。）</p>
+<p>NOTE: It is not necessary to remove the nameplate (33) from the flange (27).
+（注：无需从法兰 (27) 上拆下铭牌 (33)。）</p>
+<p>NOTE: You can use equivalent alternatives for these items.
+（注：你可以对这些项目使用等效替代方案。）</p>
+</blockquote>
+<p>一条注释可以有一个或多个句子。注释中的每个句子最多可以有 25 个词。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>NOTE: During the subsequent test, you get the cracking pressure when the fuel flow from the CROSS FEED port is more than 5 cc/minute.
+（注：在后续测试中，当 CROSS FEED 端口的燃油流量超过 5 毫升/分钟时，即达到开启压力。）
+（一个句子，22 个词。）</p>
+<p>NOTE: The data collection is not completed. Thus, the statistics module can give incorrect results.
+（注：数据收集未完成。因此，统计模块可能给出不正确的结果。）
+（两个句子，分别为 6 个词和 8 个词。）</p>
+</blockquote>
+<p>不要在注释中使用祈使形式。如果使用祈使形式，注释就变成了工作步骤的指令。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>NOTE: Make sure that the avionics ventilation system continues to operate correctly.（这段文字不是注释，因为它包含祈使形式。）</td>
+<td>注：确保航电通风系统继续正常运行。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>(6) Make sure that the avionics ventilation system continues to operate correctly.（这是相应程序中的第 6 步工作步骤。）</td>
+<td>(6) 确保航电通风系统继续正常运行。</td>
+</tr>
+</tbody>
+</table>
+<p>如果在注释中包含指令，读者可能看不到该信息。如果注释中提供的信息对于防止损坏或伤害很重要，则必须在安全说明中提供该信息。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>NOTE: When you connect the lines, do not bend them too much. If you bend the lines too much, you can cause damage to them.（这段文字不是注释。这是安全说明。）</td>
+<td>注：连接管路时，不要过度弯曲。如果过度弯曲管路，可能会对其造成损坏。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>CAUTION: WHEN YOU CONNECT THE LINES, DO NOT BEND THEM TOO MUCH. IF YOU BEND THE LINES TOO MUCH, YOU CAN CAUSE DAMAGE TO THEM.</td>
+<td>小心：连接管路时，请勿过度弯曲。如果过度弯曲管路，可能会对其造成损坏。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>NOTE: Before closing the hatch, it is mandatory to ensure that no persons are in the crew rest compartment. When the hatch is closed, there is no airflow to the compartment and therefore there is a risk of suffocation.（虽然非 STE 文本不包含祈使形式，但它不是注释。这是安全说明。）</td>
+<td>注：关闭舱口前，必须确保机组休息舱内无人。舱口关闭时，舱室内没有气流，因此有窒息风险。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>WARNING: BEFORE YOU CLOSE THE HATCH, MAKE SURE THAT NO PERSONS ARE IN THE CREW REST COMPARTMENT. WHEN THE HATCH IS CLOSED, THERE IS NO AIRFLOW TO THE COMPARTMENT AND THERE IS A RISK OF SUFFOCATION.</td>
+<td>警告：关闭舱口前，确保机组休息舱内无人。舱口关闭时，舱室内没有气流，有窒息风险。</td>
+</tr>
+</tbody>
+</table>
+<p>不要用注释来给出限制、公差或工作步骤的结果。这些信息必须直接紧跟在工作步骤中的相关动作之后。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>B. Measure the leakage from the outlet port.<br>NOTE: The leakage must not be more than 0.5 cc/minute.（此注释给出了对工作步骤很重要的限制。）</td>
+<td>B. 测量出口的泄漏量。<br>注：泄漏量不得超过 0.5 毫升/分钟。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>B. Measure the leakage from the outlet port. The leakage must not be more than 0.5 cc/minute.（此工作步骤正确。先给出动作，然后给出相关限制。）</td>
+<td>B. 测量出口的泄漏量。泄漏量不得超过 0.5 毫升/分钟。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>如何正确使用注释</strong></p>
+<p>编写程序时，如果程序包含注释，请做以下测试：
+- 仔细阅读不带注释的程序。
+- 确保读者在没有注释的情况下也能正确执行程序。</p>
+<p>测试结果令人满意，说明你正确使用了注释。</p>
+<p>如果程序中缺少重要信息，而这些信息在注释中：
+- 将该信息从注释中移除。
+- 将缺失的信息写入工作步骤。
+- 在程序中的适当位置加入这个新的工作步骤。
+- 再次进行测试，直到你完全确定读者可以在没有注释的情况下执行程序。</p>
+<blockquote>
+<p>在 STE 中，你在程序中使用注释。只有当注释是描述中的插图或表格所必需时，才能在描述中写注释。</p>
+</blockquote>
+<hr />
+<h2 id="6">第 6 节 描述性写作</h2>
+<h3 id="_25">规则总览</h3>
+<p><strong>内容结构</strong>
+- <strong>规则 6.1</strong> 逐步提供信息。
+- <strong>规则 6.2</strong> 使用关键词和关键短语为文本赋予逻辑结构。</p>
+<p><strong>句子</strong>
+- <strong>规则 6.3</strong> 写短句。每个句子最多使用 25 个词。</p>
+<p><strong>段落</strong>
+- <strong>规则 6.4</strong> 使用段落来展示相关信息。
+- <strong>规则 6.5</strong> 确保每个段落只有一个主题。
+- <strong>规则 6.6</strong> 确保段落不超过六个句子。</p>
+<hr />
+<h3 id="_26">内容结构</h3>
+<p>描述性写作提供信息，而非指令。因此，不允许使用动词的祈使形式。</p>
+<p>描述性写作可以是：
+- 对物品、产品、系统或组件的描述，包括其功能、制造方式和运行方式
+- 提供一般信息的文本（例如报告、小册子和论文）
+- 程序中的注释</p>
+<hr />
+<h4 id="61">规则 6.1 逐步提供信息。</h4>
+<p>在描述性文本中，逐步提供信息，并确保每个句子只包含一个主语。如果过快提供过多信息，文本将不易理解，读者需要重读。</p>
+<p><strong>示例：</strong></p>
+<p><strong>非 STE：</strong></p>
+<blockquote>
+<p><strong>Instrument Landing System</strong>
+During the approach to the runway, deviation pointers in the course indicators give commands to fly up or down and left or right. This information comes from the VHF transceivers, which are part of the Instrument Landing System. This helps the pilot during the landing approach. When the pilot responds to the commands, the aircraft can be flown over the runway centerline (localizer) and at a fixed angle (glideslope) to the runway threshold. The localizer signals are processed by the transceiver and data are transmitted to Air Traffic Control.</p>
+<p><strong>仪表着陆系统</strong>
+在跑道进近期间，航向指示器中的偏差指针给出向上或向下、向左或向右飞行的指令。该信息来自甚高频收发器，它们是仪表着陆系统的一部分。这有助于飞行员在着陆进近期间操作。当飞行员响应指令时，飞机可以沿跑道中心线（航向道）并以固定角度（下滑道）飞向跑道入口飞行。航向道信号由收发器处理，数据传输给空中交通管制。</p>
+</blockquote>
+<p>以下 STE 文本展示了如何使用短句写出清晰的文本，逐步提供信息。每个句子只包含一个主语（下划线文字）。</p>
+<p><strong>STE：</strong></p>
+<blockquote>
+<p><strong>Instrument Landing System</strong>
+The Instrument Landing System (the system) on the aircraft shows data that helps the pilot during the approach to the runway. This system shows the pilot the deviations from the localizer course and the glideslope path. The localizer course aligns with the centerline of the runway. And the glideslope path is at a constant angle to the threshold of the runway. During the approach to the runway, deviation pointers in the course indicators show the pilot in which direction the aircraft must go:
+- Left or right (for the localizer)
+- Up or down (for the glideslope).
+This data about deviations from the localizer course and glideslope path comes from two VHF transceivers. These transceivers transmit this data to Air Traffic Control.</p>
+<p><strong>仪表着陆系统</strong>
+飞机上的仪表着陆系统（简称"系统"）显示的数据可在跑道进近期间为飞行员提供帮助。该系统向飞行员显示偏离航向道和下滑道的偏差。航向道与跑道中心线对齐。下滑道与跑道入口成恒定角度。在跑道进近期间，航向指示器中的偏差指针向飞行员显示飞机必须前往的方向：
+- 左或右（航向道）
+- 上或下（下滑道）。
+这些关于航向道和下滑道偏差的数据来自两个甚高频收发器。这些收发器将这些数据传输给空中交通管制。</p>
+</blockquote>
+<p>STE 文本分为两段，具有逻辑结构：
+- 第一段有五个句子。
+- 第二段有两个句子。</p>
+<hr />
+<h4 id="62">规则 6.2 使用关键词和关键短语为文本赋予逻辑结构。</h4>
+<p>关键词是在文本中出现以连接不同思想的词，关键短语是具有相同功能的短语。</p>
+<p>这些关键词和关键短语展示了文本中的信息如何相互关联，并为文本赋予逻辑结构。</p>
+<p>你也可以使用连接词和连接短语来帮助读者理解文本中思想的逻辑流动。连接词和连接短语具有交通标志的功能，告诉读者信息是新的、不同的还是先前信息的结果。批准的连接词示例有："and"（和）、"but"（但是）、"then"（然后）、"thus"（因此），连接短语示例有 "as a result"（因此）和 "at the same time"（同时）。</p>
+<p>以下示例是规则 6.1 示例的 STE 文本。在文本中，你可以看到下划线的关键词和关键短语如何连接句子及其相关思想。这使文本更易于阅读和理解。</p>
+<p>使用关键词和关键短语时，确保不要在文本中更改它们。相同的术语将保持文本的清晰和正确。</p>
+<p><strong>STE 示例：</strong></p>
+<p><strong>句子 1 → 句子 2</strong></p>
+<p>The Instrument Landing System (the system) on the aircraft shows data that helps the pilot during the approach to the runway. → This system shows the pilot the deviations from the localizer course and the glideslope path.</p>
+<p>（句子 2 再次使用关键词 "system"、"show" 和 "pilot"，以添加关于句子 1 的更多信息。）</p>
+<p><strong>句子 2 → 句子 3 和 4</strong></p>
+<p>This system shows the pilot the deviations from the localizer course and the glideslope path. → The localizer course aligns with the centerline of the runway. And the glideslope path is at a constant angle to the threshold of the runway.</p>
+<p>（句子 3 和 4 再次使用关键词 "localizer course" 和 "glideslope path"，并添加新信息。）</p>
+<p><strong>句子 3 → 句子 4</strong></p>
+<p>The localizer course aligns with the centerline of the runway. → And the glideslope path is at a constant angle to the threshold of the runway.</p>
+<p>（句子 3 和 4 还包含关键词 "runway"，它回指句子 1。）</p>
+<p><strong>句子 3 和 4 → 句子 5</strong></p>
+<p>The localizer course aligns with the centerline of the runway. And the glideslope path is at a constant angle to the threshold of the runway. → During the approach to the runway, deviation pointers in the course indicators show the pilot in which direction the aircraft must go:
+- Left or right (for the localizer)
+- Up or down (for the glideslope).</p>
+<p>（句子 5 也通过关键词 "runway" 再次连接到前面的句子 3 和 4。然后，句子 5 提供了关于航向道和下滑道指示器功能的更多信息。）</p>
+<p><strong>句子 2 → 句子 5</strong></p>
+<p>This system shows the pilot the deviations from the localizer course and the glideslope path. → During the approach to the runway, deviation pointers in the course indicators show the pilot in which direction the aircraft must go:
+- Left or right (for the localizer)
+- Up or down (for the glideslope).</p>
+<p>（关键词和关键短语（如 "show(s) the pilot"）在句子 2 和 5 之间建立了逻辑联系。）</p>
+<p><strong>句子 1 → 句子 5</strong></p>
+<p>The Instrument Landing System in the aircraft shows data that helps the pilot during the approach to the runway. → During the approach to the runway, deviation pointers in the course indicators show the pilot in which direction the aircraft must go:
+- Left or right (for the localizer)
+- Up or down (for the glideslope).</p>
+<p>（句子 1 和 5 也相互连接，构成一个逻辑段落。句子 5 还再次使用句子 1 中的关键短语 "during the approach to the runway" 来回指初始句子并提供更多信息。）</p>
+<p>当你再次使用相同的关键词和关键短语时，句子之间具有逻辑联系。如果你使用不同的术语，文本将不易阅读。</p>
+<p>两段之间也存在逻辑联系。</p>
+<ul>
+<li>第 1 段（句子 1 至 5）：偏差、数据、航向道、下滑道</li>
+<li>第 2 段（句子 6 和 7）：This data about deviations from the localizer course and glideslope path comes from two VHF transceivers. These transceivers transmit this data to Air Traffic Control.</li>
+</ul>
+<hr />
+<h3 id="_27">句子</h3>
+<h4 id="63-25">规则 6.3 写短句。每个句子最多使用 25 个词。</h4>
+<p>好的技术写作对复杂主题使用短句。短句为你的写作提供清晰的结构，使信息更易于理解。</p>
+<p>在描述性写作中，最大句子长度为 25 个词。这是因为描述性文本比程序性文本更复杂。</p>
+<p><strong>示例：</strong></p>
+<blockquote>
+<p><strong>STE：</strong> During the approach to the runway, deviation pointers in the course indicators show the pilot in which direction the aircraft must go.（22 个词）
+（在跑道进近期间，航向指示器中的偏差指针向飞行员显示飞机必须前往的方向。）</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>A smartphone is a cellular telephone that has an integrated computer and many other functions, such as an operating system, internet browsing as well as the ability to run software applications.（31 个词）</td>
+<td>智能手机是一种蜂窝电话，它集成了计算机和许多其他功能，如操作系统、互联网浏览以及运行软件应用程序的能力。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>A smartphone is a cellular telephone that has an integrated computer and many other functions.（15 个词） It includes an operating system and an internet browser, and it can also operate software applications.（16 个词）</td>
+<td>智能手机是一种集成了计算机和许多其他功能的蜂窝电话。它包括操作系统和互联网浏览器，还可以运行软件应用程序。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="_28">段落</h3>
+<h4 id="64">规则 6.4 使用段落来展示相关信息。</h4>
+<p>在程序中，工作步骤通常用数字和字母来显示其顺序。在描述性写作中，段落将相关信息保持在一起，并为文本提供逻辑顺序。</p>
+<p>在 STE 中，段落以"主题句"开头，告诉读者该段落的主题。然后，主题句之后的句子对其进行解释，或提供更多相关信息。</p>
+<p>在示例中，每段开头带下划线的主题句帮助读者理解段落的内容及其主题。当新段落开始时，读者知道该段落中将有新的主题或不同的信息。</p>
+<p><strong>示例：</strong></p>
+<blockquote>
+<p><strong>STE：</strong>
+<strong>1. Lightning Strike（雷击）</strong>
+<strong>A. General（概述）</strong>
+(1) <strong>A lightning strike can cause damage to the aircraft.</strong> The damage usually occurs at the attachment points. The attachment points include:
+- The nose of the fuselage
+- The tail section
+- The propellers
+- The wing tips
+- The tips of the stabilizer
+- The trailing edge of the stabilizer
+- The antennas
+- The static dischargers.</p>
+<p>(2) <strong>From the attachment points, the lightning strike usually goes aft through the structure of the aircraft.</strong> The high current of the lightning strike can cause damage to the mechanical systems of the aircraft. Thus, a permanent or a temporary malfunction of the electrical and electronic equipment and systems can occur.</p>
+<p>(3) <strong>If a lightning strike occurs, it is necessary to do an inspection of the aircraft for damage.</strong> The maintenance personnel must do this inspection before the next flight.</p>
+<p><strong>雷击</strong>
+<strong>A. 概述</strong>
+(1) <strong>雷击会对飞机造成损伤。</strong> 损伤通常发生在附着点。附着点包括：
+- 机鼻
+- 尾部
+- 螺旋桨
+- 翼尖
+- 安定面翼尖
+- 安定面后缘
+- 天线
+- 静电放电器。</p>
+<p>(2) <strong>雷击通常从附着点穿过飞机结构向后传播。</strong> 雷击的大电流会对飞机的机械系统造成损伤。因此，电气和电子设备与系统可能发生永久性或临时性故障。</p>
+<p>(3) <strong>如果发生雷击，必须对飞机进行损伤检查。</strong> 维修人员必须在下次飞行前完成此检查。</p>
+</blockquote>
+<p>该示例有三个短段落，为文本提供了清晰的结构，使读者易于理解。</p>
+<hr />
+<h4 id="65">规则 6.5 确保每个段落只有一个主题。</h4>
+<p>在描述性写作中，段落描述主题，每个段落只有一个主题很重要。主题句是段落中第一句也是最重要的句子。主题句提供新信息，并在新信息与先前信息之间建立逻辑联系。为了在段落中建立逻辑联系，主题句通常包含关键词和/或连接词或连接短语。</p>
+<p>从主题句中，读者将理解文本的内容，并能快速找到相关信息。如果读者写下文本中每个主题句，它们将构成内容的良好大纲。每个段落中的其他句子为信息提供逻辑结构，并添加关于段落主题的更多信息。</p>
+<p>如果你再次参考规则 6.1 和 6.2 示例中的 STE 文本，你可以看到文本分为两段：
+- 第 1 段（句子 1 至 5）——主题是："帮助飞行员的数据"
+- 第 2 段（句子 6 和 7）——主题是："这些数据如何传输"</p>
+<p>在以下示例中，每段开头带下划线的主题句帮助读者理解该段落解释的内容。然后更多信息逐步呈现，并与文本中的信息正确连接。</p>
+<p><strong>示例：</strong></p>
+<blockquote>
+<p><strong>STE：</strong>
+<strong>Instrument Landing System（仪表着陆系统）</strong>
+<strong>The Instrument Landing System (the system) on the aircraft shows data that helps the pilot during the approach to the runway.</strong> This system shows the pilot the deviations from the localizer course and the glideslope path. The localizer course aligns with the centerline of the runway. And the glideslope path is at a constant angle to the threshold of the runway. During the approach to the runway, deviation pointers in the course indicators show the pilot in which direction the aircraft must go:
+- Left or right (for the localizer)
+- Up or down (for the glideslope).</p>
+<p><strong>This data about deviations from the localizer course and glideslope path comes from two VHF transceivers.</strong> These transceivers transmit this data to Air Traffic Control.</p>
+</blockquote>
+<hr />
+<h4 id="66">规则 6.6 确保段落不超过六个句子。</h4>
+<p>段落将文本分成逻辑单元，帮助保持读者的注意力。如果段落太长，就无法发挥这个功能。不要将不同主题放在同一段落中。如果一个段落超过六个句子，将其分成两个较小的段落。这种结构将使文本更易于阅读。</p>
+<p><strong>示例：</strong></p>
+<blockquote>
+<p><strong>STE：</strong>
+<strong>Description of the fuel manifold (refer to figure 10001)</strong>
+The fuel manifold (1) has these primary parts:
+- Two motorized fuel shut-off valves (referred to in this manual as a "shut-off valve")
+- A pressure transducer (2)
+- Three fittings (10), (13) and (15).
+（一段，1 个句子）</p>
+<p>The shut-off valve operates in the valve body (21). The valve body (21) has:
+- An aluminum alloy ball (27)
+- A retaining ring (31)
+- Two seals (26)
+- A spring (25).
+（一段，2 个句子）</p>
+<p>The spring (25) holds the ball (27) in position to prevent internal leakage. The preformed packings (18), (2) and (30) are installed on the seals (26), the shaft (28), and in the valve body. They prevent external leakage. One of the two seals (26), on which the spring (25) operates, has the function of a relief valve. It operates when the pressure applied in the opposite direction is more than a set value.
+（一段，5 个句子）</p>
+<p>The actuator assembly (4) is of a rotary type. A DC motor, which has a permanent high-speed magnet, supplies power to the actuator. Micro-switches in the actuator de-energize it at the end of travel. They also send signals to the fuel control panel to show the operation condition of the valve. A micro-relay controls the direction of shaft rotation and an electrical connector connects the actuator assembly to the aircraft electrical supply.
+（一段，4 个句子）</p>
+<p>The pressure transducer (2) is installed downstream of the shut-off valve (in the RH engine line). The fitting (10) connects the pressure transducer (2) to the fuel manifold (1). A lockwire safeties the pressure transducer (2). The pressure transducer (2) has an electrical connector that connects it to the Fuel Management System of the aircraft.
+（一段，4 个句子）</p>
+<p>Three fittings (10), (13), and (15) connect the two shut-off valves and the pressure transducer (2). They attach the fuel manifold (1) to the aircraft structure.
+（一段，2 个句子）</p>
+<p><strong>燃油歧管说明（参见图 10001）</strong>
+燃油歧管 (1) 有以下主要部件：
+- 两个电动燃油关断阀（本手册中简称"关断阀"）
+- 一个压力传感器 (2)
+- 三个接头 (10)、(13) 和 (15)。</p>
+<p>关断阀在阀体 (21) 内工作。阀体 (21) 包含：
+- 一个铝合金球 (27)
+- 一个挡圈 (31)
+- 两个密封件 (26)
+- 一个弹簧 (25)。</p>
+<p>弹簧 (25) 将球 (27) 保持在适当位置，防止内部泄漏。预成型密封垫 (18)、(2) 和 (30) 安装在密封件 (26)、轴 (28) 上以及阀体内。它们防止外部泄漏。两个密封件 (26) 中的一个受弹簧 (25) 作用，具有安全阀的功能。当反向施加的压力超过设定值时，它会开启。</p>
+<p>执行机构组件 (4) 为旋转式。带有高速永磁体的直流电机为执行机构提供动力。执行机构中的微动开关在行程结束时使其断电。它们还向燃油控制面板发送信号，显示阀门的运行状态。一个微型继电器控制轴的旋转方向，一个电连接器将执行机构组件连接到飞机电源。</p>
+<p>压力传感器 (2) 安装在关断阀的下游（在右发动机管路中）。接头 (10) 将压力传感器 (2) 连接到燃油歧管 (1)。一根保险线为压力传感器 (2) 提供保险。压力传感器 (2) 有一个电连接器，将其连接到飞机的燃油管理系统。</p>
+<p>三个接头 (10)、(13) 和 (15) 连接两个关断阀和压力传感器 (2)。它们将燃油歧管 (1) 固定到飞机结构上。</p>
+</blockquote>
+<p>该示例有多个短段落，为文本提供了清晰的结构，使读者易于理解。</p>
+<hr />
+<h2 id="7">第 7 节 安全说明</h2>
+<h3 id="_29">规则总览</h3>
+<p><strong>定义</strong></p>
+<p><strong>如何撰写安全说明</strong>
+- <strong>规则 7.1</strong> 使用相应的词（例如"警告"或"小心"）来标识风险等级。
+- <strong>规则 7.2</strong> 以清晰准确的命令或条件开头。
+- <strong>规则 7.3</strong> 给出解释以说明风险或可能的结果。</p>
+<hr />
+<h3 id="_30">定义</h3>
+<p>安全说明告诉读者程序或程序中的工作步骤可能是危险的或可能造成损坏。通常，描述性写作不包含安全说明，除非这些说明是引用文本，或者描述性文本包含安全风险。</p>
+<p>以下词汇和定义符合适用于航空航天和国防领域的技术出版物规范：
+- <strong>警告（warning）</strong> 告诉读者存在受伤或死亡的风险。
+- <strong>小心（caution）</strong> 告诉读者存在物品损坏的风险。</p>
+<blockquote>
+<p>其他行业或领域可能使用不同的词汇或类别来表示安全说明。</p>
+</blockquote>
+<p>如果你使用不同的词汇（例如 "danger"、"attention" 或 "notice"）或图形符号，请始终确保内容遵守规则 7.1 至 7.3。更多信息请参阅：
+- 国际标准化组织。(2018)。职业健康安全管理体系 — 要求及使用指南（ISO 45001:2018）。
+- 美国国家标准学会。(2024)。ANSI Z535 系列。
+- 国际标准化组织。(2024)。图形符号 — 安全颜色和安全标志 — 第 1 至 4 部分（ISO 3864）。</p>
+<hr />
+<h3 id="_31">如何撰写安全说明</h3>
+<h4 id="71">规则 7.1 使用相应的词（例如"警告"或"小心"）来标识风险等级。</h4>
+<p>使用一个词（例如"警告"或"小心"）或在适用时使用符号，立即向读者显示相关风险的等级。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>本节中的所有示例均使用大写字母，但 STE 不对格式做出规定。请参阅适用的技术出版物规范、风格指南和其他官方指令。</p>
+<p><strong>WARNING: BEFORE YOU FILL THE LIQUID OXYGEN SYSTEM, PUT ON A FACE MASK AND PROTECTIVE CLOTHING. LIQUID OXYGEN CAN CAUSE IRRITATION OF THE RESPIRATORY TRACT AND EYE IRRITATION.</strong></p>
+<p>警告：给液氧系统加注前，请戴上面罩和防护服。液氧会刺激呼吸道和眼睛。</p>
+<p><strong>WARNING: ALWAYS KEEP YOUR HANDS AND FEET AWAY FROM THE BLADE. WHEN THE MOTOR OPERATES, THE BLADE TURNS AND CAN CAUSE INJURY.</strong></p>
+<p>警告：始终让你的手和脚远离叶片。电机运行时，叶片旋转，可能造成伤害。</p>
+<p><strong>CAUTION: BEFORE YOU OPERATE THE GROUND TEST UNIT, MAKE SURE THAT THE PRESSURE REGULATOR IS SET TO ZERO. THIS PRECAUTION WILL PREVENT DAMAGE TO THE UNIT.</strong></p>
+<p>小心：操作地面试验装置前，确保压力调节器设为零。此预防措施将防止装置损坏。</p>
+<p><strong>CAUTION: DO NOT USE BLEACH OR CLEANSERS THAT CONTAIN CHLORINE TO CLEAN THE UNIT. THESE CLEANING AGENTS CAN CAUSE CORROSION.</strong></p>
+<p>小心：不要使用漂白剂或含氯清洁剂清洁装置。这些清洁剂会造成腐蚀。</p>
+</blockquote>
+<p>进行准确的风险分析以确定风险等级。然后，做出决定：
+- 如果存在受伤或死亡的风险，使用"警告"。
+- 如果存在机器、工具或设备损坏的风险，使用"小心"。
+- 如果同时存在两种风险等级，使用"警告"。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>CAUTION: EXTREME CLEANLINESS OF OXYGEN TUBES IS IMPERATIVE.</td>
+<td>小心：氧气管的极度清洁是必须的。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>WARNING: MAKE SURE THAT THE OXYGEN TUBES ARE FULLY CLEAN. OXYGEN AND GREASE MAKE AN EXPLOSIVE MIXTURE. AN EXPLOSION CAN CAUSE INJURY OR DEATH.</td>
+<td>警告：确保氧气管完全清洁。氧气和润滑脂会形成爆炸性混合物。爆炸可能导致受伤或死亡。</td>
+</tr>
+</tbody>
+</table>
+<p>在非 STE 示例中，安全说明是"小心"。但如果你了解氧气系统，你也知道氧气与其他物质混合可能引起爆炸。因为这里存在受伤或死亡的风险，你必须将此安全说明标识为"警告"。</p>
+<p>比较两个安全说明中的措辞。非 STE 安全说明是一个抽象句子，只做一般性陈述。STE 中的警告提供了关于如何降低爆炸风险的清晰正确的信息。警告包含"爆炸"、"受伤"和"死亡"等词，使读者清楚地理解此安全说明的重要性。</p>
+<hr />
+<h4 id="72">规则 7.2 以清晰准确的命令或条件开头。</h4>
+<p>安全说明以清晰准确的命令或条件开头。你的读者必须知道如何预防事故并保持高安全水平。</p>
+<p><strong>STE 示例：</strong>（下划线为命令）</p>
+<blockquote>
+<p><strong>WARNING: DO NOT SWALLOW THE SOLVENT. ALWAYS MAKE SURE THAT YOU KNOW THE SAFETY PRECAUTIONS AND FIRST AID INSTRUCTIONS FOR SOLVENTS. SOLVENTS ARE POISONOUS AND CAN CAUSE INJURY OR DEATH.</strong></p>
+<p>警告：请勿吞咽溶剂。始终确保你了解溶剂的安全预防措施和急救说明。溶剂有毒，可能造成伤害或死亡。</p>
+<p><strong>CAUTION: DO NOT USE BLEACH OR CLEANSERS THAT CONTAIN CHLORINE TO CLEAN THE UNIT. THESE CLEANING AGENTS CAN CAUSE CORROSION.</strong></p>
+<p>小心：不要使用漂白剂或含氯清洁剂清洁装置。这些清洁剂会造成腐蚀。</p>
+</blockquote>
+<p>如果读者必须在程序或工作步骤开始前了解某个条件，请先给出该条件。</p>
+<p><strong>STE 示例：</strong>（下划线为条件）</p>
+<blockquote>
+<p><strong>WARNING: WHILE YOU USE THE SPRAY PAINT, POINT THE SPRAY AWAY FROM YOUR FACE. THE SPRAY PAINT CAN CAUSE INJURY TO YOUR EYES.</strong></p>
+<p>警告：使用喷漆时，将喷雾指向远离面部的方向。喷漆可能对眼睛造成伤害。</p>
+<p><strong>CAUTION: WHEN YOU ASSEMBLE THE UNIT, DO NOT LET THE PARTS FALL. IF THEY FALL, PERMANENT DAMAGE TO THE PARTS CAN OCCUR.</strong></p>
+<p>小心：组装装置时，不要让零件掉落。如果零件掉落，可能会造成永久性损坏。</p>
+</blockquote>
+<hr />
+<h4 id="73">规则 7.3 给出解释以说明风险或可能的结果。</h4>
+<p>如果可能，始终告诉读者如果不遵守安全说明可能会出现的问题。如果有明确且具体的风险，执行任务的人将理解风险并更加小心。以下示例是规则 7.2 中给出的示例，其中下划线的解释清楚地表明了风险或可能的结果。</p>
+<p><strong>示例：</strong>（下划线为风险或可能结果）</p>
+<blockquote>
+<p><strong>WARNING: DO NOT SWALLOW THE SOLVENT. ALWAYS MAKE SURE THAT YOU KNOW THE SAFETY PRECAUTIONS AND FIRST AID INSTRUCTIONS FOR SOLVENTS. <u>SOLVENTS ARE POISONOUS AND CAN CAUSE INJURY OR DEATH.</u></strong></p>
+<p>警告：请勿吞咽溶剂。始终确保你了解溶剂的安全预防措施和急救说明。<u>溶剂有毒，可能造成伤害或死亡。</u></p>
+<p><strong>CAUTION: DO NOT USE BLEACH OR CLEANSERS THAT CONTAIN CHLORINE TO CLEAN THE UNIT. <u>THESE CLEANING AGENTS CAN CAUSE CORROSION.</u></strong></p>
+<p>小心：不要使用漂白剂或含氯清洁剂清洁装置。<u>这些清洁剂会造成腐蚀。</u></p>
+<p><strong>WARNING: WHILE YOU USE THE SPRAY PAINT, POINT THE SPRAY AWAY FROM YOUR FACE. <u>THE SPRAY PAINT CAN CAUSE INJURY TO YOUR EYES.</u></strong></p>
+<p>警告：使用喷漆时，将喷雾指向远离面部的方向。<u>喷漆可能对眼睛造成伤害。</u></p>
+<p><strong>CAUTION: WHEN YOU ASSEMBLE THE UNIT, DO NOT LET THE PARTS FALL. <u>IF THEY FALL, PERMANENT DAMAGE TO THE PARTS CAN OCCUR.</u></strong></p>
+<p>小心：组装装置时，不要让零件掉落。<u>如果零件掉落，可能会造成永久性损坏。</u></p>
+</blockquote>
+<hr />
+<h2 id="8">第 8 节 标点与词数</h2>
+<h3 id="_32">规则总览</h3>
+<p><strong>标点</strong>
+- <strong>规则 8.1</strong> 可以使用所有标准英语标点符号，但分号（;）除外。
+- <strong>规则 8.2</strong> 使用连字符（-）连接直接相关的词。
+- <strong>规则 8.3</strong> 可以使用括号：
+  - 引用插图或文本
+  - 包含标识插图或文本中项目的字母或数字
+  - 标识程序中的工作步骤
+  - 包含缩写
+  - 同时给出名词的单数和复数形式
+  - 解释词语或句子的一部分
+  - 包含替代方案</p>
+<p><strong>词数</strong>
+- <strong>规则 8.4</strong> 在垂直列表中，冒号（:）对词数的影响与句号相同，表示句子结束。
+- <strong>规则 8.5</strong> 将文本放在括号中时，该文本在该句子中算作一个词。
+- <strong>规则 8.6</strong> 以下每个元素算作一个词：
+  - 数字
+  - 数字与计量单位一起
+  - 缩写
+  - 字母数字标识符
+  - 引用文本
+  - 标题、小标题、标牌和标签上的文字
+  - 个人、团体、组织和地缘政治实体的专有名词
+- <strong>规则 8.7</strong> 带连字符的词算作一个词。</p>
+<hr />
+<h3 id="_33">标点</h3>
+<p>正确的标点很重要，因为它可以防止歧义并显示文本各部分之间的关系。</p>
+<p>STE 不提供关于一般标点的规则。更多信息请参阅官方参考书。例如：
+- 《芝加哥手册》编委会。(2024)。《芝加哥写作与风格手册》（第 18 版）。
+- Sabin, W. A. (2011)。《Gregg 参考手册：风格、语法、用法与格式手册》（第 10 版）。
+- 美国政府出版局。(2020)。《美国政府出版局风格手册》。
+- Swan, M. (2017)。《实用英语用法》（第 4 版）。
+- Kirkman, J. (2006)。《标点很重要：科技写作标点建议》。</p>
+<hr />
+<h4 id="81">规则 8.1 可以使用所有标准英语标点符号，但分号（;）除外。</h4>
+<p>STE 中不允许使用分号（;），因为它会让你写出很长的句子。而且它也不容易正确使用。作为分号的替代方案，始终写两个不同的句子。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>(1) Examine the removed parts; replace the damaged ones.</td>
+<td>(1) 检查拆下的零件；更换损坏的零件。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>(1) Examine the removed parts for damage.<br>(2) Replace the damaged part(s).</td>
+<td>(1) 检查拆下的零件是否有损伤。<br>(2) 更换损坏的零件。</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The battery is not user-replaceable; it can only be replaced by an approved service station.</td>
+<td>电池不可由用户更换；只能由批准的服务站更换。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Users cannot replace the battery. Only specialists at approved service stations can replace it.</td>
+<td>用户不能更换电池。只有批准服务站的专业人员才能更换。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="82-">规则 8.2 使用连字符（-）连接直接相关的词。</h4>
+<p>连字符（-）是连接词或词的一部分的标点符号。在技术名词中使用连字符来表示两个或多个词直接相关。这种结构帮助读者更容易理解词语和短语。</p>
+<p>以下示例展示了如何使用连字符连接直接相关的词。</p>
+<p><strong>1. 两个或多个词且在名词前作形容词的术语：</strong></p>
+<blockquote>
+<p>low-altitude flight（低空飞行）, high-pressure chamber（高压舱）, air-conditioned compartment（空调舱）, transmitter-receiver system（收发系统）, quick-release fastener（快卸紧固件）, clamshell-type flap（蛤壳式襟翼）, eighteen-inch monitor（18 英寸监视器）, cast-aluminum bracket（铸铝支架）, three-to-one ratio（三比一的比例）, trial-and-error method（试错法）, air-to-air refueling（空中加油）, soap-and-water solution（肥皂水）, up-to-date information（最新信息）, run-on torque（转动扭矩）, break-away torque（断开扭矩）, cut-in speed（接入转速）, in-flight entertainment system（机上娱乐系统）, stiff-bristled brush（硬毛刷）, fire-resistant material（耐火材料）, self-sealing hose（自封软管）</p>
+</blockquote>
+<p><strong>2. 双词分数或数字：</strong></p>
+<blockquote>
+<p>forty-seven（四十七）, ninety-ninth（第九十九）, one hundred and sixty-two（一百六十二）, three-sixteenths（十六分之三）, one thirty-second（三十二分之一）</p>
+</blockquote>
+<p><strong>3. 包含大写字母加名词，或数字加名词，通常表示某物形状或构型的术语：</strong></p>
+<blockquote>
+<p>L-shaped bracket（L 形支架）, O-ring（O 形圈）, T-shirt（T恤）, U-beam（U 形梁）, Y-coupling（Y 形接头）, V-band clamp（V 形带卡箍）, 3-prong connector（3 针连接器）, 180-grit abrasive cloth（180 目砂布）</p>
+</blockquote>
+<p><strong>4. 以名词或其他词性作为第一部分的动词：</strong></p>
+<blockquote>
+<p>die-cast（压铸）, arc-weld（电弧焊）, fusion-bond（熔合）, stop-drill（止裂钻孔）, vacuum-pack（真空包装）, heat-treat（热处理）, jump-start（助推起动）, air-condition（空调调节）, short-circuit（短路）, fast-forward（快进）, cold-roll（冷轧）, dry-clean（干洗）, blow-dry（吹干）</p>
+</blockquote>
+<p><strong>5. 前缀结尾为元音且词根以元音开头的术语：</strong></p>
+<blockquote>
+<p>pre-amplifier（前置放大器）, de-icing（除冰）, anti-icing（防冰）, pre-engage（预接合）</p>
+<p>连字符不同于破折号，破折号用于分隔思想、表示范围或表示停顿。破折号通常比连字符长，但有时也表示为两侧带空格的连字符。</p>
+</blockquote>
+<hr />
+<h4 id="83">规则 8.3 可以使用括号：</h4>
+<ul>
+<li>引用插图或文本</li>
+<li>包含标识插图或文本中项目的字母或数字</li>
+<li>标识程序中的工作步骤</li>
+<li>包含缩写</li>
+<li>同时给出名词的单数和复数形式</li>
+<li>解释词语或句子的一部分</li>
+<li>包含替代方案</li>
+</ul>
+<p>在 STE 中，括号可用于以下情况：</p>
+<p><strong>1. 引用插图或文本</strong></p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Remove the valve (10, Figure 1).（拆下阀门（图 1 中的 10）。）
+Install the cover (refer to paragraphs 2 thru 5).（安装盖（参见第 2 至 5 段）。）</p>
+</blockquote>
+<p><strong>2. 包含标识插图或文本中项目的字母或数字</strong></p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Disconnect the hoses (2) and (12) from the suction ejector (8).（从抽吸引射器 (8) 上断开软管 (2) 和 (12)。）
+Remove the nuts (74), the washers (76), the bolts (68), the seals (70), and the bonding straps (72).（拆下螺母 (74)、垫圈 (76)、螺栓 (68)、密封件 (70) 和搭接线 (72)。）</p>
+</blockquote>
+<p><strong>3. 标识程序中的工作步骤</strong></p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>(1) Install the locking cap (4) on the body (8).（(1) 在本体 (8) 上安装锁紧帽 (4)。）
+(2) Safety the locking cap (4) with the cotter pin (5).（(2) 用开口销 (5) 给锁紧帽 (4) 打保险。）
+(3) Install a new retaining ring (6).（(3) 安装新的挡圈 (6)。）</p>
+</blockquote>
+<p><strong>4. 包含缩写</strong></p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>A Liquid Crystal Display (LCD) is a flat-panel display that uses the light-modulating properties of liquid crystals.（液晶显示器（LCD）是一种利用液晶光调制特性的平板显示器。）</p>
+</blockquote>
+<p><strong>5. 同时给出名词的单数和复数形式</strong></p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>A. Before you do the test(s), install the component(s).（A. 进行测试前，安装组件。）
+B. Do the applicable test(s).（B. 进行适用的测试。）</p>
+</blockquote>
+<p><strong>6. 解释词语或句子的一部分</strong></p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Increase the pressure slowly (not more than 10 psi each minute).（缓慢增加压力（每分钟不超过 10 psi）。）
+Make sure that the BLEED pushbutton switch is released (the ON legend is off).（确保 BLEED 按钮开关已释放（ON 字样熄灭）。）</p>
+</blockquote>
+<p><strong>7. 包含替代方案</strong></p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Open the left (right) access panel L42 (R42).（打开左（右）检修面板 L42（R42）。）</p>
+</blockquote>
+<hr />
+<h3 id="_34">词数</h3>
+<h4 id="84">规则 8.4 在垂直列表中，冒号（:）对词数的影响与句号相同，表示句子结束。</h4>
+<p>在垂直列表中，冒号（:）将句子的第一部分与垂直列表中的后续项目分开。这个冒号具有句号（句点）的效果。因此：
+- 在程序性句子中，冒号之前最多可以使用 20 个词。
+- 在描述性句子中，冒号之前最多可以使用 25 个词。</p>
+<p>冒号之后垂直列表中的每一项都算作一个新句子。因此，垂直列表中每一项的限制为：
+- 程序性句子 20 个词
+- 描述性句子 25 个词</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>To extinguish a possible fire, portable fire extinguishers are installed in these areas: （13 个词）
+- The cockpit （2 个词）
+- The cabin （2 个词）
+- The cabin sub-compartment （3 个词）
+- The crew rest compartment. （4 个词）</p>
+<p>为扑灭可能发生的火灾，这些区域安装了便携式灭火器：
+- 驾驶舱
+- 客舱
+- 客舱副舱
+- 机组休息舱。</p>
+</blockquote>
+<hr />
+<h4 id="85">规则 8.5 将文本放在括号中时，该文本在该句子中算作一个词。</h4>
+<p>计算句子长度的词数时，括号中的文本算作该句子的一个词。但是，你放在括号中的词语也构成一个新句子。因此，在那个不同的句子中也要计算它们。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Make sure that the EMER pushbutton switch is released (the EMER legend is off).
+（确保 EMER 按钮开关已释放（EMER 字样熄灭）。）
+（本句有 10 个词，因为括号中的文本算作一个词。括号中的句子有 5 个词，算作另一个句子。）</p>
+</blockquote>
+<p>如果括号中有标识符（数字、字母或字母数字标识符），该标识符在句子中算作一个词。括号中的缩写也算作一个词。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Remove the safety pin (10).（拆下安全销 (10)。）——5 个词
+Installation of a Business Class (B/C) Seat（商务舱（B/C）座椅的安装）——7 个词
+Hardware and Software Configuration Check of the In-Flight Entertainment (IFE) System（机上娱乐（IFE）系统的硬件和软件配置检查）——11 个词</p>
+</blockquote>
+<hr />
+<h4 id="86">规则 8.6 以下每个元素算作一个词：</h4>
+<ul>
+<li>数字</li>
+<li>数字与计量单位一起</li>
+<li>缩写</li>
+<li>字母数字标识符</li>
+<li>引用文本</li>
+<li>标题、小标题、标牌和标签上的文字</li>
+<li>个人、团体、组织和地缘政治实体的专有名词</li>
+</ul>
+<p>计算句子长度的词数时，以下各项各算作一个词：</p>
+<p><strong>1. 数字</strong></p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Do steps 13 thru 16 a minimum of three times.（步骤 13 至 16 至少执行三次。）——10 个词
+（"13" 和 "16" 是数字，各算一个词。）</p>
+<p>The spar box has twenty-one ribs.（翼梁盒有二十一根肋条。）——6 个词
+（"twenty-one" 是一个数字，算作一个词。）</p>
+</blockquote>
+<p>不要计算标识段落或工作步骤的数字。这些数字通常是文档编号系统的一部分。</p>
+<p><strong>2. 数字与计量单位一起</strong></p>
+<p>计量单位通常跟在其相关数字之后（例如 10 mA）。当数字与其计量单位一起书写时，它们算作一个词。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Make sure that the temperature in the room is 10 °C.（确保房间内的温度为 10°C。）——10 个词
+Make sure that the temperature in the room is 10 degrees Celsius.（确保房间内的温度为 10 摄氏度。）——10 个词</p>
+<p>The unit weighs 20 kg.（该装置重 20 千克。）——4 个词
+The unit weighs 20 kilograms.（该装置重 20 千克。）——4 个词</p>
+<p>The resistance must be 10 Ω.（电阻必须为 10 欧姆。）——5 个词
+The resistance must be 10 ohms.（电阻必须为 10 欧姆。）——5 个词</p>
+</blockquote>
+<p><strong>3. 缩写</strong></p>
+<p>在技术文本中，可以使用缩写（也包括首字母缩略词和首字母缩拼词）来使句子更短、更易读。但这些缩写只有在读者知道其含义时才能帮助读者。每个缩写算作一个词。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>The maintenance team does a test of this system each day at 10 a.m.（维修团队每天上午 10 点对该系统进行一次测试。）——13 个词
+（"a.m." 是缩写，与其数字一起算作一个词。）</p>
+<p>During this safety check, obey NASA protocols.（在此安全检查期间，遵守 NASA 协议。）——7 个词
+（NASA 是缩写（首字母缩略词），算作一个词。）</p>
+<p>For remote access, use the VPN.（远程访问时，使用 VPN。）——6 个词
+（VPN 是缩写（首字母缩拼词），算作一个词。）</p>
+</blockquote>
+<p><strong>4. 字母数字标识符</strong></p>
+<p>字母数字标识符是标识某物的字母和数字的组合。每个字母数字标识符算作一个词。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Examine the No. 1 bearing installation.（检查 1 号轴承的安装情况。）——5 个词
+（"No. 1" 是字母数字标识符，算作一个词。）</p>
+<p>Tag circuit breaker 36L7.（标记断路器 36L7。）——4 个词
+（"36L7" 是字母数字标识符，算作一个词。）</p>
+</blockquote>
+<p><strong>5. 引用文本</strong></p>
+<p>引用文本通常用引号（"..."）标出。引号之间的词语在句子中算作一个词。在某些句子或文档的某些部分，大写字母或字体差异也可以表示引用文本。这类文本也算作一个词。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Touch the "Service Overview" arrow to select the function page.（触摸"服务概览"箭头选择功能页面。）——9 个词
+（"Service Overview" 是引用文本，算作一个词。）</p>
+<p>Release the SHORT-CIRCUIT TEST switch.（释放 SHORT-CIRCUIT TEST 开关。）——4 个词
+（SHORT-CIRCUIT TEST 是引用文本，算作一个词。）</p>
+<p>C = (A - B) - 0.063 mm（1 个词）
+（在 STE 中，公式是引用文本，算作一个词。）</p>
+</blockquote>
+<p><strong>6. 标题、小标题、标牌和标签上的文字</strong></p>
+<p>在某些文本中，有一些你不能更改的词或词组。它们是：
+- 标题和小标题
+- 标牌上的文字（例如工作区或公共场所的警告告示）
+- 标签上的文字（例如贴在物体上的警告和小心标签）</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Before you start a repair, refer to the Structural Repair Manual for the applicable safety procedures and precautions.（开始修理前，请参阅《结构修理手册》中的适用安全程序和预防措施。）——16 个词
+（"Structure Repair Manual" 是文档标题，算作一个词。）</p>
+<p>Refer to Testing and Fault Isolation, page block 1001.（参见《测试与故障隔离》，页码块 1001。）——6 个词
+（"Testing and Fault Isolation" 是手册中某节的标题，算作一个词。）</p>
+<p>Refer to Requirements after Job Completion for the applicable procedures.（参见《工作完成后的要求》中的适用程序。）——7 个词
+（"Requirements after Job Completion" 是数据模块中的小标题，算作一个词。）</p>
+<p>This procedure is for the inspection of SSI No. 57-21-16, "Outer wing bottom skin lower surface spanwise skin joints at stringer 13 and stringer 20 between Rib 12 and Rib 27 excluding areas covered by flap track fairings 3, 4, and 5."（9 个词）
+（"This procedure is for the inspection of" 有 7 个词。"SSI No. 57-21-16" 是结构重要件（SSI）的参考编号，算作一个词。随后引号中的文字是 SSI 的标题。它不是 STE，且无法更改。因此，该文本算作一个词。结果，全句总共有 9 个词。）</p>
+<p>"Interior hazards exist to such a degree that interior operations may be conducted only after full examination, and with extreme caution."（1 个词）
+（引号中的文字不是 STE。它来自一块标牌，无法更改。算作一个词。）</p>
+<p>"FRAGILE - Please handle with care."（1 个词）
+（引号中的文字不是 STE。它来自运输容器上的标签，无法更改。算作一个词。）</p>
+</blockquote>
+<p><strong>7. 个人、团体、组织和地缘政治实体的专有名词。</strong></p>
+<p>有一些词组你不能更改，因为它们标识：
+- 个人（例如 John Smith）
+- 团体或组织（例如 World Health Organization）
+- 地缘政治实体（例如 Republic of Ireland）</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>The first president of the United States of America was George Washington.（美利坚合众国的第一任总统是乔治·华盛顿。）——8 个词
+（"United States of America" 是地缘政治实体的专有名词，算作一个词。"George Washington" 是个人的专有名词，算作一个词。）</p>
+<p>The owner of STE is the Aerospace, Security and Defence Industries Association of Europe.（7 个词）
+（STE 的所有者是欧洲航空航天、安全与国防工业协会。）
+（"Aerospace, Security and Defence Industries Association of Europe" 是组织的专有名词，算作一个词。）</p>
+</blockquote>
+<hr />
+<h4 id="87">规则 8.7 带连字符的词算作一个词。</h4>
+<p>通常不是形容词但在名词前具有形容词功能的词组会使用连字符。这类词组算作一个词。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Clean the surface with a soap-and-water solution.（用肥皂水清洁表面。）——7 个词
+Use the trial-and-error method.（使用试错法。）——4 个词</p>
+</blockquote>
+<p>当你在长技术名词中使用连字符以使读者更清晰时，一组带连字符的词也算作一个词。</p>
+<p><strong>STE 示例：</strong></p>
+<blockquote>
+<p>Cutoff-switch power connection（切断开关电源连接）——3 个词
+Main-gear-door retraction-winch handle（主起落架门收放绞盘手柄）——3 个词</p>
+</blockquote>
+<hr />
+<h2 id="9">第 9 节 写作实践</h2>
+<h3 id="_35">规则总览</h3>
+<p><strong>不同的句子结构</strong>
+- <strong>规则 9.1</strong> 当逐词替换不足以表达时，使用不同的句子结构来写句子。</p>
+<p><strong>如何正确使用批准词</strong>
+- <strong>规则 9.2</strong> 正确使用每个批准词。
+- <strong>规则 9.3</strong> 将两个词一起使用时，不要构成短语动词。</p>
+<p><strong>一致的风格</strong>
+- <strong>规则 9.4</strong> 选择术语或措辞时，始终使用一致的风格。</p>
+<p><strong>一般建议</strong>
+- <strong>GR-1</strong> 连词 "that"
+- <strong>GR-2</strong> 介词 "with"
+- <strong>GR-3</strong> 如何使用代词
+- <strong>GR-4</strong> 代词 "this"
+- <strong>GR-5</strong> 假朋友（形近义异词）
+- <strong>GR-6</strong> 拉丁语缩写
+- <strong>GR-7</strong> 包容性语言
+- <strong>GR-8</strong> 所有格形式</p>
+<hr />
+<h3 id="_36">不同的句子结构</h3>
+<h4 id="91">规则 9.1 当逐词替换不足以表达时，使用不同的句子结构来写句子。</h4>
+<p>STE 是一种具有受控词典的受控自然语言。</p>
+<p>为了帮助你正确使用批准词，词典为未批准的词提供了批准的替代词。如果你找到一个词性相同的替代词，就可以用它来替换不允许的词（逐词替换）。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>A value of 2 mm is acceptable.（"acceptable" 未获批准。）</td>
+<td>2 毫米的值是可接受的。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>A value of 2 mm is permitted.</td>
+<td>2 毫米的值是允许的。</td>
+</tr>
+</tbody>
+</table>
+<p>替换词汇时，始终确保你选择的替代词不会改变句子的意思。如果意思改变了，或者替代词的词性不同，你必须使用不同的句子结构。</p>
+<p>需要使用不同的句子结构是因为：</p>
+<p><strong>1. 你必须改变句子的语法结构才能使用你选择的替代词。</strong> 通常，STE 示例会告诉你如何做到这一点。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The oil level on the sight gauge must be visible during the test.</td>
+<td>测试期间，观察窗上的油位必须可见。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>During the test, make sure that you can see the oil level on the sight gauge.</td>
+<td>测试期间，确保你能看到观察窗上的油位。</td>
+</tr>
+</tbody>
+</table>
+<p>在本例中，批准的动词 "see"（看见）替换了形容词 "visible"（可见的）。但要使用动词 "see"，必须将 "must be" 替换为 "make sure that you can"。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Cycle the unit twice to remove air from the lines.</td>
+<td>将装置循环两次以排出管路中的空气。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Operate the unit for two cycles to remove air from the lines.</td>
+<td>将装置操作两个循环以排出管路中的空气。</td>
+</tr>
+</tbody>
+</table>
+<p>在本例中，批准的名词 "cycle"（循环）与批准的动词 "operate"（操作）一起替换了动词 "cycle"。而技术名词 "two"（两个）替换了副词 "twice"（两次）。</p>
+<p>使用不同的句子结构时，始终确保你使用的批准词不会改变句子的意思。</p>
+<p><strong>2. 对未批准词的逐词替换会产生无意义的结果。</strong></p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Without this modification, the service life of the unit can be uncertain.</td>
+<td>没有这项改装，装置的使用寿命可能不确定。</td>
+</tr>
+</tbody>
+</table>
+<p>"Uncertain"（不确定的）不在词典中，但它的意思是"not sure"（不确定）或"not known"（不知道）。因此，你可以在词典中查找 "sure" 和 "know"。你会发现它们是批准的，你可以使用 "not sure" 和 "not known"（"not" + 批准词）。</p>
+<p>但不要写：</p>
+<blockquote>
+<p>❌ Without this modification, the service life of the unit cannot be sure.
+❌ 没有这项改装，装置的使用寿命不能确信。</p>
+</blockquote>
+<p>或者</p>
+<blockquote>
+<p>❌ Without this modification, the service life of the unit cannot be known.
+❌ 没有这项改装，装置的使用寿命不能被知道。</p>
+</blockquote>
+<p>这些句子不清晰，也不是好的英语。你必须思考句子的意思，然后使用不同的句子结构。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✓ STE</td>
+<td>Without this modification, it is possible that the service life of this unit will be shorter than usual.</td>
+<td>没有这项改装，该装置的使用寿命可能会比通常的短。</td>
+</tr>
+</tbody>
+</table>
+<p>STE 句子使用批准词清晰地传达了相同的信息。始终确保你知道沟通的目的，并且你使用的词语表达了你想要的意思。</p>
+<p><strong>3. 你找到的批准替代词会改变句子的意思。</strong></p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Just apply very light pressure to the surface.</td>
+<td>只要在表面上施加非常轻的压力。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Only apply very light pressure to the surface.</td>
+<td>只在表面上施加非常轻的压力。</td>
+</tr>
+<tr>
+<td>✗ 不是：</td>
+<td>Immediately apply very light pressure to the surface.</td>
+<td>立即在表面上施加非常轻的压力。</td>
+</tr>
+</tbody>
+</table>
+<p>"Immediately"（立即）是 "just" 的批准替代词。但如果你在这个语境中使用 "immediately"，就会改变指令的意思。</p>
+<p><strong>4. 你必须替换的词不在词典中。</strong></p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The incidence of water in fuel is dangerous.</td>
+<td>燃油中含水的发生率是危险的。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Water in fuel is dangerous.</td>
+<td>燃油中有水是危险的。</td>
+</tr>
+</tbody>
+</table>
+<p>"Incidence"（发生率）不在词典中。因此，你必须想到一个具有相同含义的不同词，例如 "presence"（存在）。但 "presence" 未获批准，其建议的批准替代词是 "be"（是/存在）。你可以使用不同的句子结构来保持相同的意思。</p>
+<p><strong>如何使用不同的句子结构</strong></p>
+<p>当你不能进行逐词替换时，使用不同的词来获得相同的结果。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Lift the seat so that it clears the track locks.</td>
+<td>抬起座椅，使其脱离轨道锁。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Lift the seat until it is away from the track locks.</td>
+<td>抬起座椅，直到其远离轨道锁。</td>
+</tr>
+<tr>
+<td>✗ 不是：</td>
+<td>Lift the seat so that it cleans the track locks.</td>
+<td>抬起座椅，使其清洁轨道锁。</td>
+</tr>
+</tbody>
+</table>
+<p>在本例中，"clear" 不是批准的动词，它在词典中的唯一替代词是动词 "clean"（清洁）。但动词 "clean" 不具有你想要的含义。</p>
+<p>不要将 "clear" 用作动词，也不要认为 "clear" 可以是技术动词。</p>
+<p>在写句子之前回答这些问题：
+- "'clear' 这个词在这个语境中是什么意思？"
+- "读者必须执行的动作是什么？"</p>
+<p>如果你不确定，在英语词典中查找 "clear"，找到适用于该句子的定义。</p>
+<p>你会理解 "clears the track locks" 是先前动作 "lift the seat" 的结果。这是增加座椅与轨道锁之间距离所必需的动作。因此，你可以告诉读者 "抬起座椅"（动作）"直到座椅远离轨道锁"。</p>
+<p>在示例中，你看到了：
+- 如何替换句子中未批准的词
+- 如何写出意思相同的新句子</p>
+<p>通常，你必须选择不同的词、使用不同的动词形式，或写出新的句子结构。你可能必须将长句分成更短的句子，删除不必要的信息，或从工程师那里获取更多信息。通常，你必须对文本进行多处修改。然后，当你改变文本的一部分时，必须确保它对文本的其他部分没有负面影响。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>If cracks are detected during this procedure, the operator must perform the repair within a certain number of flight hours depending on crack length. Refer to following table:<br>Crack length detected &nbsp; Time before repair<br>L &gt; ... &nbsp; 1000 flight hours<br>L = ... &nbsp; 2000 flight hours<br>L &lt; ... &nbsp; 3000 flight hours</td>
+<td>如果在此程序中检测到裂纹，操作员必须在一定的飞行小时数内完成修理，具体取决于裂纹长度。参见下表：<br>检测到的裂纹长度 &nbsp; 修理前时间<br>L &gt; ... &nbsp; 1000 飞行小时<br>L = ... &nbsp; 2000 飞行小时<br>L &lt; ... &nbsp; 3000 飞行小时</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>If you find cracks, refer to the table that follows:<br>If the crack is of this length &nbsp; Do the repair before<br>L &gt; ... &nbsp; 1000 flight hours<br>L = ... &nbsp; 2000 flight hours<br>L &lt; ... &nbsp; 3000 flight hours</td>
+<td>如果发现裂纹，参见下表：<br>如果裂纹为此长度 &nbsp; 在以下时间前完成修理<br>L &gt; ... &nbsp; 1000 飞行小时<br>L = ... &nbsp; 2000 飞行小时<br>L &lt; ... &nbsp; 3000 飞行小时</td>
+</tr>
+</tbody>
+</table>
+<p>在非 STE 示例中：
+- 下划线的词在 STE 中未获批准。
+- 第一个动词形式 "are detected" 是被动语态。
+- 第一句有 24 个词。
+- "crack length" 和 "following table" 前缺少冠词。
+- 指令不是祈使形式。</p>
+<p>如词典所示，你可以替换：
+- "perform" → "do"
+- "within" → "in"
+- "certain" → "some"
+- "detect" → "find"</p>
+<p>你还可以加上缺失的冠词。然后句子变成：</p>
+<blockquote>
+<p>If cracks are found during this procedure, the operator must do the repair in some flight hours depending on the crack length. Refer to the following table:</p>
+</blockquote>
+<p>这个句子保持了相同的结构，但句子不是好的英语。</p>
+<p>要替换 "are found"（被动语态），必须将结构改为："If you find cracks..."</p>
+<p>但这不会改变句子其余部分的结构。</p>
+<p>要替换 "following"，必须对结构稍作修改："Refer to the table that follows:"</p>
+<p>要替换 "the operator must do the repair"，必须将结构改为："do the repair"</p>
+<p>要替换 "in some flight hours"，可以使用 "number of flight hours"。</p>
+<p>要替换 "depending"，必须对句子进行重要修改。这一重要修改是必要的，因为你不能用词典中为 "depend" 给出的替代词 "if (conj)" 进行逐词替换。</p>
+<p>然后你可以这样写第一句：</p>
+<blockquote>
+<p>If you find cracks during this procedure, do the repair before the number of flight hours that are applicable to the crack length. Refer to the table that follows:</p>
+</blockquote>
+<p>但第一句有 23 个词，技术含义不正确且不易理解。而且部分信息在表格中。因此，没有必要给出两次。一个好的解决方案是将指令放在表格标题中，如 STE 文本所示。</p>
+<p>STE 的主要目标是读者能立即理解他们读到的每个句子。</p>
+<hr />
+<h3 id="_37">如何正确使用批准词</h3>
+<h4 id="92">规则 9.2 正确使用每个批准词。</h4>
+<p>一些 STE 批准词的含义仅适用于某些语境（受限含义）。</p>
+<p>使用一个词之前，请阅读词典批准词义栏中的定义。词在标准英语中通常有许多不同的含义。在 STE 中，批准词通常只有一个批准词义。该词在标准英语中可能具有的其他含义未获批准。</p>
+<p>始终确保你选择的词在适用语境中具有正确的含义。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Wear protective clothing.</td>
+<td>穿戴防护服。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Use (or put on) protective clothing.</td>
+<td>使用（或穿上）防护服。</td>
+</tr>
+</tbody>
+</table>
+<p>"wear" 一词作为动词获批准，但含义是"因摩擦而损坏"。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>This regulation extends to all units.</td>
+<td>本规定延伸至所有装置。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>This regulation is applicable to all units.</td>
+<td>本规定适用于所有装置。</td>
+</tr>
+</tbody>
+</table>
+<p>动词 "extend" 的批准词义是"增加或使某物在尺寸或范围上增加"。在非 STE 示例中，动词 "extend" 与其批准词义不符。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>When the pressure goes down, lift the cover.</td>
+<td>当压力下降时，抬起盖。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>When the pressure decreases, lift the cover.</td>
+<td>当压力降低时，抬起盖。</td>
+</tr>
+</tbody>
+</table>
+<p>动词 "goes" 与介词 "down" 一起构成的短语指的是物理运动，例如指示器（仪表指针或旗标）下降时。
+"Decrease"（降低）更好，因为它指的是压力，而不是监控压力的指示器。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Make sure that the probe went through more than 500 °C.</td>
+<td>确保探头经历了超过 500°C 的温度。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Make sure that the temperature of the probe increased to more than 500 °C.</td>
+<td>确保探头的温度升高到超过 500°C。</td>
+</tr>
+</tbody>
+</table>
+<p>动词 "go" 与介词 "through" 一起只能用于物理上穿过某物的事物。不能用它来表示要求或条件。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Move the tube to see if the inner connection is tight.</td>
+<td>移动管子看看内部连接是否紧固。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Move the tube to make sure that the inner connection is tight.</td>
+<td>移动管子以确保内部连接紧固。</td>
+</tr>
+</tbody>
+</table>
+<p>动词 "see" 只能用于你能用眼睛看到的事物，而不能用作"了解"的意思。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>The indicator turns green.</td>
+<td>指示器变绿。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>The color of the indicator changes to green.</td>
+<td>指示器的颜色变为绿色。</td>
+</tr>
+</tbody>
+</table>
+<p>动词 "turn" 只能用于"绕轴或点移动或使移动"的含义。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Do not let the pressure go below (or above) 20 psi.</td>
+<td>不要让压力低于（或高于）20 psi。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Do not let the pressure become less than (or more than) 20 psi.</td>
+<td>不要让压力低于（或高于）20 psi。</td>
+</tr>
+</tbody>
+</table>
+<p>介词 "above" 和 "below" 仅用于物理位置，不用于限制。</p>
+<p>此外，确保你将批准词用作其批准的词性。在英语中，词通常没有不同的形式来立即显示其在句子中的功能。因此，读者经常可能对同一个词有不同的理解。为了使句子更清晰，一个批准词通常只能有一种功能（词性）。在 STE 中，将每个批准词用作批准的词性。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>When you work with cleaning agents, use breathing equipment.</td>
+<td>当你使用清洁剂工作时，使用呼吸设备。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>When you do work with cleaning agents, use breathing equipment.</td>
+<td>当你使用清洁剂进行作业时，使用呼吸设备。</td>
+</tr>
+</tbody>
+</table>
+<p>"Work" 作为名词获批准，但不作为动词。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Install the cover with the help of a second person.</td>
+<td>在第二个人的帮助下安装盖。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Install the cover with the aid of a second person.</td>
+<td>在第二个人的协助下安装盖。</td>
+</tr>
+</tbody>
+</table>
+<p>"Help" 作为动词获批准，但不作为名词。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>Be careful not to damage the sleeve.</td>
+<td>小心不要损坏套筒。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>Be careful not to cause damage to the sleeve.</td>
+<td>小心不要对套筒造成损坏。</td>
+</tr>
+</tbody>
+</table>
+<p>"Damage" 作为名词获批准，但不作为动词。</p>
+<p>有少数词被批准为多种词性，且有多个含义。这些词很重要，经常出现在技术英语中。</p>
+<p>例如，"flush" 一词在技术文本中经常作为动词出现（批准词义为"用液体流去除某物或以液体流运行"）。同一个词也可以作为形容词出现（当指一个表面完全接触另一个表面的状态时）。</p>
+<p><strong>示例：</strong></p>
+<blockquote>
+<p><strong>STE：</strong> Flush the pipes with a disinfectant solution.（用消毒液冲洗管道。）
+（"flush" 在这里是动词。）</p>
+<p><strong>STE：</strong> Make sure that the door is flush with the adjacent surfaces.（确保门与相邻表面齐平。）
+（"flush" 在这里是形容词。）</p>
+</blockquote>
+<p>但因为动词和形容词有不同的位置和语境，所以很容易看出它们的功能。</p>
+<hr />
+<h4 id="93">规则 9.3 将两个词一起使用时，不要构成短语动词。</h4>
+<p>在英语中，一个动词和一个或多个介词可以组合在一起构成"短语动词"。这个短语动词的含义与其组成部分的含义不同。短语动词通常有两个含义：原始的、更具体的含义，以及更一般和抽象的含义。</p>
+<p><strong>一般示例：</strong></p>
+<blockquote>
+<p>Put out the cat.（把猫放出去。）
+（具体含义："把猫放到房子外面。"）</p>
+<p>Put out the fire.（把火扑灭。）
+（抽象含义："灭火。"）</p>
+</blockquote>
+<p>为了防止歧义，STE 中不允许将批准词组合在一起构成新短语（短语动词）。</p>
+<p><strong>示例：</strong></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>After you put out the fire, close the valve on the fire extinguisher.</td>
+<td>你把火扑灭后，关闭灭火器上的阀门。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>After you extinguish the fire, close the valve on the fire extinguisher.</td>
+<td>灭火后，关闭灭火器上的阀门。</td>
+</tr>
+</tbody>
+</table>
+<p>"Put" 和 "out" 都是 STE 中的批准词。在示例中，"put out" 的含义与词典中给出的 "put" 和 "out" 的批准含义不同。"Extinguish"（熄灭）一词的批准词义是"停止燃烧"，它是技术文档中最常用的词。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>This compound can give off poisonous fumes.</td>
+<td>这种化合物会释放有毒烟气。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>This compound can release poisonous fumes.</td>
+<td>这种化合物会释放有毒烟气。</td>
+</tr>
+</tbody>
+</table>
+<p>"Give" 和 "off" 都是 STE 中的批准词。在示例中，"give off" 的含义与词典中给出的 "give" 和 "off" 的批准含义不同。这里你必须想到一个具有相同含义的不同词。"Release"（释放）的批准词义是"使自由"或"放开"。也可以在这个语境中使用这个词来替换 "give off"。</p>
+<p>你通常不会在词典中找到被列为"未批准"的短语动词。当你用 STE 写一个标准英语句子时，始终确保新句子语法正确。并确保你使用批准词时采用的是它们在词典中的含义。</p>
+<p>只有少数短语动词（例如 "put on" 和 "come on"）在词典中获批准。它们都有受限的含义。</p>
+<hr />
+<h3 id="_38">一致的风格</h3>
+<h4 id="94">规则 9.4 选择术语或措辞时，始终使用一致的风格。</h4>
+<p>在程序中，你会经常反复给出相同的信息。例如，大多数程序都给出如何拆卸或安装组件或零件的指令。当你为某个工作步骤选择术语或措辞时，每次出现该类型的工作步骤时都使用相同的术语或措辞。读者会识别出该术语或措辞，并迅速理解该动作。不同的术语或措辞可能造成混淆和延误。</p>
+<p><strong>示例：</strong></p>
+<p>以下两个句子各自给出相同的指令，且各自都正确遵守了 STE 的规则。</p>
+<blockquote>
+<p><strong>STE：</strong> Lubricate the two bolts with a small quantity of oil.（用少量润滑油润滑两颗螺栓。）
+<strong>STE：</strong> Apply a small quantity of oil to the threads of the two bolts.（在两颗螺栓的螺纹上涂少量润滑油。）</p>
+</blockquote>
+<p>如果你在不同的工作步骤中使用这两个句子来给出相同的指令，你并没有帮助读者。选择一个句子或句子风格，然后在语境（和含义）相同时反复使用。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>原文</th>
+<th>译文</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>❌ 非 STE</td>
+<td>1. Put the housing (8) in its installation position on the main body (9).<br>2. Lubricate the two bolts (10) with oil.<br>3. Install the two bolts (10) in the body (9).<br>4. Torque-tighten the two bolts to 4 Nm.<br>5. Put the transducer (11) on the body assembly (9).<br>6. Apply a small quantity of oil to the threads of the four bolts (12).<br>7. Attach the transducer (11) to the body assembly (9) with the four bolts (12).<br>8. Torque each of the four bolts (12) to 0.8 Nm.</td>
+<td>1. 将壳体 (8) 放在主体 (9) 上的安装位置。<br>2. 用油润滑两颗螺栓 (10)。<br>3. 将两颗螺栓 (10) 安装到主体 (9) 中。<br>4. 将两颗螺栓扭矩拧紧至 4 Nm。<br>5. 将传感器 (11) 放在主体组件 (9) 上。<br>6. 在四颗螺栓 (12) 的螺纹上涂少量润滑油。<br>7. 用四颗螺栓 (12) 将传感器 (11) 固定到主体组件 (9) 上。<br>8. 将四颗螺栓 (12) 中的每颗扭矩拧紧至 0.8 Nm。</td>
+</tr>
+<tr>
+<td>✓ STE</td>
+<td>1. Put the housing (8) in its installation position on the body assembly (9).<br>2. Apply a small quantity of oil to the threads of the two bolts (10).<br>3. Install the two bolts (10) in the body assembly (9).<br>4. Torque each of the two bolts to 4 Nm.<br>5. Put the transducer (11) on the body assembly (9).<br>6. Apply a small quantity of oil to the threads of the four bolts (12).<br>7. Attach the transducer (11) to the body assembly (9) with the four bolts (12).<br>8. Torque each of the four bolts (12) to 0.8 Nm.</td>
+<td>1. 将壳体 (8) 放在主体组件 (9) 上的安装位置。<br>2. 在两颗螺栓 (10) 的螺纹上涂少量润滑油。<br>3. 将两颗螺栓 (10) 安装到主体组件 (9) 中。<br>4. 将两颗螺栓中的每颗扭矩拧紧至 4 Nm。<br>5. 将传感器 (11) 放在主体组件 (9) 上。<br>6. 在四颗螺栓 (12) 的螺纹上涂少量润滑油。<br>7. 用四颗螺栓 (12) 将传感器 (11) 固定到主体组件 (9) 上。<br>8. 将四颗螺栓 (12) 中的每颗扭矩拧紧至 0.8 Nm。</td>
+</tr>
+</tbody>
+</table>
+<p>在非 STE 文本中，你可以看到有不同的措辞：
+- 物品 (9) 的不同术语（"main body"、"body" 和 "body assembly"）
+- 拧紧螺栓的不同措辞（"torque" 和 "torque-tighten"）
+- 润滑工作步骤的不同句子（"lubricate the XX bolts" 和 "apply a small quantity of oil to the threads of the XX bolts"）</p>
+<p>在 STE 文本中，每次出现相同的物品时，都使用相同的名词，相同的语境始终使用相同的措辞。这使文本清晰易读。读者一次阅读一个工作步骤并执行相应的任务。为了快速理解内容并正确执行每个工作步骤，措辞不发生变化很重要。</p>
+<p>在描述性写作中，读者必须将文本作为一个整体来理解。因此，正确使用词语和句子并为文本提供逻辑结构很重要。这种方法使文本更易于阅读和理解。</p>
+<hr />
+<h3 id="_39">一般建议</h3>
+<p>本节中的一般建议（GR）不是 STE 规则。它们可以帮助你防止作者常犯的典型错误。</p>
+<hr />
+<h4 id="gr-1-that">GR-1 连词 "that"</h4>
+<p>在英语中，你可以使用连词 "that" 将新信息（在从句中）连接到主句。你可以在动词之后使用这个连词。例如："make sure"（确保）、"show"（显示）和 "recommend"（建议）。</p>
+<p>母语为英语的人说话时经常不使用 "that"，这种风格也出现在写作中。但这个连词帮助读者理解主句的结尾和从句的开头在哪里。因此，尽可能多地使用连词 "that" 以防止歧义。</p>
+<p>这个连词也有助于翻译，因为在许多其他语言中，不可能省略对应的词。</p>
+<p><strong>示例：</strong></p>
+<p>不要写：</p>
+<blockquote>
+<p>Make sure the valve is open.（确保阀门打开。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>Make sure that the valve is open.（确保阀门打开。）</p>
+</blockquote>
+<p>不要写：</p>
+<blockquote>
+<p>The manufacturer recommends you prepare the mixture in an area with good airflow.（制造商建议你在空气流通良好的区域配制混合物。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>The manufacturer recommends that you prepare the mixture in an area with good airflow.（制造商建议你在空气流通良好的区域配制混合物。）</p>
+</blockquote>
+<p>不要写：</p>
+<blockquote>
+<p>The gauge shows the reservoir is full.（仪表显示储液器已满。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>The gauge shows that the reservoir is full.（仪表显示储液器已满。）</p>
+</blockquote>
+<hr />
+<h4 id="gr-2-with">GR-2 介词 "with"</h4>
+<p>在 STE 中，介词 "with" 有三个批准的含义。它是一个表示"关联或关系"、"帮助或共享"或"手段或工具"的功能词。在某些句子中，这个词可能引起歧义。例如，句子："Install the panel with the green fasteners"（用绿色紧固件安装面板）可能有不同的含义：
+- 安装带有绿色紧固件的面板。
+- 将面板与绿色紧固件一起安装。
+- 使用绿色紧固件安装面板。</p>
+<p>通常，句子的语境会给读者足够的信息来知道哪个含义是正确的。</p>
+<p>但当你使用 "with" 一词时，请重读你的句子。确保你的句子不会引起歧义，没有错误，且句子的含义没有改变。</p>
+<p><strong>示例：</strong></p>
+<p>不要写：</p>
+<blockquote>
+<p>Lift the aircraft at the maximum takeoff weight with passengers.（在乘客的最大起飞重量下提升飞机。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>Lift the aircraft at the maximum takeoff weight (passenger weight included).（在最大起飞重量（含乘客重量）下提升飞机。）</p>
+</blockquote>
+<p>语境（或经验）告诉你，你不会要求乘客帮你提升飞机。因为这个句子可能有两种不同的含义，一种解释会使它成为一个笑话。</p>
+<p>不要写：</p>
+<blockquote>
+<p>Make sure that the lever does not touch the stop (1) with hydraulic pressure supplied.（确保在提供液压时杠杆不接触挡块 (1)。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>When you supply hydraulic pressure, make sure that the lever does not touch the stop (1).（提供液压时，确保杠杆不接触挡块 (1)。）
+（先写条件。）</p>
+</blockquote>
+<p>当你想使用不同的句子结构来替换 "with" 一词时，确保在工作步骤中显示主要动作动词。</p>
+<p>不要写：</p>
+<blockquote>
+<p>Use tool TS9867 to seal the opening.（使用工具 TS9867 来密封开口。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>Seal the opening with tool TS9867.（用工具 TS9867 密封开口。）</p>
+</blockquote>
+<p>这个句子很清晰，因为它给出了工具编号。在 STE 中，你必须给出主要动作动词，即 "seal"（密封），而不是 "use"（使用）。</p>
+<hr />
+<h4 id="gr-3">GR-3 如何使用代词</h4>
+<p>代词指代文本中已经出现的人、地点或物品。代词的例子有 "it"（它）、"they"（它们）、"that"（那个）、"these"（这些）和 "those"（那些）。如果你正确使用代词，你的文本将易于阅读。</p>
+<p>在 STE 中，批准的代词在词典中。如果代词不在词典中（例如 "she" 或 "he"），请勿使用。</p>
+<p>如果一个代词可以指代文本中的一个或多个名词，就可能在句子中引起歧义。如果有歧义，将代词替换为它所指代的词。这将使句子清晰且更易于阅读。</p>
+<p><strong>示例：</strong></p>
+<p>不要写：</p>
+<blockquote>
+<p>If you engage the pins incorrectly with the seats, they can become damaged.（如果你将销子与座不正确地接合，它们可能会损坏。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>If you engage the pins incorrectly with the seats, the pins can become damaged.（如果你将销子与座不正确地接合，销子可能会损坏。）</p>
+</blockquote>
+<p>或者</p>
+<blockquote>
+<p>If you engage the pins incorrectly with the seats, the seats can become damaged.（如果你将销子与座不正确地接合，座可能会损坏。）</p>
+</blockquote>
+<p>或者</p>
+<blockquote>
+<p>If you engage the pins incorrectly with the seats, the pins and seats can become damaged.（如果你将销子与座不正确地接合，销子和座可能会损坏。）</p>
+</blockquote>
+<hr />
+<h4 id="gr-4-this">GR-4 代词 "this"</h4>
+<p>在句子中使用代词 "this" 时，确保读者知道代词指代的物品。如果 "this" 可以指代多个物品，请再次给出相应的语境。</p>
+<p><strong>示例：</strong></p>
+<p>不要写：</p>
+<blockquote>
+<p>Make sure that the cover is not locked (this can cause damage to the probe).（确保盖没有锁定（这可能导致探头损坏）。）
+（导致探头损坏的原因是什么？盖处于锁定状态？还是盖处于解锁状态？）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>Make sure that the cover is not locked. If the cover is locked, this can cause damage to the probe.（确保盖没有锁定。如果盖被锁定，这可能导致探头损坏。）</p>
+</blockquote>
+<p>或者</p>
+<blockquote>
+<p>If the cover is locked, damage to the probe can occur.（如果盖被锁定，可能会导致探头损坏。）</p>
+</blockquote>
+<p>不要写：</p>
+<blockquote>
+<p>Do not use crocus cloth on aluminum parts. If you do this, you can cause corrosion on aluminum parts. Crocus cloth contains ferrous oxide.（不要在铝制零件上使用抛光布。如果你这样做，可能会导致铝制零件腐蚀。抛光布含有氧化亚铁。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>Do not use crocus cloth on aluminum parts. Crocus cloth contains ferrous oxide, which can cause corrosion on aluminum parts.（不要在铝制零件上使用抛光布。抛光布含有氧化亚铁，可能导致铝制零件腐蚀。）</p>
+</blockquote>
+<hr />
+<h4 id="gr-5">GR-5 假朋友（形近义异词）</h4>
+<p>假朋友是指一个词或短语看起来与某人母语中的词相同，但在另一种语言中含义不同。例如，英语单词 "disposition" 和意大利语单词 "disposizione"，或西班牙语单词 "disposición"。</p>
+<p>如果你的母语不是英语，当你使用一个词时，确保这个词在英语中有正确的含义（而不是你母语中看起来相同的词的含义）。</p>
+<p><strong>示例：</strong></p>
+<p>不要写：</p>
+<blockquote>
+<p>Obey the dispositions of the manufacturer when you use this adhesive.（使用此胶粘剂时，请遵守制造商的 disposition。）
+（英语中的 "disposition" 不是"指令"的意思。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>When you use this adhesive, obey the manufacturer's instructions.（使用此胶粘剂时，请遵守制造商的说明。）</p>
+</blockquote>
+<hr />
+<h4 id="gr-6">GR-6 拉丁语缩写</h4>
+<p>在英语文本中，你可以找到一些拉丁语缩写（例如 "e.g." 表示 "for example" 例如，"i.e." 表示 "that is" 即，"etc." 表示 "and so on" 等等）。STE 建议不要使用拉丁语缩写，因为如果读者不认识它们，可能会混淆。始终使用英语单词使文本清晰。</p>
+<p><strong>示例：</strong></p>
+<p>不要写：</p>
+<blockquote>
+<p>Discard the standard parts (e.g., washers, screws, bolts, and nuts) each time you remove them.（每次拆卸时，丢弃标准零件（例如垫圈、螺钉、螺栓和螺母）。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>Discard the standard parts (for example, washers, bolts, and nuts) each time you remove them.（每次拆卸时，丢弃标准零件（例如垫圈、螺栓和螺母）。）</p>
+</blockquote>
+<p>不要写：</p>
+<blockquote>
+<p>These wires can have insulation of different colors (blue, green, red, etc.).（这些电线可以有不同颜色的绝缘层（蓝色、绿色、红色等）。）</p>
+</blockquote>
+<p>应写为：</p>
+<blockquote>
+<p>These wires can have insulation of different colors. They can be blue, green, red, or other colors.（这些电线可以有不同颜色的绝缘层。它们可以是蓝色、绿色、红色或其他颜色。）</p>
+</blockquote>
+<p>如果这些缩写不是必要的，可以省略。</p>
+<p>应写为：</p>
+<blockquote>
+<p>These wires can have insulation of different colors.（这些电线可以有不同颜色的绝缘层。）</p>
+</blockquote>
+<hr />
+<h4 id="gr-7">GR-7 包容性语言</h4>
+<p>包容性语言防止偏见，确保所有人都受到尊重和代表。包容性语言的目标是使用中性和非歧视性的术语和表达，促进沟通中的平等和包容。</p>
+<p>STE 不包含包容性语言的示例，但它完全遵守性别中立语言的要求。用 STE 写作时，确保始终使用性别中立的语言。性别特定的代词，例如 "he" 或 "she"，在 STE 中是不允许的。"man"（男人）和 "woman"（女人）这两个词在 STE 中也不允许，除非这些词在适用语境中是必要的，例如在医学文本中。STE 始终使用中性术语和结构来防止技术文档中的性别偏见。</p>
+<p>更多信息，请参阅国际、国家、公司或行业特定的指导文件。例如：
+- 欧洲性别平等研究所。(2019)。性别敏感沟通工具包。
+- 联合国。(2019)。残障包容沟通指南。</p>
+<hr />
+<h4 id="gr-8">GR-8 所有格形式</h4>
+<p>所有格形式（也称为撒克逊属格）通过添加撇号和 "s" 来构成所有格。例如，"refer to the manufacturer's instructions"（参见制造商的说明）。</p>
+<p>STE 是一种强调清晰写作和简洁性的受控自然语言。虽然所有格形式在 STE 中是允许的，但要确保正确使用它。如果你不确定句子是否正确，就不要使用所有格形式。</p>
+<p>其他语言没有这种类型的所有格形式，或者对所有格形式有不同的替代方案。因此，非英语母语的读者并不总是容易理解英语中的所有格形式。</p>
+<p>始终参考技术出版物规范、风格指南或其他官方指令以获取信息和规则。</p>
+    </div>
+  </div>
+</div>
+
+<button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
+
+<script>
+  // Toggle TOC items
+  function toggleToc(el) {
+    el.classList.toggle('open');
+    const parentLi = el.parentElement;
+    const subUl = parentLi.querySelector('.toc-sub');
+    if (subUl) {
+      subUl.classList.toggle('open');
+    }
+  }
+
+  // Toggle all
+  let allOpen = false;
+  function toggleAll() {
+    allOpen = !allOpen;
+    const toggles = document.querySelectorAll('.toc-toggle');
+    const subs = document.querySelectorAll('.toc-sub');
+    toggles.forEach(t => {
+      if (allOpen) t.classList.add('open');
+      else t.classList.remove('open');
+    });
+    subs.forEach(s => {
+      if (allOpen) s.classList.add('open');
+      else s.classList.remove('open');
+    });
+  }
+
+  // Scroll to ID smoothly
+  function scrollToId(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Close mobile TOC
+      if (window.innerWidth <= 900) {
+        document.querySelector('.toc').classList.remove('open');
+      }
+    }
+    return false;
+  }
+
+  // Mobile TOC toggle
+  function toggleMobileToc() {
+    document.querySelector('.toc').classList.toggle('open');
+  }
+
+  // Back to top
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  window.addEventListener('scroll', function() {
+    const btn = document.getElementById('backToTop');
+    if (window.scrollY > 300) {
+      btn.classList.add('show');
+    } else {
+      btn.classList.remove('show');
+    }
+  });
+
+  // Active TOC item on scroll
+  window.addEventListener('scroll', function() {
+    const headings = document.querySelectorAll('.content h2, .content h3');
+    let current = '';
+    headings.forEach(h => {
+      const rect = h.getBoundingClientRect();
+      if (rect.top <= 100) {
+        current = h.id;
+      }
+    });
+
+    document.querySelectorAll('.toc-item > a').forEach(a => {
+      a.parentElement.classList.remove('active');
+      if (a.getAttribute('href') === '#' + current) {
+        a.parentElement.classList.add('active');
+        // Auto-expand parent
+        let parent = a.parentElement.parentElement;
+        while (parent && parent.classList.contains('toc-sub')) {
+          parent.classList.add('open');
+          const toggle = parent.parentElement.querySelector('.toc-toggle');
+          if (toggle) toggle.classList.add('open');
+          parent = parent.parentElement.parentElement;
+        }
+      }
+    });
+  });
+
+  // Auto-expand first level
+  document.addEventListener('DOMContentLoaded', function() {
+    const firstLevelSubs = document.querySelectorAll('.toc-list > .has-children > .toc-sub');
+    firstLevelSubs.forEach(s => s.classList.add('open'));
+    const firstLevelToggles = document.querySelectorAll('.toc-list > .has-children > .toc-toggle');
+    firstLevelToggles.forEach(t => t.classList.add('open'));
+  });
+</script>
+
+</body>
+</html>

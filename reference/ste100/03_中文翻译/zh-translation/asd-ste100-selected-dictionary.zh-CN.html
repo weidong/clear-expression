@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASD-STE100 精选词典 — AI & 知识管理场景</title>
+  <style>
+    :root {
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --surface-2: #F1F5F9;
+      --text: #0F172A;
+      --text-2: #334155;
+      --text-mute: #64748B;
+      --brand: #0EA5E9;
+      --brand-dark: #0284C7;
+      --brand-soft: #E0F2FE;
+      --brand-text: #0369A1;
+      --accent: #8B5CF6;
+      --success: #10B981;
+      --success-soft: #ECFDF5;
+      --danger: #EF4444;
+      --danger-soft: #FEF2F2;
+      --warning: #F59E0B;
+      --border: #E2E8F0;
+      --radius: 10px;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      --font-mono: 'SFMono-Regular', Consolas, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+    .sidebar-header {
+      padding: 0 20px 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+    .sidebar-title {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sidebar-sub {
+      font-size: 12px;
+      color: var(--text-mute);
+      margin-top: 4px;
+    }
+    .nav-group { margin-bottom: 8px; }
+    .nav-group-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-mute);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 10px 20px 6px;
+    }
+    .nav-item {
+      display: block;
+      padding: 7px 20px;
+      font-size: 13.5px;
+      color: var(--text-2);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+    }
+    .nav-item:hover {
+      background: var(--surface-2);
+      color: var(--text);
+    }
+    .nav-item.active {
+      background: var(--brand-soft);
+      color: var(--brand-text);
+      border-left-color: var(--brand);
+      font-weight: 500;
+    }
+    .nav-item .count {
+      float: right;
+      font-size: 11px;
+      background: var(--surface-2);
+      padding: 1px 7px;
+      border-radius: 10px;
+      color: var(--text-mute);
+    }
+    .nav-item.active .count {
+      background: white;
+      color: var(--brand-text);
+    }
+
+    /* Main */
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      padding: 40px 50px 60px;
+      max-width: 1000px;
+    }
+
+    .page-header {
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .page-subtitle {
+      color: var(--text-2);
+      font-size: 16px;
+    }
+    .page-meta {
+      display: flex;
+      gap: 16px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .meta-tag {
+      font-size: 12px;
+      padding: 3px 10px;
+      background: var(--brand-soft);
+      color: var(--brand-text);
+      border-radius: 999px;
+      font-weight: 500;
+    }
+
+    .section {
+      margin-bottom: 40px;
+      scroll-margin-top: 30px;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-title .icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    .section-desc {
+      background: var(--surface-2);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text-2);
+      margin-bottom: 16px;
+    }
+
+    /* Dictionary table */
+    .dict-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .dict-table th {
+      background: var(--surface-2);
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      color: var(--text-mute);
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .dict-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .dict-table tr:last-child td { border-bottom: none; }
+    .dict-table tr:hover td { background: #F8FAFC; }
+
+    .word-approved {
+      font-weight: 700;
+      color: var(--brand-dark);
+      font-family: var(--font-mono);
+      font-size: 14px;
+    }
+    .word-pos {
+      font-size: 11px;
+      color: var(--text-mute);
+      font-style: italic;
+      margin-left: 6px;
+    }
+    .word-meaning {
+      font-size: 13px;
+      color: var(--text-2);
+    }
+    .word-meaning-en {
+      font-size: 12px;
+      color: var(--text-mute);
+      font-style: italic;
+      margin-top: 2px;
+    }
+    .word-example {
+      font-size: 13px;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+    .word-example-en {
+      font-size: 12px;
+      color: var(--text-mute);
+      font-family: var(--font-mono);
+      margin-top: 4px;
+    }
+    .word-example::before {
+      content: "🔹 ";
+    }
+
+    /* Non-approved table */
+    .non-approve-bad {
+      color: var(--danger);
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+    .non-approve-good {
+      color: var(--success);
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+    .compare-bad {
+      color: var(--danger);
+      font-size: 13px;
+      padding: 4px 8px;
+      background: var(--danger-soft);
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+    .compare-good {
+      color: var(--success);
+      font-size: 13px;
+      padding: 4px 8px;
+      background: var(--success-soft);
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+
+    /* Note box */
+    .note-box {
+      background: var(--brand-soft);
+      border-left: 4px solid var(--brand);
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+    }
+    .note-box h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--brand-text);
+      margin-bottom: 6px;
+    }
+    .note-box p {
+      font-size: 13.5px;
+      color: var(--text-2);
+      margin-bottom: 4px;
+    }
+
+    .concentration-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 13.5px;
+    }
+    .concentration-table th, .concentration-table td {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+    .concentration-table th {
+      background: var(--surface-2);
+      font-weight: 600;
+    }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 24px 18px; }
+      .page-title { font-size: 22px; }
+      .dict-table { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">📖 STE 精选词典</div>
+      <div class="sidebar-sub">AI & 知识管理场景 · 100 词</div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group-title">内容导航</div>
+      <a class="nav-item active" href="#sec-verbs" onclick="showSection('sec-verbs')">
+        动词 <span class="count">30</span>
+      </a>
+      <a class="nav-item" href="#sec-nouns" onclick="showSection('sec-nouns')">
+        名词 <span class="count">25</span>
+      </a>
+      <a class="nav-item" href="#sec-adj" onclick="showSection('sec-adj')">
+        形容词 <span class="count">20</span>
+      </a>
+      <a class="nav-item" href="#sec-adv" onclick="showSection('sec-adv')">
+        副/介/连词 <span class="count">15</span>
+      </a>
+      <a class="nav-item" href="#sec-nonapproved" onclick="showSection('sec-nonapproved')">
+        非批准词速查 <span class="count">10</span>
+      </a>
+      <a class="nav-item" href="#sec-usage" onclick="showSection('sec-usage')">
+        使用说明
+      </a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <h1 class="page-title">ASD-STE100 精选词典</h1>
+      <p class="page-subtitle">面向 AI 大模型 / 知识管理 / 技术写作场景的 100 个核心词</p>
+      <div class="page-meta">
+        <span class="meta-tag">Issue 9</span>
+        <span class="meta-tag">100 精选词条</span>
+        <span class="meta-tag">中英对照</span>
+      </div>
+    </div>
+
+    <!-- Verbs -->
+    <section class="section" id="sec-verbs">
+      <h2 class="section-title">
+        <span class="icon">🔨</span>
+        一、动词（30 个）
+      </h2>
+      <p class="section-desc">
+        动词是 STE 规范的核心。STE 严格限制可以使用的动词及其形态，
+        只允许使用：动词原形、祈使形式、一般现在时。这大大降低了表达的复杂性。
+      </p>
+
+      <table class="dict-table">
+        <thead>
+          <tr>
+            <th style="width:120px">批准词</th>
+            <th style="width:180px">中文释义</th>
+            <th>STE 例句（中 / 英）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="word-approved">USE</span><span class="word-pos">v.</span></td>
+            <td>使用（employ for a purpose）</td>
+            <td class="word-example">使用正确的工具来执行该步骤。<div class="word-example-en">Use the correct tool to do the step.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">DO</span><span class="word-pos">v.</span></td>
+            <td>做、执行（perform an action）</td>
+            <td class="word-example">执行泄漏测试。<div class="word-example-en">Do the leak test.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">MAKE</span><span class="word-pos">v.</span></td>
+            <td>使、制作（cause to be）</td>
+            <td class="word-example">确保表面清洁。<div class="word-example-en">Make sure that the surface is clean.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">PUT</span><span class="word-pos">v.</span></td>
+            <td>放、放置（move to a position）</td>
+            <td class="word-example">将文件放入指定目录。<div class="word-example-en">Put the file in the specified directory.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">SET</span><span class="word-pos">v.</span></td>
+            <td>设置（adjust to a value）</td>
+            <td class="word-example">将参数设置为默认值。<div class="word-example-en">Set the parameter to the default value.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">START</span><span class="word-pos">v.</span></td>
+            <td>启动（begin to operate）</td>
+            <td class="word-example">启动应用程序。<div class="word-example-en">Start the application.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">STOP</span><span class="word-pos">v.</span></td>
+            <td>停止（cease operation）</td>
+            <td class="word-example">如果出现错误，立即停止操作。<div class="word-example-en">If an error occurs, stop the operation immediately.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">CHECK</span><span class="word-pos">v.</span></td>
+            <td>检查（examine if correct）</td>
+            <td class="word-example">检查配置文件是否完整。<div class="word-example-en">Check that the configuration file is complete.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">INSTALL</span><span class="word-pos">v.</span></td>
+            <td>安装（put in position for use）</td>
+            <td class="word-example">在系统上安装依赖包。<div class="word-example-en">Install the dependency package on the system.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">CONNECT</span><span class="word-pos">v.</span></td>
+            <td>连接（join together）</td>
+            <td class="word-example">将设备连接到计算机。<div class="word-example-en">Connect the device to the computer.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">OPEN</span><span class="word-pos">v.</span></td>
+            <td>打开（make accessible）</td>
+            <td class="word-example">打开终端窗口。<div class="word-example-en">Open a terminal window.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">CLOSE</span><span class="word-pos">v.</span></td>
+            <td>关闭（shut）</td>
+            <td class="word-example">关闭所有不必要的程序。<div class="word-example-en">Close all unnecessary programs.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">ENTER</span><span class="word-pos">v.</span></td>
+            <td>输入（技术动词，put in data）</td>
+            <td class="word-example">在提示符处输入你的密码。<div class="word-example-en">Enter your password at the prompt.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">SEND</span><span class="word-pos">v.</span></td>
+            <td>发送（cause to go）</td>
+            <td class="word-example">向服务器发送请求。<div class="word-example-en">Send a request to the server.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">GET</span><span class="word-pos">v.</span></td>
+            <td>获取（obtain / receive）</td>
+            <td class="word-example">从 API 获取数据。<div class="word-example-en">Get the data from the API.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">GIVE</span><span class="word-pos">v.</span></td>
+            <td>给予、提供（provide）</td>
+            <td class="word-example">模型会给出答案。<div class="word-example-en">The model gives the answer.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">FIND</span><span class="word-pos">v.</span></td>
+            <td>找到（locate by search）</td>
+            <td class="word-example">在文档中找到相关章节。<div class="word-example-en">Find the related section in the document.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">CHANGE</span><span class="word-pos">v.</span></td>
+            <td>更改（make different）</td>
+            <td class="word-example">更改设置以提高性能。<div class="word-example-en">Change the settings to improve performance.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">ADD</span><span class="word-pos">v.</span></td>
+            <td>添加（put together with）</td>
+            <td class="word-example">在列表中添加新项目。<div class="word-example-en">Add a new item to the list.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">REMOVE</span><span class="word-pos">v.</span></td>
+            <td>移除（take away）</td>
+            <td class="word-example">移除临时文件。<div class="word-example-en">Remove the temporary files.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">REPLACE</span><span class="word-pos">v.</span></td>
+            <td>替换（put in place of）</td>
+            <td class="word-example">用新版本替换旧文件。<div class="word-example-en">Replace the old file with the new version.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">MEASURE</span><span class="word-pos">v.</span></td>
+            <td>测量（find the value of）</td>
+            <td class="word-example">测量响应时间。<div class="word-example-en">Measure the response time.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">RECORD</span><span class="word-pos">v.</span></td>
+            <td>记录（write down / register）</td>
+            <td class="word-example">在日志中记录所有操作。<div class="word-example-en">Record all operations in the log.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">TEST</span><span class="word-pos">v.</span></td>
+            <td>测试（examine qualities）</td>
+            <td class="word-example">测试系统的稳定性。<div class="word-example-en">Test the stability of the system.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">ADJUST</span><span class="word-pos">v.</span></td>
+            <td>调整（set to correct position）</td>
+            <td class="word-example">调整温度设定值。<div class="word-example-en">Adjust the temperature setpoint.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">CONTROL</span><span class="word-pos">v.</span></td>
+            <td>控制（regulate operation）</td>
+            <td class="word-example">该模块控制系统的输出。<div class="word-example-en">The module controls the output of the system.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">INCREASE</span><span class="word-pos">v.</span></td>
+            <td>增加（make greater）</td>
+            <td class="word-example">增加缓冲区大小以提高性能。<div class="word-example-en">Increase the buffer size to improve performance.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">DECREASE</span><span class="word-pos">v.</span></td>
+            <td>减少（make smaller）</td>
+            <td class="word-example">减少内存使用量。<div class="word-example-en">Decrease the memory usage.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">COMPARE</span><span class="word-pos">v.</span></td>
+            <td>比较（examine similarities/differences）</td>
+            <td class="word-example">比较两个版本的差异。<div class="word-example-en">Compare the differences between the two versions.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">CALCULATE</span><span class="word-pos">v.</span></td>
+            <td>计算（find by mathematical means）</td>
+            <td class="word-example">计算最终结果。<div class="word-example-en">Calculate the final result.</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Nouns -->
+    <section class="section" id="sec-nouns">
+      <h2 class="section-title">
+        <span class="icon">📋</span>
+        二、名词（25 个）
+      </h2>
+      <p class="section-desc">
+        STE 中的名词分为批准名词和技术名词。批准名词是词典中明确批准的通用名词。
+        技术名词是各领域的专有名词（如"数据库""API"），不在批准词列表中但允许使用。
+      </p>
+
+      <table class="dict-table">
+        <thead>
+          <tr>
+            <th style="width:140px">批准词</th>
+            <th style="width:200px">中文释义</th>
+            <th>说明 / 例句</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="word-approved">SYSTEM</span><span class="word-pos">n.</span></td>
+            <td>系统（assembly of parts that work together）</td>
+            <td class="word-example">该系统由三个模块组成。<div class="word-example-en">The system has three modules.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">DATA</span><span class="word-pos">n.</span></td>
+            <td>数据（facts / information）</td>
+            <td class="word-example">数据存储在数据库中。<div class="word-example-en">The data is stored in the database.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">INFORMATION</span><span class="word-pos">n.</span></td>
+            <td>信息（knowledge / facts）</td>
+            <td class="word-example">页面包含有关错误的信息。<div class="word-example-en">The page has information about the error.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">FUNCTION</span><span class="word-pos">n.</span></td>
+            <td>功能、函数（purpose / normal operation）</td>
+            <td class="word-example">此函数返回一个布尔值。<div class="word-example-en">This function returns a boolean value.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">VALUE</span><span class="word-pos">n.</span></td>
+            <td>值、数值（quantity / magnitude）</td>
+            <td class="word-example">变量的默认值为零。<div class="word-example-en">The default value of the variable is zero.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">PARAMETER</span><span class="word-pos">n.</span></td>
+            <td>参数（value that can be adjusted）</td>
+            <td class="word-example">输入参数决定输出结果。<div class="word-example-en">The input parameters determine the output.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">RESULT</span><span class="word-pos">n.</span></td>
+            <td>结果（outcome / product）</td>
+            <td class="word-example">结果显示在屏幕上。<div class="word-example-en">The result is shown on the screen.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">PROBLEM</span><span class="word-pos">n.</span></td>
+            <td>问题（difficulty / question）</td>
+            <td class="word-example">如果遇到问题，请查阅文档。<div class="word-example-en">If you find a problem, refer to the documentation.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">SOLUTION</span><span class="word-pos">n.</span></td>
+            <td>解决方案（answer / way to solve）</td>
+            <td class="word-example">该问题有三种可能的解决方案。<div class="word-example-en">There are three possible solutions to the problem.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">STEP</span><span class="word-pos">n.</span></td>
+            <td>步骤（one action in a procedure）</td>
+            <td class="word-example">按顺序执行每个步骤。<div class="word-example-en">Do each step in sequence.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">PROCEDURE</span><span class="word-pos">n.</span></td>
+            <td>程序、过程（series of steps）</td>
+            <td class="word-example">按照安装程序操作。<div class="word-example-en">Follow the installation procedure.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">TASK</span><span class="word-pos">n.</span></td>
+            <td>任务（piece of work to do）</td>
+            <td class="word-example">该任务需要 10 分钟完成。<div class="word-example-en">The task takes 10 minutes to complete.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">DOCUMENT</span><span class="word-pos">n.</span></td>
+            <td>文档（piece of written information）</td>
+            <td class="word-example">请先阅读相关文档。<div class="word-example-en">Read the related document first.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">FILE</span><span class="word-pos">n.</span></td>
+            <td>文件（collection of data）</td>
+            <td class="word-example">将数据保存在文件中。<div class="word-example-en">Save the data in a file.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">CODE</span><span class="word-pos">n.</span></td>
+            <td>代码（set of program instructions）</td>
+            <td class="word-example">审查代码以查找错误。<div class="word-example-en">Review the code to find errors.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">ERROR</span><span class="word-pos">n.</span></td>
+            <td>错误（mistake / fault）</td>
+            <td class="word-example">系统显示错误消息。<div class="word-example-en">The system shows an error message.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">WARNING</span><span class="word-pos">n.</span></td>
+            <td>警告（notice of danger）</td>
+            <td class="word-example">注意警告信息。<div class="word-example-en">Pay attention to the warning message.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">NOTE</span><span class="word-pos">n.</span></td>
+            <td>注、注意事项（short explanation）</td>
+            <td class="word-example">注：此设置仅适用于高级用户。<div class="word-example-en">NOTE: This setting is for advanced users only.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">CONFIGURATION</span><span class="word-pos">n.</span></td>
+            <td>配置（way parts are set up）</td>
+            <td class="word-example">默认配置适用于大多数情况。<div class="word-example-en">The default configuration works for most cases.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">PERFORMANCE</span><span class="word-pos">n.</span></td>
+            <td>性能（how well something works）</td>
+            <td class="word-example">新算法提高了性能。<div class="word-example-en">The new algorithm improves performance.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">OPERATION</span><span class="word-pos">n.</span></td>
+            <td>操作、运行（action / functioning）</td>
+            <td class="word-example">操作过程中不要关闭电源。<div class="word-example-en">Do not turn off the power during operation.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">PROCESS</span><span class="word-pos">n.</span></td>
+            <td>过程、进程（series of actions）</td>
+            <td class="word-example">该过程需要三个阶段。<div class="word-example-en">The process has three stages.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">MODULE</span><span class="word-pos">n.</span></td>
+            <td>模块（self-contained unit）</td>
+            <td class="word-example">每个模块有一个特定的功能。<div class="word-example-en">Each module has a specific function.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">VERSION</span><span class="word-pos">n.</span></td>
+            <td>版本（form that is different from others）</td>
+            <td class="word-example">确保使用最新版本的软件。<div class="word-example-en">Make sure that you use the latest version of the software.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">USER</span><span class="word-pos">n.</span></td>
+            <td>用户（person who uses）</td>
+            <td class="word-example">用户可以自定义界面。<div class="word-example-en">The user can customize the interface.</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Adjectives -->
+    <section class="section" id="sec-adj">
+      <h2 class="section-title">
+        <span class="icon">🏷️</span>
+        三、形容词（20 个）
+      </h2>
+      <p class="section-desc">
+        STE 限制形容词的使用以减少歧义。只有明确批准的形容词才能使用，
+        且通常只允许原级形式（不用复杂的比较级/最高级变化）。
+      </p>
+
+      <table class="dict-table">
+        <thead>
+          <tr>
+            <th style="width:140px">批准词</th>
+            <th style="width:180px">中文释义</th>
+            <th>例句</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="word-approved">CORRECT</span><span class="word-pos">adj.</span></td>
+            <td>正确的（right / accurate）</td>
+            <td class="word-example">输入正确的用户名。<div class="word-example-en">Enter the correct username.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">INCORRECT</span><span class="word-pos">adj.</span></td>
+            <td>不正确的（wrong）</td>
+            <td class="word-example">如果密码不正确，访问将被拒绝。<div class="word-example-en">If the password is incorrect, access is denied.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">DEFAULT</span><span class="word-pos">adj.</span></td>
+            <td>默认的（standard / initial）</td>
+            <td class="word-example">使用默认设置。<div class="word-example-en">Use the default settings.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">DIFFERENT</span><span class="word-pos">adj.</span></td>
+            <td>不同的（not the same）</td>
+            <td class="word-example">两种方法产生不同的结果。<div class="word-example-en">The two methods give different results.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">SAME</span><span class="word-pos">adj.</span></td>
+            <td>相同的（identical）</td>
+            <td class="word-example">所有用户使用相同的接口。<div class="word-example-en">All users use the same interface.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">NECESSARY</span><span class="word-pos">adj.</span></td>
+            <td>必要的（needed / required）</td>
+            <td class="word-example">只安装必要的组件。<div class="word-example-en">Install only the necessary components.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">IMPORTANT</span><span class="word-pos">adj.</span></td>
+            <td>重要的（of great value）</td>
+            <td class="word-example">保存你的工作很重要。<div class="word-example-en">It is important to save your work.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">POSSIBLE</span><span class="word-pos">adj.</span></td>
+            <td>可能的（able to be done）</td>
+            <td class="word-example">可以通过命令行完成配置。<div class="word-example-en">Configuration is possible through the command line.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">IMPOSSIBLE</span><span class="word-pos">adj.</span></td>
+            <td>不可能的（not possible）</td>
+            <td class="word-example">没有密码就不可能访问。<div class="word-example-en">Access is impossible without a password.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">AVAILABLE</span><span class="word-pos">adj.</span></td>
+            <td>可用的（ready for use）</td>
+            <td class="word-example">有三种可用的选项。<div class="word-example-en">Three options are available.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">RELEVANT</span><span class="word-pos">adj.</span></td>
+            <td>相关的（related / applicable）</td>
+            <td class="word-example">有关更多信息，请参阅相关章节。<div class="word-example-en">For more information, refer to the relevant section.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">SPECIFIC</span><span class="word-pos">adj.</span></td>
+            <td>特定的、具体的（exact / particular）</td>
+            <td class="word-example">为特定任务选择合适的工具。<div class="word-example-en">Select the correct tool for the specific task.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">AUTOMATIC</span><span class="word-pos">adj.</span></td>
+            <td>自动的（self-acting）</td>
+            <td class="word-example">系统自动执行备份。<div class="word-example-en">The system does the backup automatically.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">MANUAL</span><span class="word-pos">adj.</span></td>
+            <td>手动的（done by hand）</td>
+            <td class="word-example">如果自动模式失败，使用手动模式。<div class="word-example-en">If automatic mode fails, use manual mode.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">FULL</span><span class="word-pos">adj.</span></td>
+            <td>完整的（complete）</td>
+            <td class="word-example">完整列表请参阅附录。<div class="word-example-en">Refer to the appendix for the full list.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">PARTIAL</span><span class="word-pos">adj.</span></td>
+            <td>部分的（not complete）</td>
+            <td class="word-example">仅显示部分结果。<div class="word-example-en">Only partial results are shown.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">MAXIMUM</span><span class="word-pos">adj.</span></td>
+            <td>最大的（greatest possible）</td>
+            <td class="word-example">最大文件大小为 100 MB。<div class="word-example-en">The maximum file size is 100 MB.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">MINIMUM</span><span class="word-pos">adj.</span></td>
+            <td>最小的（smallest possible）</td>
+            <td class="word-example">最低系统要求列在表中。<div class="word-example-en">The minimum system requirements are listed in the table.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">RELATED</span><span class="word-pos">adj.</span></td>
+            <td>相关的（connected）</td>
+            <td class="word-example">相关主题在第 3 章中讨论。<div class="word-example-en">Related topics are discussed in Chapter 3.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">CORRESPONDING</span><span class="word-pos">adj.</span></td>
+            <td>对应的（related / matching）</td>
+            <td class="word-example">在相应的字段中输入值。<div class="word-example-en">Enter the value in the corresponding field.</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Adv/Prep/Conj -->
+    <section class="section" id="sec-adv">
+      <h2 class="section-title">
+        <span class="icon">🔗</span>
+        四、副词 / 介词 / 连词（15 个）
+      </h2>
+      <p class="section-desc">
+        这些连接词和修饰词看似不起眼，但是句子结构的"骨架"。
+        STE 对它们的使用有严格限制，目的是让句子结构简单明了。
+      </p>
+
+      <table class="dict-table">
+        <thead>
+          <tr>
+            <th style="width:120px">批准词</th>
+            <th style="width:100px">词性</th>
+            <th style="width:180px">中文释义</th>
+            <th>用法说明 / 例句</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="word-approved">FIRST</span></td>
+            <td>adv.</td>
+            <td>首先、第一</td>
+            <td>用于步骤编号或排序。</td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">THEN</span></td>
+            <td>adv.</td>
+            <td>然后</td>
+            <td>表示顺序。注意：不能用来表示"因此"。</td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">ALSO</span></td>
+            <td>adv.</td>
+            <td>也</td>
+            <td>表示补充。</td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">ONLY</span></td>
+            <td>adv.</td>
+            <td>只、仅仅</td>
+            <td>表示限制。</td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">FULLY</span></td>
+            <td>adv.</td>
+            <td>完全地</td>
+            <td class="word-example">完全关闭系统后再断开连接。<div class="word-example-en">Fully close the system before you disconnect.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">IMMEDIATELY</span></td>
+            <td>adv.</td>
+            <td>立即</td>
+            <td class="word-example">如果发生泄漏，立即关闭阀门。<div class="word-example-en">If a leak occurs, immediately close the valve.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">CORRECTLY</span></td>
+            <td>adv.</td>
+            <td>正确地</td>
+            <td class="word-example">确保电缆正确连接。<div class="word-example-en">Make sure that the cable is correctly connected.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">BEFORE</span></td>
+            <td>conj.</td>
+            <td>在……之前</td>
+            <td class="word-example">开始之前，请阅读说明。<div class="word-example-en">Before you start, read the instructions.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">AFTER</span></td>
+            <td>conj.</td>
+            <td>在……之后</td>
+            <td class="word-example">完成后保存文件。<div class="word-example-en">Save the file after you finish.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">WHEN</span></td>
+            <td>conj.</td>
+            <td>当……时</td>
+            <td class="word-example">绿灯亮起时，设备就绪。<div class="word-example-en">When the green light comes on, the equipment is ready.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">IF</span></td>
+            <td>conj.</td>
+            <td>如果</td>
+            <td class="word-example">如果出现错误，请重新启动。<div class="word-example-en">If an error occurs, restart.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">BECAUSE</span></td>
+            <td>conj.</td>
+            <td>因为</td>
+            <td class="word-example">因为内存不足，操作失败。<div class="word-example-en">The operation failed because of insufficient memory.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">ABOUT</span></td>
+            <td>prep.</td>
+            <td>大约 / 关于</td>
+            <td>两个批准含义："大约"（数量）和"关于"（主题）。</td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">ACCORDING TO</span></td>
+            <td>prep.</td>
+            <td>根据</td>
+            <td class="word-example">根据规范编写文档。<div class="word-example-en">Write the document according to the specification.</div></td>
+          </tr>
+          <tr>
+            <td><span class="word-approved">DURING</span></td>
+            <td>prep.</td>
+            <td>在……期间</td>
+            <td class="word-example">安装过程中不要中断电源。<div class="word-example-en">Do not interrupt power during installation.</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Non-approved -->
+    <section class="section" id="sec-nonapproved">
+      <h2 class="section-title">
+        <span class="icon">⚠️</span>
+        五、常见非批准词速查表（10 组）
+      </h2>
+      <p class="section-desc">
+        这些是日常写作中最常见、但 STE 不批准使用的词。
+        记住它们的批准替代词，可以快速提升写作的 STE 合规性。
+      </p>
+
+      <table class="dict-table">
+        <thead>
+          <tr>
+            <th style="width:160px">非批准词</th>
+            <th style="width:160px">替代词</th>
+            <th>对比示例</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="non-approve-bad">utilize / utilization</span><br><span style="font-size:12px;color:var(--text-mute)">利用</span></td>
+            <td><span class="non-approve-good">USE (v)</span><br><span style="font-size:12px;color:var(--text-mute)">使用</span></td>
+            <td>
+              <span class="compare-bad">❌ 利用该工具完成任务。</span><br>
+              <span class="compare-good">✓ 使用该工具完成任务。</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="non-approve-bad">implement / implementation</span><br><span style="font-size:12px;color:var(--text-mute)">实施</span></td>
+            <td><span class="non-approve-good">DO / INSTALL</span><br><span style="font-size:12px;color:var(--text-mute)">执行 / 安装</span></td>
+            <td>
+              <span class="compare-bad">❌ 实施新策略。</span><br>
+              <span class="compare-good">✓ 执行新策略。</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="non-approve-bad">perform</span><br><span style="font-size:12px;color:var(--text-mute)">执行</span></td>
+            <td><span class="non-approve-good">DO / CARRY OUT</span><br><span style="font-size:12px;color:var(--text-mute)">做</span></td>
+            <td>
+              <span class="compare-bad">❌ 执行测试。</span><br>
+              <span class="compare-good">✓ 做测试。</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="non-approve-bad">provide</span><br><span style="font-size:12px;color:var(--text-mute)">提供</span></td>
+            <td><span class="non-approve-good">GIVE (v)</span><br><span style="font-size:12px;color:var(--text-mute)">给予</span></td>
+            <td>
+              <span class="compare-bad">❌ 系统提供数据。</span><br>
+              <span class="compare-good">✓ 系统给出数据。</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="non-approve-bad">enable</span><br><span style="font-size:12px;color:var(--text-mute)">启用</span></td>
+            <td><span class="non-approve-good">MAKE POSSIBLE</span><br><span style="font-size:12px;color:var(--text-mute)">使成为可能</span></td>
+            <td>
+              <span class="compare-bad">❌ 该功能启用高级选项。</span><br>
+              <span class="compare-good">✓ 该功能使高级选项成为可能。</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="non-approve-bad">ensure</span><br><span style="font-size:12px;color:var(--text-mute)">确保</span></td>
+            <td><span class="non-approve-good">MAKE SURE</span><br><span style="font-size:12px;color:var(--text-mute)">确保</span></td>
+            <td>
+              <span class="compare-bad">❌ 确保配置正确。</span><br>
+              <span class="compare-good">✓ 确保配置正确。</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="non-approve-bad">indicate</span><br><span style="font-size:12px;color:var(--text-mute)">指示</span></td>
+            <td><span class="non-approve-good">SHOW (v)</span><br><span style="font-size:12px;color:var(--text-mute)">显示</span></td>
+            <td>
+              <span class="compare-bad">❌ 指示灯指示状态。</span><br>
+              <span class="compare-good">✓ 指示灯显示状态。</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="non-approve-bad">obtain</span><br><span style="font-size:12px;color:var(--text-mute)">获取</span></td>
+            <td><span class="non-approve-good">GET (v)</span><br><span style="font-size:12px;color:var(--text-mute)">获取</span></td>
+            <td>
+              <span class="compare-bad">❌ 从服务器获取数据。</span><br>
+              <span class="compare-good">✓ 从服务器获取数据。</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="non-approve-bad">attempt</span><br><span style="font-size:12px;color:var(--text-mute)">尝试</span></td>
+            <td><span class="non-approve-good">TRY (v)</span><br><span style="font-size:12px;color:var(--text-mute)">尝试</span></td>
+            <td>
+              <span class="compare-bad">❌ 尝试重新连接。</span><br>
+              <span class="compare-good">✓ 尝试重新连接。</span>
+            </td>
+          </tr>
+          <tr>
+            <td><span class="non-approve-bad">approximately</span><br><span style="font-size:12px;color:var(--text-mute)">大约</span></td>
+            <td><span class="non-approve-good">ABOUT (prep)</span><br><span style="font-size:12px;color:var(--text-mute)">大约</span></td>
+            <td>
+              <span class="compare-bad">❌ 大约需要 5 分钟。</span><br>
+              <span class="compare-good">✓ 大约需要 5 分钟。</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Usage -->
+    <section class="section" id="sec-usage">
+      <h2 class="section-title">
+        <span class="icon">📖</span>
+        六、使用说明
+      </h2>
+
+      <div class="note-box">
+        <h4>💡 批准词 vs 非批准词</h4>
+        <p><strong>批准词</strong>：STE 词典中批准使用的词，有明确的批准含义。在词典中以全部大写显示。</p>
+        <p><strong>非批准词</strong>：STE 词典中不批准使用的词，通常给出一个或多个批准替代词。在词典中以小写显示。</p>
+      </div>
+
+      <div class="note-box" style="border-left-color: var(--accent); background: #F5F3FF;">
+        <h4 style="color: #5B21B6;">🔑 一词一义原则</h4>
+        <p>每个批准词只有一个批准含义。如果一个词在日常英语中有多个含义，在 STE 中只能使用其批准的那个含义。</p>
+        <p>例如：<strong>FOLLOW</strong> 的批准含义只有"跟随"（come after），不能用"follow the instruction"（遵循指示），应该说 <strong>Obey</strong> the instruction。</p>
+      </div>
+
+      <div class="note-box" style="border-left-color: var(--warning); background: #FFFBEB;">
+        <h4 style="color: #92400E;">🔧 技术名词和技术动词</h4>
+        <p>有些词虽然不在批准词列表中，但如果它们是：</p>
+        <p>① 你所在领域的标准技术名词 &nbsp; ② 简短（不超过 3 个词） &nbsp; ③ 清晰易懂</p>
+        <p>那么可以作为"技术名词"或"技术动词"使用。但必须保持一致——同一个东西全程用同一个名称。</p>
+      </div>
+
+      <h3 style="font-size:16px; margin: 24px 0 12px;">浓度调节指南</h3>
+      <p style="margin-bottom: 10px; color: var(--text-2);">在 AI 场景下，不必追求 100% 严格的 STE 合规。根据场景灵活调节：</p>
+
+      <table class="concentration-table">
+        <thead>
+          <tr>
+            <th>场景</th>
+            <th>推荐浓度</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>技术文档 / 操作手册</td>
+            <td><strong style="color: var(--success);">100%</strong></td>
+            <td>追求精确性和可维护性</td>
+          </tr>
+          <tr>
+            <td>知识库 / 概念说明</td>
+            <td><strong style="color: var(--brand);">80%</strong></td>
+            <td>清晰为主，适当灵活</td>
+          </tr>
+          <tr>
+            <td>日常交流 / 邮件</td>
+            <td><strong style="color: var(--warning);">50%</strong></td>
+            <td>保留核心原则，自然表达</td>
+          </tr>
+          <tr>
+            <td>创意写作 / 文章</td>
+            <td><strong style="color: var(--text-mute);">20-30%</strong></td>
+            <td>只借鉴短句和结构清晰的思路</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); text-align: center; color: var(--text-mute); font-size: 13px;">
+      基于 ASD-STE100 Issue 9 官方词典选编 · 聚焦 AI 与知识管理场景<br>
+      完整词典包含 875 个批准词和 1274 个非批准词，参见官方规范 Part 2
+    </div>
+  </main>
+
+  <script>
+    // Navigation active state
+    function showSection(id) {
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('href') === '#' + id) {
+          item.classList.add('active');
+        }
+      });
+    }
+
+    // Scroll spy
+    const sections = document.querySelectorAll('.section');
+    const navItems = document.querySelectorAll('.nav-item');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (window.scrollY >= sectionTop - 100) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navItems.forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('href') === '#' + current) {
+          item.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

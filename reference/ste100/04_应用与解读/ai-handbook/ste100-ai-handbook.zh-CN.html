@@ -1,0 +1,3190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASD-STE100 AI 时代应用手册</title>
+<style>
+/* ========== 全局样式 ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-deep: #0a1628;
+    --primary-blue: #1e3a5f;
+    --primary-mid: #2d5a87;
+    --accent-purple: #7c3aed;
+    --accent-violet: #a855f7;
+    --accent-blue: #3b82f6;
+    --accent-cyan: #06b6d4;
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --bg-dark: #0f172a;
+    --bg-card: rgba(30, 41, 59, 0.6);
+    --bg-card-hover: rgba(51, 65, 85, 0.8);
+    --border-color: rgba(148, 163, 184, 0.15);
+    --code-bg: #0d1117;
+    --code-border: #30363d;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --radius: 12px;
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    --gradient-1: linear-gradient(135deg, #1e3a5f 0%, #7c3aed 100%);
+    --gradient-2: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+    --gradient-3: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
+    --gradient-4: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+    --gradient-5: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+    --gradient-6: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+    --gradient-7: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    --gradient-8: linear-gradient(135deg, #f97316 0%, #f43f5e 100%);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+/* 背景装饰 */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-1);
+    z-index: 1000;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ========== 布局 ========== */
+.layout {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+
+/* ========== 侧边栏 ========== */
+.sidebar {
+    width: 300px;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid var(--border-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+    z-index: 100;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    background: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(10px);
+    z-index: 2;
+}
+
+.sidebar-title {
+    font-size: 16px;
+    font-weight: 700;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+}
+
+.sidebar-subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.nav-menu {
+    padding: 12px 0;
+}
+
+.nav-part {
+    margin-bottom: 4px;
+}
+
+.nav-part-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.nav-part-title:hover {
+    color: var(--text-primary);
+    background: rgba(124, 58, 237, 0.1);
+}
+
+.nav-part-title .part-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+}
+
+.nav-part-title .toggle-icon {
+    margin-left: auto;
+    transition: transform 0.2s;
+    font-size: 10px;
+}
+
+.nav-part.collapsed .toggle-icon {
+    transform: rotate(-90deg);
+}
+
+.nav-part.collapsed .nav-subitems {
+    display: none;
+}
+
+.nav-subitems {
+    padding: 4px 0;
+}
+
+.nav-subitem {
+    display: block;
+    padding: 8px 20px 8px 54px;
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: all 0.2s;
+    border-left: 2px solid transparent;
+}
+
+.nav-subitem:hover {
+    color: var(--text-primary);
+    background: rgba(124, 58, 237, 0.08);
+    border-left-color: var(--accent-purple);
+}
+
+.nav-subitem.active {
+    color: var(--text-primary);
+    background: rgba(124, 58, 237, 0.15);
+    border-left-color: var(--accent-violet);
+}
+
+/* ========== 移动端菜单按钮 ========== */
+.menu-toggle {
+    display: none;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 200;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: rgba(30, 41, 59, 0.9);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 20px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ========== 主内容区 ========== */
+.main-content {
+    flex: 1;
+    margin-left: 300px;
+    min-height: 100vh;
+}
+
+.content-wrapper {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 48px 80px;
+}
+
+/* ========== 封面 ========== */
+.cover {
+    text-align: center;
+    padding: 80px 0 60px;
+    margin-bottom: 60px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.cover-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: rgba(124, 58, 237, 0.15);
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    border-radius: 20px;
+    font-size: 13px;
+    color: var(--accent-violet);
+    margin-bottom: 24px;
+}
+
+.cover h1 {
+    font-size: 42px;
+    font-weight: 800;
+    background: var(--gradient-1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+    line-height: 1.2;
+}
+
+.cover-subtitle {
+    font-size: 18px;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+}
+
+.cover-meta {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+.cover-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cover-meta-item strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* ========== 章节通用样式 ========== */
+.part {
+    margin-bottom: 80px;
+    scroll-margin-top: 32px;
+}
+
+.part-header {
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid;
+    border-image: var(--gradient-1) 1;
+}
+
+.part-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.part-header h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.part-desc {
+    color: var(--text-secondary);
+    font-size: 15px;
+}
+
+.section {
+    margin-bottom: 40px;
+    scroll-margin-top: 32px;
+}
+
+.section h3 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    padding-left: 14px;
+    border-left: 4px solid var(--accent-purple);
+    line-height: 1.4;
+}
+
+.section h4 {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 24px 0 12px;
+    color: var(--text-primary);
+}
+
+.section p {
+    margin-bottom: 14px;
+    color: var(--text-secondary);
+}
+
+.section ul, .section ol {
+    margin: 14px 0 14px 24px;
+    color: var(--text-secondary);
+}
+
+.section li {
+    margin-bottom: 8px;
+}
+
+.section strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* ========== 表格 ========== */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.styled-table thead {
+    background: rgba(124, 58, 237, 0.2);
+}
+
+.styled-table th {
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+}
+
+.styled-table td {
+    padding: 12px 16px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.styled-table tbody tr {
+    background: var(--bg-card);
+    transition: background 0.2s;
+}
+
+.styled-table tbody tr:hover {
+    background: var(--bg-card-hover);
+}
+
+.styled-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ========== 代码块 ========== */
+.code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin: 20px 0;
+    overflow-x: auto;
+    position: relative;
+    font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #e6edf3;
+}
+
+.code-block::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ff5f56;
+    box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #27c93f;
+}
+
+.code-block pre {
+    margin: 0;
+    padding-top: 8px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.prompt-block {
+    border: 1px solid rgba(124, 58, 237, 0.4);
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 20px 0;
+    position: relative;
+}
+
+.prompt-block::before {
+    content: 'Prompt';
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    background: var(--gradient-3);
+    color: white;
+    padding: 2px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.prompt-block .prompt-content {
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+}
+
+/* ========== 对比卡片 ========== */
+.compare-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.compare-col {
+    border-radius: var(--radius);
+    padding: 20px;
+    position: relative;
+}
+
+.compare-col.bad {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.compare-col.good {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.compare-label {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.compare-col.bad .compare-label {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+
+.compare-col.good .compare-label {
+    background: rgba(16, 185, 129, 0.2);
+    color: #6ee7b7;
+}
+
+.compare-content {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+}
+
+/* ========== 提示框 ========== */
+.callout {
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin: 20px 0;
+    display: flex;
+    gap: 12px;
+}
+
+.callout-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.callout-content {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.callout.note {
+    background: rgba(59, 130, 246, 0.1);
+    border-left: 4px solid var(--accent-blue);
+    color: #93c5fd;
+}
+
+.callout.warning {
+    background: rgba(245, 158, 11, 0.1);
+    border-left: 4px solid var(--warning);
+    color: #fcd34d;
+}
+
+.callout.tip {
+    background: rgba(16, 185, 129, 0.1);
+    border-left: 4px solid var(--success);
+    color: #6ee7b7;
+}
+
+/* ========== 各 Part 配色 ========== */
+.part-1 .part-badge { background: var(--gradient-1); }
+.part-1 .section h3 { border-left-color: var(--accent-purple); }
+.part-1 .part-header { border-image: var(--gradient-1) 1; }
+
+.part-2 .part-badge { background: var(--gradient-2); }
+.part-2 .section h3 { border-left-color: var(--accent-cyan); }
+.part-2 .part-header { border-image: var(--gradient-2) 1; }
+.part-2 .styled-table thead { background: rgba(6, 182, 212, 0.15); }
+
+.part-3 .part-badge { background: var(--gradient-3); }
+.part-3 .section h3 { border-left-color: var(--accent-violet); }
+.part-3 .part-header { border-image: var(--gradient-3) 1; }
+.part-3 .styled-table thead { background: rgba(168, 85, 247, 0.15); }
+
+.part-4 .part-badge { background: var(--gradient-4); }
+.part-4 .section h3 { border-left-color: var(--warning); }
+.part-4 .part-header { border-image: var(--gradient-4) 1; }
+.part-4 .styled-table thead { background: rgba(245, 158, 11, 0.15); }
+
+.part-5 .part-badge { background: var(--gradient-5); }
+.part-5 .section h3 { border-left-color: var(--success); }
+.part-5 .part-header { border-image: var(--gradient-5) 1; }
+.part-5 .styled-table thead { background: rgba(16, 185, 129, 0.15); }
+
+.part-6 .part-badge { background: var(--gradient-6); }
+.part-6 .section h3 { border-left-color: #ec4899; }
+.part-6 .part-header { border-image: var(--gradient-6) 1; }
+.part-6 .styled-table thead { background: rgba(236, 72, 153, 0.15); }
+
+.part-7 .part-badge { background: var(--gradient-7); }
+.part-7 .section h3 { border-left-color: #8b5cf6; }
+.part-7 .part-header { border-image: var(--gradient-7) 1; }
+.part-7 .styled-table thead { background: rgba(139, 92, 246, 0.15); }
+
+.part-8 .part-badge { background: var(--gradient-8); }
+.part-8 .section h3 { border-left-color: #f97316; }
+.part-8 .part-header { border-image: var(--gradient-8) 1; }
+.part-8 .styled-table thead { background: rgba(249, 115, 22, 0.15); }
+
+/* ========== 速查卡特殊样式 ========== */
+.cheat-sheet {
+    background: white;
+    color: #1e293b;
+    border-radius: var(--radius);
+    padding: 32px;
+    margin: 24px 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.cheat-sheet h3 {
+    color: #1e293b;
+    border-left: 4px solid #7c3aed;
+    padding-left: 12px;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.cheat-sheet h4 {
+    color: #334155;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+
+.cheat-sheet p {
+    color: #475569;
+    margin-bottom: 12px;
+}
+
+.cheat-sheet ul, .cheat-sheet ol {
+    color: #475569;
+}
+
+.cheat-sheet .styled-table {
+    box-shadow: none;
+    border: 1px solid #e2e8f0;
+}
+
+.cheat-sheet .styled-table thead {
+    background: #f1f5f9;
+}
+
+.cheat-sheet .styled-table th {
+    color: #1e293b;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.cheat-sheet .styled-table td {
+    color: #475569;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.cheat-sheet .styled-table tbody tr {
+    background: white;
+}
+
+.cheat-sheet .styled-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.print-hint {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-top: 16px;
+}
+
+/* ========== 目录列表 ========== */
+.toc-list {
+    list-style: none;
+    margin: 20px 0;
+    padding: 0;
+}
+
+.toc-part {
+    margin-bottom: 12px;
+}
+
+.toc-part-link {
+    display: block;
+    padding: 12px 16px;
+    background: var(--bg-card);
+    border-radius: 8px;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+    border: 1px solid var(--border-color);
+}
+
+.toc-part-link:hover {
+    background: var(--bg-card-hover);
+    transform: translateX(4px);
+    border-color: var(--accent-purple);
+}
+
+.toc-part-link .part-num {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    text-align: center;
+    line-height: 28px;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    margin-right: 12px;
+    vertical-align: middle;
+}
+
+.toc-subitems {
+    list-style: none;
+    margin: 8px 0 8px 56px;
+    padding: 0;
+}
+
+.toc-subitems li {
+    margin-bottom: 4px;
+}
+
+.toc-subitems a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.toc-subitems a:hover {
+    color: var(--accent-violet);
+}
+
+/* ========== 页脚 ========== */
+.footer {
+    text-align: center;
+    padding: 40px;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 1024px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .menu-toggle {
+        display: flex;
+    }
+    
+    .content-wrapper {
+        padding: 60px 24px 60px;
+    }
+    
+    .cover h1 {
+        font-size: 32px;
+    }
+    
+    .compare-card {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .content-wrapper {
+        padding: 60px 16px 40px;
+    }
+    
+    .cover h1 {
+        font-size: 26px;
+    }
+    
+    .cover-subtitle {
+        font-size: 15px;
+    }
+    
+    .cover-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .part-header h2 {
+        font-size: 24px;
+    }
+    
+    .section h3 {
+        font-size: 18px;
+    }
+    
+    .cheat-sheet {
+        padding: 20px;
+    }
+    
+    .styled-table {
+        font-size: 12px;
+    }
+    
+    .styled-table th,
+    .styled-table td {
+        padding: 8px 10px;
+    }
+}
+
+/* ========== 打印样式 ========== */
+@media print {
+    .sidebar, .menu-toggle {
+        display: none !important;
+    }
+    
+    .main-content {
+        margin-left: 0 !important;
+    }
+    
+    .content-wrapper {
+        max-width: 100%;
+        padding: 0;
+    }
+    
+    body {
+        background: white;
+        color: #1e293b;
+    }
+    
+    .cheat-sheet {
+        box-shadow: none;
+        border: 1px solid #e2e8f0;
+        page-break-inside: avoid;
+    }
+    
+    .part {
+        page-break-before: always;
+    }
+    
+    .part:first-child {
+        page-break-before: auto;
+    }
+}
+
+/* ========== 滚动条 ========== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.2);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(148, 163, 184, 0.4);
+}
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+<div class="layout">
+    <!-- 侧边栏 -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-title">ASD-STE100 手册</div>
+            <div class="sidebar-subtitle">AI 时代应用指南 v1.0</div>
+        </div>
+        <nav class="nav-menu" id="navMenu">
+            <!-- 导航由 JS 动态生成 -->
+        </nav>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <div class="content-wrapper">
+
+            <!-- 封面 -->
+            <section class="cover" id="cover">
+                <div class="cover-badge">AI 时代必备写作指南</div>
+                <h1>ASD-STE100<br>AI 时代应用手册</h1>
+                <p class="cover-subtitle">用受控语言规范，让 AI 输出更清晰、更准确、更有价值</p>
+                <div class="cover-meta">
+                    <div class="cover-meta-item">📚 <strong>8</strong> 篇内容</div>
+                    <div class="cover-meta-item">⚡ <strong>12</strong> 个 Prompt 模板</div>
+                    <div class="cover-meta-item">🎯 <strong>50+</strong> 实用示例</div>
+                    <div class="cover-meta-item">📅 v1.0 · 2026.10</div>
+                </div>
+            </section>
+
+            <!-- 手册说明 -->
+            <section class="section" id="intro">
+                <h3>手册说明</h3>
+                <p>ASD-STE100（Simplified Technical English）是一套源自航空维修领域的受控语言规范。在 AI 大模型时代，它被 Andrej Karpathy 等专家重新发现并推荐，作为约束 LLM 输出、提升信息密度和可读性的有效工具。</p>
+                <p>本手册面向使用 AI 大模型、AI Agent、知识管理的用户，提供从基础概念到实操工具的完整指南。</p>
+                
+                <div class="callout tip">
+                    <div class="callout-icon">💡</div>
+                    <div class="callout-content">
+                        <strong>阅读建议：</strong><br>
+                        · 初学者：按顺序阅读第 1-2 篇，立即上手<br>
+                        · 知识管理用户：重点阅读第 3 篇<br>
+                        · AI Agent 开发者：重点阅读第 4 篇<br>
+                        · 技术写作者：重点阅读第 5 篇<br>
+                        · 快速查阅：直接跳到第 8 篇速查卡
+                    </div>
+                </div>
+            </section>
+
+            <!-- 目录 -->
+            <section class="section" id="toc">
+                <h3>目录</h3>
+                <ul class="toc-list">
+                    <li class="toc-part">
+                        <a href="#part1" class="toc-part-link"><span class="part-num" style="background: var(--gradient-1)">1</span>基础篇——为什么 STE 能让 AI 输出更有价值</a>
+                        <ul class="toc-subitems">
+                            <li><a href="#p1-1">1.1 什么是 ASD-STE100</a></li>
+                            <li><a href="#p1-2">1.2 Karpathy 为什么推荐用它</a></li>
+                            <li><a href="#p1-3">1.3 STE 提升 AI 输出质量的 5 个原理</a></li>
+                            <li><a href="#p1-4">1.4 STE vs 普通写作：对比示例</a></li>
+                            <li><a href="#p1-5">1.5 STE "浓度"概念</a></li>
+                        </ul>
+                    </li>
+                    <li class="toc-part">
+                        <a href="#part2" class="toc-part-link"><span class="part-num" style="background: var(--gradient-2)">2</span>Prompt 篇——写出 STE 风格的提示词</a>
+                        <ul class="toc-subitems">
+                            <li><a href="#p2-1">2.1 核心 Prompt 模板</a></li>
+                            <li><a href="#p2-2">2.2 12 个即用 Prompt 模板</a></li>
+                            <li><a href="#p2-3">2.3 Prompt 使用技巧</a></li>
+                        </ul>
+                    </li>
+                    <li class="toc-part">
+                        <a href="#part3" class="toc-part-link"><span class="part-num" style="background: var(--gradient-3)">3</span>知识库篇——用 STE 构建高质量个人知识库</a>
+                        <ul class="toc-subitems">
+                            <li><a href="#p3-1">3.1 为什么知识库需要 STE 规范</a></li>
+                            <li><a href="#p3-2">3.2 STE-Wiki 三层架构设计</a></li>
+                            <li><a href="#p3-3">3.3 页面模板</a></li>
+                            <li><a href="#p3-4">3.4 三大工作流</a></li>
+                            <li><a href="#p3-5">3.5 实操：从零搭建 STE 知识库</a></li>
+                            <li><a href="#p3-6">3.6 质量自检清单</a></li>
+                        </ul>
+                    </li>
+                    <li class="toc-part">
+                        <a href="#part4" class="toc-part-link"><span class="part-num" style="background: var(--gradient-4)">4</span>Agent 篇——让 Agent 输出符合 STE 规范</a>
+                        <ul class="toc-subitems">
+                            <li><a href="#p4-1">4.1 为什么 Agent 需要 STE 约束</a></li>
+                            <li><a href="#p4-2">4.2 Agent 系统提示词模板</a></li>
+                            <li><a href="#p4-3">4.3 STE 自检流程</a></li>
+                            <li><a href="#p4-4">4.4 STE 评分系统</a></li>
+                            <li><a href="#p4-5">4.5 多 Agent 场景下的 STE 规范传递</a></li>
+                        </ul>
+                    </li>
+                    <li class="toc-part">
+                        <a href="#part5" class="toc-part-link"><span class="part-num" style="background: var(--gradient-5)">5</span>代码篇——STE 在技术写作中的应用</a>
+                        <ul class="toc-subitems">
+                            <li><a href="#p5-1">5.1 代码注释的 STE 规范</a></li>
+                            <li><a href="#p5-2">5.2 README / 技术文档的 STE 写法</a></li>
+                            <li><a href="#p5-3">5.3 API 文档的 STE 模板</a></li>
+                            <li><a href="#p5-4">5.4 错误信息的 STE 写法</a></li>
+                            <li><a href="#p5-5">5.5 代码评审意见的 STE 表达</a></li>
+                        </ul>
+                    </li>
+                    <li class="toc-part">
+                        <a href="#part6" class="toc-part-link"><span class="part-num" style="background: var(--gradient-6)">6</span>创作篇——用 STE 思路提升写作质量</a>
+                        <ul class="toc-subitems">
+                            <li><a href="#p6-1">6.1 文章/报告写作的 STE 应用</a></li>
+                            <li><a href="#p6-2">6.2 邮件的 STE 写法</a></li>
+                            <li><a href="#p6-3">6.3 演示文稿的 STE 原则</a></li>
+                            <li><a href="#p6-4">6.4 知识萃取：把经验变成可复用资产</a></li>
+                            <li><a href="#p6-5">6.5 个人笔记的 STE 整理法</a></li>
+                        </ul>
+                    </li>
+                    <li class="toc-part">
+                        <a href="#part7" class="toc-part-link"><span class="part-num" style="background: var(--gradient-7)">7</span>工具篇——STE 写作辅助工具</a>
+                        <ul class="toc-subitems">
+                            <li><a href="#p7-1">7.1 LLM 作为 STE 检查员</a></li>
+                            <li><a href="#p7-2">7.2 自动检查脚本</a></li>
+                            <li><a href="#p7-3">7.3 Obsidian 插件推荐</a></li>
+                            <li><a href="#p7-4">7.4 浏览器扩展推荐</a></li>
+                        </ul>
+                    </li>
+                    <li class="toc-part">
+                        <a href="#part8" class="toc-part-link"><span class="part-num" style="background: var(--gradient-8)">8</span>速查篇——一页纸 STE 速查卡</a>
+                        <ul class="toc-subitems">
+                            <li><a href="#p8-1">8.1 STE 核心 10 条速记</a></li>
+                            <li><a href="#p8-2">8.2 常见替换词表</a></li>
+                            <li><a href="#p8-3">8.3 STE 浓度调节指南</a></li>
+                            <li><a href="#p8-4">8.4 STE 自检 5 步法</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- ==================== 第 1 篇 ==================== -->
+            <article class="part part-1" id="part1">
+                <div class="part-header">
+                    <div class="part-badge">第 1 篇</div>
+                    <h2>基础篇——为什么 STE 能让 AI 输出更有价值</h2>
+                    <p class="part-desc">了解 ASD-STE100 的起源、核心理念，以及它为什么能显著提升 AI 输出的质量。</p>
+                </div>
+
+                <section class="section" id="p1-1">
+                    <h3>1.1 什么是 ASD-STE100</h3>
+                    <p>ASD-STE100（Simplified Technical English，简化技术英语）是由欧洲航空航天和国防工业协会（ASD）制定的一套受控语言规范。它最初的目的是确保航空维修文档的清晰性和准确性，避免因语言歧义导致的安全事故。</p>
+                    
+                    <h4>核心规则</h4>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>规则类别</th><th>核心要求</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>词汇限制</td><td>使用约 1800 个批准词汇，每个词通常只有一个含义</td></tr>
+                            <tr><td>句子结构</td><td>句子长度不超过 20 个单词，使用简单句</td></tr>
+                            <tr><td>语态要求</td><td>优先使用主动语态，避免被动语态</td></tr>
+                            <tr><td>名词堆叠</td><td>禁止 3 个以上名词堆叠（如 "system power supply unit" 需改写）</td></tr>
+                            <tr><td>指令清晰</td><td>操作步骤使用祈使句，动作明确</td></tr>
+                            <tr><td>避免歧义</td><td>禁止使用代词 "it" 指代不明，避免隐喻和习语</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="callout note">
+                        <div class="callout-icon">📌</div>
+                        <div class="callout-content">
+                            <strong>注：</strong>本手册讨论的是 STE 的"思想"而非严格的词汇表。在中文语境下，我们借鉴其核心原则：短句子、主动语态、一词一义、结构清晰、信息密度高。
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section" id="p1-2">
+                    <h3>1.2 Karpathy 为什么推荐用它</h3>
+                    <p>Andrej Karpathy（前特斯拉 AI 总监、OpenAI 创始成员）在多次演讲和推文中提到，他使用 Simplified Technical English 的原则来约束 LLM 输出。</p>
+                    
+                    <h4>核心观点</h4>
+                    <ol>
+                        <li><strong>"LLM 输出的最大问题不是信息量不够，而是信息密度太低。"</strong><br>普通输出充斥着套话、连接词、冗余修饰。STE 风格强制每句话都承载信息。</li>
+                        <li><strong>"把 LLM 当成一个有点啰嗦的初级员工，你需要给它明确的写作规范。"</strong><br>不加约束的 LLM 倾向于"凑字数"。STE 规则相当于给 LLM 一份写作质量标准。</li>
+                        <li><strong>"技术文档的理想状态是：每句话都可以被执行或验证。"</strong><br>STE 风格的文档可执行性强。读者能快速找到所需信息，不需要"阅读理解"。</li>
+                        <li><strong>"我让所有 AI 助手都用 STE 风格回答，效率提升了不止一倍。"</strong><br>阅读速度更快，误解率更低，信息提取更容易。</li>
+                    </ol>
+                </section>
+
+                <section class="section" id="p1-3">
+                    <h3>1.3 STE 提升 AI 输出质量的 5 个原理</h3>
+                    
+                    <h4>原理 1：降低认知负荷</h4>
+                    <p>普通 AI 输出：长段落、复杂句、多层嵌套，读者需要反复阅读才能理解。<br>STE 输出：短句子、每句一个核心信息、结构分明，读者可以"扫描式阅读"。</p>
+                    <div class="callout tip">
+                        <div class="callout-icon">🧠</div>
+                        <div class="callout-content"><strong>认知科学依据：</strong>人脑工作记忆容量有限（约 4±1 个信息块），长句会快速耗尽工作记忆。</div>
+                    </div>
+                    
+                    <h4>原理 2：减少歧义</h4>
+                    <p>普通 AI 输出：大量使用代词、模糊修饰、抽象名词。<br>STE 输出：明确的名词、具体的动作、可验证的描述。</p>
+                    <div class="callout tip">
+                        <div class="callout-icon">🤖</div>
+                        <div class="callout-content"><strong>AI 场景价值：</strong>当你把 AI 输出再喂给另一个 AI（Agent 链式调用）时，歧义会被指数级放大。STE 风格是 Agent 之间可靠通信的基础。</div>
+                    </div>
+                    
+                    <h4>原理 3：提高信息密度</h4>
+                    <p>普通 AI 输出：通常 30%-50% 是"连接词、过渡语、客套话"。<br>STE 输出：每句话都有实质内容，信息密度可达 80% 以上。</p>
+                    <p><strong>量化对比：</strong>同样内容，STE 风格通常能节省 40%-60% 的字数。</p>
+                    
+                    <h4>原理 4：便于结构化提取</h4>
+                    <p>普通 AI 输出：格式松散，难以用程序提取关键信息。<br>STE 输出：结构规整，容易转换为表格、JSON、知识图谱等结构化格式。</p>
+                    
+                    <h4>原理 5：建立质量基线</h4>
+                    <p>普通 AI 输出：质量波动大，取决于模型心情和提示词技巧。<br>STE 输出：有明确的规则可以检查和评分，输出质量更稳定。</p>
+                </section>
+
+                <section class="section" id="p1-4">
+                    <h3>1.4 STE vs 普通写作：对比示例</h3>
+                    
+                    <h4>示例 1：概念解释</h4>
+                    <div class="compare-card">
+                        <div class="compare-col bad">
+                            <div class="compare-label">普通写法</div>
+                            <div class="compare-content">
+                                机器学习是一种人工智能的应用，它使得系统能够从经验中学习和改进，而无需进行明确的编程。机器学习的过程涉及使用数据来训练模型，通过算法来分析数据并从中学习，然后根据学习到的模式做出预测或决策。
+                            </div>
+                        </div>
+                        <div class="compare-col good">
+                            <div class="compare-label">STE 写法</div>
+                            <div class="compare-content">
+                                <strong>机器学习是一种 AI 技术。</strong><br><br>
+                                它让计算机从数据中学习。<br>
+                                不需要人工编写所有规则。<br><br>
+                                <strong>工作流程：</strong><br>
+                                1. 输入训练数据<br>
+                                2. 算法分析数据中的模式<br>
+                                3. 生成模型<br>
+                                4. 模型对新数据做出预测
+                            </div>
+                        </div>
+                    </div>
+                    <p><strong>改进点：</strong>把 2 个长句拆成短句 + 列表；每句只说一件事；用编号列表展示流程；删除连接词。</p>
+                    
+                    <h4>示例 2：操作指南</h4>
+                    <div class="compare-card">
+                        <div class="compare-col bad">
+                            <div class="compare-label">普通写法</div>
+                            <div class="compare-content">
+                                在进行系统配置之前，你需要确保已经备份了所有重要的数据，以防止在配置过程中可能出现的意外情况导致数据丢失。同时，建议你关闭所有正在运行的应用程序，这样可以避免配置过程中出现冲突。
+                            </div>
+                        </div>
+                        <div class="compare-col good">
+                            <div class="compare-label">STE 写法</div>
+                            <div class="compare-content">
+                                <strong>操作前检查：</strong><br>
+                                1. 备份所有重要数据<br>
+                                2. 关闭所有运行中的应用程序<br><br>
+                                <strong>原因：</strong>防止数据丢失和程序冲突。
+                            </div>
+                        </div>
+                    </div>
+                    <p><strong>改进点：</strong>使用祈使句直接给出指令；把"原因"和"操作"分开；删除套话。</p>
+                </section>
+
+                <section class="section" id="p1-5">
+                    <h3>1.5 STE "浓度"概念</h3>
+                    <p>STE 不是非黑即白的。根据场景不同，你可以调节 STE 的"浓度"。</p>
+                    
+                    <h4>100% STE：严格模式</h4>
+                    <p><strong>适用场景：</strong>操作手册、Agent 之间消息传递、技术规范、API 文档</p>
+                    <ul>
+                        <li>每句不超过 15-20 字</li>
+                        <li>全部使用主动语态</li>
+                        <li>没有形容词和副词</li>
+                        <li>每个术语只有一个含义</li>
+                    </ul>
+                    
+                    <h4>80% STE：标准模式（推荐日常使用）</h4>
+                    <p><strong>适用场景：</strong>日常 AI 对话、技术文档、知识卡片、工作邮件</p>
+                    <ul>
+                        <li>大多数句子简短（90% 在 25 字以内）</li>
+                        <li>偶尔使用被动语态（不超过 10%）</li>
+                        <li>少量必要的形容词</li>
+                        <li>结构清晰，有明确的层级</li>
+                    </ul>
+                    
+                    <h4>50% STE：轻度模式</h4>
+                    <p><strong>适用场景：</strong>文章博客、产品介绍、会议纪要、面向非技术读者的解释</p>
+                    <ul>
+                        <li>段落不超过 4 行</li>
+                        <li>关键信息用短句和列表</li>
+                        <li>解释性内容可以适当展开</li>
+                        <li>保留一定的文学性和可读性</li>
+                    </ul>
+                    
+                    <h4>浓度选择指南</h4>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>场景</th><th>推荐浓度</th><th>原因</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Agent 系统提示词</td><td>100%</td><td>精确无歧义</td></tr>
+                            <tr><td>技术操作指南</td><td>100% / 80%</td><td>可执行、可验证</td></tr>
+                            <tr><td>知识库页面</td><td>80%</td><td>信息密度高</td></tr>
+                            <tr><td>日常 AI 问答</td><td>80%</td><td>效率与可读性平衡</td></tr>
+                            <tr><td>邮件/消息</td><td>80% / 50%</td><td>专业且不失礼貌</td></tr>
+                            <tr><td>文章/报告</td><td>50%</td><td>兼顾可读性和信息密度</td></tr>
+                            <tr><td>创意写作</td><td>0-50%</td><td>不适用严格 STE</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+            </article>
+
+            <!-- ==================== 第 2 篇 ==================== -->
+            <article class="part part-2" id="part2">
+                <div class="part-header">
+                    <div class="part-badge">第 2 篇</div>
+                    <h2>Prompt 篇——写出 STE 风格的提示词</h2>
+                    <p class="part-desc">12 个即用型 STE Prompt 模板，覆盖日常 AI 使用的大部分场景。</p>
+                </div>
+
+                <section class="section" id="p2-1">
+                    <h3>2.1 核心 Prompt 模板</h3>
+                    
+                    <h4>基础模板（80% 浓度）</h4>
+                    <div class="prompt-block">
+                        <div class="prompt-content">请用 Simplified Technical English (STE) 风格回答我的问题。
+
+要求：
+1. 使用短句，每句不超过 25 个汉字
+2. 每段不超过 3 句话
+3. 优先使用主动语态
+4. 用编号列表展示步骤或要点
+5. 避免使用形容词和副词
+6. 删除客套话和连接词
+7. 每个术语保持一致
+
+我的问题是：
+{在此处输入你的问题}</div>
+                    </div>
+                    
+                    <h4>可调浓度模板</h4>
+                    <div class="prompt-block">
+                        <div class="prompt-content">请用 STE（简化技术英语）风格回答。
+
+STE 浓度：{100% / 80% / 50%}
+
+浓度说明：
+- 100%：严格模式。每句≤15字，全主动语态，无修饰词，纯信息
+- 80%：标准模式。大多数句子简短，偶尔使用被动语态，结构清晰
+- 50%：轻度模式。关键信息用 STE 风格，解释性内容可适当展开
+
+输出格式要求：
+- 使用 Markdown 格式
+- 关键步骤用编号列表
+- 概念用加粗标注
+- 对比用表格
+
+我的问题：
+{在此处输入你的问题}</div>
+                    </div>
+                    
+                    <h4>超浓缩模式（适合快速获取信息）</h4>
+                    <div class="prompt-block">
+                        <div class="prompt-content">请用最精简的 STE 风格回答。
+要求：
+- 只给要点，不给解释
+- 用短语，不用完整句子
+- 最多 5 条
+- 每条不超过 10 个字
+
+问题：{问题}</div>
+                    </div>
+                </section>
+
+                <section class="section" id="p2-2">
+                    <h3>2.2 12 个即用 Prompt 模板</h3>
+                    
+                    <h4>模板 1：概念解释</h4>
+                    <p><strong>适用场景：</strong>学习新概念、向他人解释技术术语</p>
+                    <div class="prompt-block">
+                        <div class="prompt-content">请用 STE 风格解释【{概念名称}】。
+
+要求：
+1. 第一句给出定义（是什么）
+2. 用 3-5 个要点说明核心特征
+3. 给出 1 个简单的例子
+4. 说明它和【{相关概念}】的区别（如果有）
+5. 用 80% STE 浓度
+
+输出结构：
+- 定义：...
+- 核心特征：
+  1. ...
+  2. ...
+- 例子：...
+- 与 {相关概念} 的区别：...</div>
+                    </div>
+                    <div class="callout tip">
+                        <div class="callout-icon">✨</div>
+                        <div class="callout-content">
+                            <strong>效果示例（解释"向量数据库"）：</strong><br>
+                            <strong>定义：</strong>向量数据库是一种存储向量数据的数据库。<br>
+                            <strong>核心特征：</strong>1. 数据以向量形式存储 2. 支持相似度搜索 3. 常用于 AI 应用<br>
+                            <strong>例子：</strong>输入"猫的图片"，系统找到相似的图片。
+                        </div>
+                    </div>
+                    
+                    <h4>模板 2：技术教程/操作指南</h4>
+                    <p><strong>适用场景：</strong>让 AI 生成可执行的操作步骤</p>
+                    <div class="prompt-block">
+                        <div class="prompt-content">请写一份关于【{操作主题}】的 STE 风格操作指南。
+
+要求：
+1. 用 100% STE 浓度（严格模式）
+2. 每个步骤是一个祈使句
+3. 每个步骤只包含一个动作
+4. 前提条件单独列出
+5. 危险或重要提示用 ⚠️ 标注
+6. 每步不超过 20 字
+
+输出结构：
+- 适用版本：{软件/系统版本}
+- 前提条件：
+  1. ...
+- 操作步骤：
+  1. ...
+  2. ...
+- 验证方法：...</div>
+                    </div>
+                    
+                    <h4>模板 3：摘要总结</h4>
+                    <p><strong>适用场景：</strong>总结长文、报告、会议记录</p>
+                    <div class="prompt-block">
+                        <div class="prompt-content">请用 STE 风格总结以下内容。
+
+要求：
+1. 用 80% STE 浓度
+2. 先给一句话总述（不超过 30 字）
+3. 然后列出 3-7 个核心要点
+4. 每个要点不超过 25 字
+5. 最后给出 1 个结论或行动项
+6. 总字数不超过原文的 20%
+
+待总结内容：
+{在此粘贴原文}</div>
+                    </div>
+                    
+                    <h4>模板 4：翻译</h4>
+                    <p><strong>适用场景：</strong>技术文档翻译、专业内容翻译</p>
+                    <div class="prompt-block">
+                        <div class="prompt-content">请将以下【{源语言}】内容翻译为【{目标语言}】。
+
+要求：
+1. 使用 STE 风格翻译
+2. 保持术语一致
+3. 句子简短清晰
+4. 技术术语保留原文并在括号中标注
+5. 不要添加原文没有的内容
+6. 不要意译，保持原意
+
+待翻译内容：
+{在此粘贴原文}</div>
+                    </div>
+                    
+                    <h4>模板 5：改写/润色</h4>
+                    <p><strong>适用场景：</strong>将普通文本改写为 STE 风格</p>
+                    <div class="prompt-block">
+                        <div class="prompt-content">请将以下内容改写为 STE 风格。
+
+目标浓度：{100% / 80% / 50%}
+
+改写规则：
+1. 拆分长句为短句
+2. 将被动语态改为主动语态
+3. 删除冗余修饰词
+4. 用列表替代段落式描述
+5. 保持所有原始信息，不增不减
+6. 专业术语保持不变
+
+原文：
+{在此粘贴原文}</div>
+                    </div>
+                    
+                    <h4>模板 6：对比分析</h4>
+                    <p><strong>适用场景：</strong>比较两个或多个技术方案、工具、概念</p>
+                    <div class="prompt-block">
+                        <div class="prompt-content">请对比分析【A】和【B】。
+
+要求：
+1. 用 STE 风格
+2. 用表格形式呈现
+3. 从以下维度对比：
+   - 核心用途
+   - 优势
+   - 劣势
+   - 适用场景
+   - 学习成本
+   - 价格（如适用）
+4. 最后给出选择建议（分场景）</div>
+                    </div>
+                    
+                    <h4>模板 7：代码解释</h4>
+                    <p><strong>适用场景：</strong>理解代码、学习编程</p>
+                    <div class="prompt-block">
+                        <div class="prompt-content">请用 STE 风格解释以下代码。
+
+要求：
+1. 先说明这段代码的整体功能（一句话）
+2. 逐段/逐函数解释
+3. 每个解释不超过 30 字
+4. 说明输入和输出
+5. 指出关键逻辑点
+6. 如果有潜在问题，也请指出
+
+代码：
+{在此粘贴代码}</div>
+                    </div>
+                    
+                    <h4>模板 8：邮件/消息写作</h4>
+                    <p><strong>适用场景：</strong>工作邮件、商务沟通</p>
+                    <div class="prompt-block">
+                        <div class="prompt-content">请帮我写一封【{邮件类型}】邮件。
+
+背景信息：
+- 收件人：{收件人身份}
+- 发件人：{你的身份/名字}
+- 核心目的：{邮件要达成什么}
+- 需要对方做的事：{明确的行动要求}
+- 截止时间：{如有}
+
+要求：
+1. 用 STE 风格（50%-80% 浓度）
+2. 主题明确，包含关键信息
+3. 第一段说明来意（不超过 2 句）
+4. 正文用要点列出
+5. 结尾明确下一步行动
+6. 保持专业礼貌
+7. 全文不超过 150 字（短邮件）/ 300 字（长邮件）</div>
+                    </div>
+                    
+                    <h4>模板 9：报告大纲</h4>
+                    <p><strong>适用场景：</strong>写报告、方案、研究文档</p>
+                    <div class="prompt-block">
+                        <div class="prompt-content">请为【{报告主题}】设计一份 STE 风格的大纲。
+
+报告类型：{技术报告 / 项目方案 / 研究报告 / 工作总结}
+目标读者：{谁会读这份报告}
+核心目的：{报告要达成什么}
+
+要求：
+1. 用 STE 风格
+2. 包含 3-5 个主要部分
+3. 每个部分下有 2-5 个子要点
+4. 每个要点是一个名词短语或短句
+5. 逻辑递进，结构清晰
+6. 给出每个部分的建议字数占比</div>
+                    </div>
+                    
+                    <h4>模板 10：会议纪要整理</h4>
+                    <p><strong>适用场景：</strong>将会议录音/文字记录整理为结构化纪要</p>
+                    <div class="prompt-block">
+                        <div class="prompt-content">请将以下会议记录整理为 STE 风格的会议纪要。
+
+要求：
+1. 用 80% STE 浓度
+2. 包含以下部分：
+   - 基本信息（时间、参会人、主题）
+   - 关键决策（编号列出）
+   - 行动项（表格：任务 / 负责人 / 截止时间）
+   - 讨论要点（3-5 条）
+   - 下次会议安排（如有）
+3. 只保留有价值的信息，删除闲聊和重复内容
+4. 每个决策和行动项要具体、可执行
+
+会议记录：
+{在此粘贴会议记录文字}</div>
+                    </div>
+                    
+                    <h4>模板 11：知识卡片生成</h4>
+                    <p><strong>适用场景：</strong>将学到的知识整理成可复习的卡片</p>
+                    <div class="prompt-block">
+                        <div class="prompt-content">请将以下内容制作成 STE 风格的知识卡片。
+
+要求：
+1. 用 80% STE 浓度
+2. 卡片格式：
+   - 标题（概念名称）
+   - 一句话定义
+   - 核心要点（3-5 条，每条≤20 字）
+   - 一个典型应用场景
+   - 易混淆点（如有）
+   - 相关概念（3-5 个）
+3. 适合用 Anki 或类似工具复习
+
+内容来源：
+{在此粘贴内容}</div>
+                    </div>
+                    
+                    <h4>模板 12：错误排查指南</h4>
+                    <p><strong>适用场景：</strong>调试错误、排障文档</p>
+                    <div class="prompt-block">
+                        <div class="prompt-content">请针对【{错误/问题描述}】生成一份 STE 风格的排查指南。
+
+要求：
+1. 用 100% STE 浓度
+2. 按可能性从高到低排列排查步骤
+3. 每个步骤是一个可执行的动作
+4. 每个步骤后说明如何判断结果
+5. 给出每个可能原因的解决方案
+6. 最后给出 escalation 路径
+
+输出结构：
+- 错误现象：...
+- 排查步骤：
+  1. 检查 ...
+     - 如果 ... → 执行解决方案 A
+     - 如果正常 → 继续下一步
+- 解决方案：
+  A. ...
+  B. ...
+- 何时求助：...</div>
+                    </div>
+                </section>
+
+                <section class="section" id="p2-3">
+                    <h3>2.3 Prompt 使用技巧</h3>
+                    
+                    <h4>技巧 1：在系统提示词中设置默认 STE 风格</h4>
+                    <p>如果你使用支持自定义系统提示词的 AI 工具（如 ChatGPT 自定义指令、Claude 系统提示等），可以把 STE 要求放入系统提示词，这样每次对话都默认使用 STE 风格。</p>
+                    
+                    <h4>技巧 2：用"浓度滑块"动态调节</h4>
+                    <p>在对话中可以随时调整浓度：</p>
+                    <ul>
+                        <li>"请用更精简的方式说" → 提高浓度</li>
+                        <li>"请展开解释一下" → 降低浓度</li>
+                        <li>"请用严格 STE 格式" → 切换到 100%</li>
+                    </ul>
+                    
+                    <h4>技巧 3：批量处理时使用统一模板</h4>
+                    <p>如果你需要处理大量内容（如整理知识库），先设计好固定模板，然后批量调用。这样输出格式一致，便于后续检索和使用。</p>
+                    
+                    <h4>技巧 4：让 AI 自我检查</h4>
+                    <p>在 Prompt 最后加上：</p>
+                    <div class="code-block"><pre>回答完成后，请用 STE 规则自检，并在末尾给出 STE 合规评分（1-10 分）。
+如果评分低于 8 分，请重新改写。</pre></div>
+                </section>
+            </article>
+
+            <!-- ==================== 第 3 篇 ==================== -->
+            <article class="part part-3" id="part3">
+                <div class="part-header">
+                    <div class="part-badge">第 3 篇</div>
+                    <h2>知识库篇——用 STE 构建高质量个人知识库</h2>
+                    <p class="part-desc">用 STE 规范打造可积累、可检索、可复用的个人知识体系。</p>
+                </div>
+
+                <section class="section" id="p3-1">
+                    <h3>3.1 为什么知识库需要 STE 规范</h3>
+                    
+                    <h4>问题：知识库为什么会"用不起来"</h4>
+                    <p>很多人的知识库面临同样的困境：笔记越积越多但找不到，同一件事有多条记录说法不一致，当时记的笔记回头看不懂，想用 AI 检索效果很差。</p>
+                    <p><strong>核心原因：</strong>笔记质量没有标准，信息密度低，结构混乱。</p>
+                    
+                    <h4>STE 对知识库的 5 个价值</h4>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>价值</th><th>说明</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>可读性</td><td>任何时候打开都能快速理解</td></tr>
+                            <tr><td>一致性</td><td>相同概念用相同表述，不混乱</td></tr>
+                            <tr><td>可检索</td><td>结构清晰，关键词明确，AI 容易命中</td></tr>
+                            <tr><td>可复用</td><td>知识卡片可以直接迁移到其他场景</td></tr>
+                            <tr><td>可积累</td><td>质量有基线，越积累越有价值</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>对比示例</h4>
+                    <div class="compare-card">
+                        <div class="compare-col bad">
+                            <div class="compare-label">普通笔记</div>
+                            <div class="compare-content">
+                                今天学了一下 RAG，感觉挺重要的。就是检索增强生成吧，好像是把知识库和大模型结合起来，让模型能用到自己的数据。大概流程是先把文档切块，然后转向量，存到向量数据库里...好像有很多细节。
+                            </div>
+                        </div>
+                        <div class="compare-col good">
+                            <div class="compare-label">STE 风格笔记</div>
+                            <div class="compare-content">
+                                <strong># RAG（检索增强生成）</strong><br><br>
+                                <strong>定义：</strong>让大模型使用外部知识库回答问题的技术。<br><br>
+                                <strong>核心流程：</strong><br>
+                                1. 文档切块（Chunking）<br>
+                                2. 块转向量（Embedding）<br>
+                                3. 向量存入向量数据库<br>
+                                4. 用户提问 → 搜索相似块<br>
+                                5. 拼接 Prompt → 生成回答
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section" id="p3-2">
+                    <h3>3.2 STE-Wiki 三层架构设计</h3>
+                    
+                    <h4>整体架构</h4>
+                    <div class="code-block"><pre>┌─────────────────────────────────────┐
+│           第三层：产出层              │
+│  文章 / 报告 / 方案 / 课程 / 书籍     │
+│  （面向输出，50% STE 浓度）          │
+├─────────────────────────────────────┤
+│           第二层：知识层              │
+│  概念页 / 实体页 / 对比页 / 指南页    │
+│  （面向理解，80% STE 浓度）          │
+├─────────────────────────────────────┤
+│           第一层：原子层              │
+│  知识卡片 / 术语定义 / 金句 / 数据    │
+│  （面向存储，100% STE 浓度）         │
+└─────────────────────────────────────┘</pre></div>
+                    
+                    <h4>第一层：原子层（100% STE）</h4>
+                    <p><strong>定位：</strong>知识库的最小单元，像乐高积木一样可以被复用。</p>
+                    <p><strong>内容类型：</strong>术语定义卡、金句/观点卡、数据/事实卡、方法步骤卡</p>
+                    <p><strong>特点：</strong>每张卡片只讲一件事，严格 STE 格式，有明确的标签和关联。</p>
+                    
+                    <h4>第二层：知识层（80% STE）</h4>
+                    <p><strong>定位：</strong>把原子卡片组织成结构化的知识页面。</p>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>页面类型</th><th>用途</th><th>结构</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>概念页</td><td>解释一个概念/技术/理论</td><td>定义、原理、分类、应用、优缺点</td></tr>
+                            <tr><td>实体页</td><td>描述工具/人物/公司</td><td>基本信息、核心特征、使用场景、评价</td></tr>
+                            <tr><td>操作指南页</td><td>一步步教你做某事</td><td>前提、步骤、验证、常见问题</td></tr>
+                            <tr><td>对比分析页</td><td>比较多个选项</td><td>维度对比表、选择建议</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>第三层：产出层（50% STE）</h4>
+                    <p><strong>定位：</strong>面向外部输出的成品。</p>
+                    <p><strong>内容类型：</strong>技术文章、项目方案、培训课程、书籍、分享演讲</p>
+                </section>
+
+                <section class="section" id="p3-3">
+                    <h3>3.3 页面模板</h3>
+                    
+                    <h4>模板 A：概念页</h4>
+                    <div class="code-block"><pre>---
+类型: 概念页
+创建日期: YYYY-MM-DD
+领域: [领域标签]
+难度: 入门 / 中级 / 高级
+---
+
+# {概念名称}
+
+## 一句话定义
+{用一句话说清楚这是什么}
+
+## 为什么重要
+1. ...
+2. ...
+
+## 核心原理
+- 要点 1
+- 要点 2
+- 要点 3
+
+## 关键组成部分
+| 组成部分 | 作用 | 说明 |
+|---------|------|------|
+| ... | ... | ... |
+
+## 常见应用场景
+1. {场景 1}
+2. {场景 2}
+
+## 优缺点
+| 优点 | 缺点 |
+|-----|------|
+| ... | ... |
+
+## 常见误区
+1. {误区 1} → {正确理解}
+
+## 相关概念
+- [[相关概念 1]]：{关系说明}</pre></div>
+                    
+                    <h4>模板 B：实体页（工具/产品/人物）</h4>
+                    <div class="code-block"><pre>---
+类型: 实体页
+子类: 工具 / 产品 / 人物 / 公司
+创建日期: YYYY-MM-DD
+---
+
+# {名称}
+
+## 基本信息
+| 项目 | 内容 |
+|-----|------|
+| 全称 | ... |
+| 类型 | ... |
+| 开发商 | ... |
+| 价格 | ... |
+
+## 核心功能
+1. {功能 1}：{一句话说明}
+2. {功能 2}：{一句话说明}
+
+## 适用场景
+- 场景 1
+- 场景 2
+
+## 使用体验
+### 优点
+- ...
+### 缺点
+- ...
+
+## 我的评价
+{一句话总结}</pre></div>
+                    
+                    <h4>模板 C：操作指南页</h4>
+                    <div class="code-block"><pre>---
+类型: 操作指南
+创建日期: YYYY-MM-DD
+适用版本: vX.X
+---
+
+# {操作名称}指南
+
+## 适用范围
+- 适用系统：...
+- 前提条件：...
+- 预计耗时：... 分钟
+
+## 操作步骤
+### 步骤 1：{步骤名称}
+1. {动作 1}
+2. {动作 2}
+
+⚠️ 注意：{重要提示}
+
+## 验证方法
+{如何确认操作成功}
+
+## 常见问题
+| 问题 | 原因 | 解决方案 |
+|-----|------|---------|
+| ... | ... | ... |</pre></div>
+                    
+                    <h4>模板 D：对比分析页</h4>
+                    <div class="code-block"><pre>---
+类型: 对比分析
+创建日期: YYYY-MM-DD
+对比对象: [A, B, C]
+---
+
+# {A} vs {B} vs {C} 对比
+
+## 对比维度说明
+本次对比基于以下维度：
+1. 维度 1
+2. 维度 2
+
+## 详细对比
+| 维度 | A | B | C |
+|-----|---|---|---|
+| 维度 1 | ... | ... | ... |
+
+## 各方案适用场景
+### 选 A，如果：
+- ...
+
+## 最终建议
+{一句话总结选择策略}</pre></div>
+                </section>
+
+                <section class="section" id="p3-4">
+                    <h3>3.4 三大工作流</h3>
+                    
+                    <h4>工作流 1：摄入（Ingest）</h4>
+                    <p><strong>适用场景：</strong>读书、看文章、听课程、参加会议</p>
+                    <ol>
+                        <li><strong>收集原始素材</strong> — 保存原文，标注来源和时间</li>
+                        <li><strong>快速提取要点</strong> — 用 AI 生成 STE 风格摘要，提取 3-7 个核心概念</li>
+                        <li><strong>创建原子卡片</strong> — 每个概念创建一张知识卡片，添加标签和关联</li>
+                        <li><strong>归类到知识层</strong> — 检查是否已有相关概念页，有则补充，无则新建</li>
+                        <li><strong>标记待整理</strong> — 快速摄入的内容标记 #待整理，定期回顾</li>
+                    </ol>
+                    
+                    <h4>工作流 2：查询（Query）</h4>
+                    <p><strong>适用场景：</strong>写东西需要资料、遇到问题找答案、复习回顾</p>
+                    <ol>
+                        <li><strong>明确查询目标</strong> — 你要找的是概念？工具？操作步骤？</li>
+                        <li><strong>使用关键词搜索</strong> — 先用标签过滤，再用全文搜索</li>
+                        <li><strong>从知识层入手</strong> — 先找到概念页，从"相关"链接深入</li>
+                        <li><strong>下钻到原子层</strong> — 需要细节时查看具体卡片</li>
+                        <li><strong>补充缺失</strong> — 找不到内容时记录为缺口，安排补充</li>
+                    </ol>
+                    
+                    <h4>工作流 3：整理（Refine）</h4>
+                    <p><strong>适用场景：</strong>每周/每月的知识库维护</p>
+                    <ol>
+                        <li><strong>处理 #待整理 标签</strong> — 回顾快速摄入的内容，完善格式和关联</li>
+                        <li><strong>检查重复内容</strong> — 搜索相似标题，合并重复的概念页</li>
+                        <li><strong>更新过时内容</strong> — 检查工具版本，更新数据和事实</li>
+                        <li><strong>优化关联</strong> — 添加缺失的双向链接，清理无效链接</li>
+                        <li><strong>STE 质量抽检</strong> — 随机抽取 5 个页面检查质量</li>
+                    </ol>
+                </section>
+
+                <section class="section" id="p3-5">
+                    <h3>3.5 实操：从零搭建一个 STE 知识库</h3>
+                    
+                    <h4>步骤 1：搭建目录结构</h4>
+                    <div class="code-block"><pre>我的知识库/
+├── 00-工具箱/          # 模板、脚本、样式
+├── 01-原子卡片/        # 第一层：知识卡片
+│   ├── 术语卡/
+│   ├── 观点卡/
+│   ├── 方法卡/
+│   └── 数据卡/
+├── 02-知识页面/        # 第二层：结构化页面
+│   ├── 概念页/
+│   ├── 实体页/
+│   ├── 操作指南/
+│   └── 对比分析/
+├── 03-产出内容/        # 第三层：文章/报告/方案
+├── 04-每日笔记/        # Daily Notes
+└── 05-附件/            # 图片、文件</pre></div>
+                    
+                    <h4>步骤 2：导入模板</h4>
+                    <p>将 4 个页面模板保存到 <code>00-工具箱/模板/</code> 目录。安装 Obsidian 插件：Templater、Dataview、Tag Wrangler。</p>
+                    
+                    <h4>步骤 3：创建第一个概念页</h4>
+                    <ol>
+                        <li>新建笔记 → 选择"概念页"模板</li>
+                        <li>填写基本信息</li>
+                        <li>用 STE 风格撰写内容</li>
+                        <li>添加标签和相关概念链接</li>
+                    </ol>
+                    
+                    <h4>步骤 4：第一次摄入练习</h4>
+                    <p>选择一篇你最近读的文章，用"摄入工作流"Prompt 生成知识卡片，导入原子卡片目录，创建对应的概念页。</p>
+                    
+                    <h4>步骤 5：每周维护</h4>
+                    <p>设定每周固定时间（如周日晚上 30 分钟）处理待整理笔记、检查 STE 质量、补充关联。</p>
+                </section>
+
+                <section class="section" id="p3-6">
+                    <h3>3.6 知识库质量自检清单</h3>
+                    <p>每月执行一次，给你的知识库打分。</p>
+                    
+                    <h4>结构质量（30 分）</h4>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>检查项</th><th>分值</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>原子卡片与知识页面比例合理（3:1 ~ 5:1）</td><td>5 分</td></tr>
+                            <tr><td>每个概念页都有至少 3 个相关链接</td><td>5 分</td></tr>
+                            <tr><td>标签体系不超过 3 层</td><td>5 分</td></tr>
+                            <tr><td>没有孤儿页面（没有任何入链的页面）</td><td>5 分</td></tr>
+                            <tr><td>目录结构清晰，分类不重叠</td><td>5 分</td></tr>
+                            <tr><td>模板完整，新内容都使用模板</td><td>5 分</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>STE 质量（40 分）</h4>
+                    <p>随机抽取 10 个页面，检查以下项目：</p>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>检查项</th><th>分值</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>大多数句子 ≤ 25 字</td><td>10 分</td></tr>
+                            <tr><td>每段不超过 3 句话</td><td>5 分</td></tr>
+                            <tr><td>主动语态占比 ≥ 80%</td><td>5 分</td></tr>
+                            <tr><td>关键信息使用列表呈现</td><td>5 分</td></tr>
+                            <tr><td>没有模糊的代词指代</td><td>5 分</td></tr>
+                            <tr><td>同一概念使用统一术语</td><td>5 分</td></tr>
+                            <tr><td>没有套话和冗余修饰</td><td>5 分</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>使用价值（30 分）</h4>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>检查项</th><th>分值</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>最近一个月有新增内容</td><td>5 分</td></tr>
+                            <tr><td>最近一个月有查询和使用记录</td><td>5 分</td></tr>
+                            <tr><td>能在 30 秒内找到常用信息</td><td>5 分</td></tr>
+                            <tr><td>产出层内容来自知识库</td><td>5 分</td></tr>
+                            <tr><td>知识库帮助你完成了具体工作</td><td>5 分</td></tr>
+                            <tr><td>有定期维护的习惯</td><td>5 分</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+            </article>
+
+            <!-- ==================== 第 4 篇 ==================== -->
+            <article class="part part-4" id="part4">
+                <div class="part-header">
+                    <div class="part-badge">第 4 篇</div>
+                    <h2>Agent 篇——让 Agent 输出符合 STE 规范</h2>
+                    <p class="part-desc">为 AI Agent 建立 STE 写作标准，让输出更稳定、更可靠、更易评估。</p>
+                </div>
+
+                <section class="section" id="p4-1">
+                    <h3>4.1 为什么 Agent 需要 STE 约束</h3>
+                    
+                    <h4>Agent 输出的 3 个典型问题</h4>
+                    <ol>
+                        <li><strong>输出不稳定</strong> — 同样的输入，输出格式差别很大；有时候啰嗦，有时候太简略</li>
+                        <li><strong>Agent 之间通信不畅</strong> — Agent A 的输出 Agent B 理解错了；信息在传递中失真</li>
+                        <li><strong>难以调试和评估</strong> — 不知道输出质量好不好；无法量化改进效果</li>
+                    </ol>
+                    
+                    <h4>STE 如何解决这些问题</h4>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>问题</th><th>STE 解决方案</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>输出不稳定</td><td>明确的规则 = 可预期的输出</td></tr>
+                            <tr><td>通信失真</td><td>无歧义的表达 = 信息传递准确</td></tr>
+                            <tr><td>难以评估</td><td>可检查的规则 = 可量化的质量评分</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="callout tip">
+                        <div class="callout-icon">🏭</div>
+                        <div class="callout-content">
+                            <strong>类比：</strong>没有 STE 约束的 Agent 像没有操作手册的工厂，每个工人按自己的方式干活。有 STE 约束的 Agent 像有严格 SOP 的流水线，产出稳定、可预测、可优化。
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section" id="p4-2">
+                    <h3>4.2 Agent 系统提示词模板</h3>
+                    
+                    <h4>基础版系统提示词</h4>
+                    <div class="prompt-block">
+                        <div class="prompt-content">你是一个专业的 AI 助手。请始终按照 STE（简化技术英语）规范输出。
+
+STE 核心规则：
+1. 句子简短。每句不超过 25 个汉字。
+2. 每段不超过 3 句话。
+3. 使用主动语态。
+4. 用编号列表展示步骤和要点。
+5. 删除客套话和连接词。
+6. 一个术语只有一个含义，全程保持一致。
+7. 避免使用代词（它、这、那），使用具体名词。
+8. 重要提示单独标注。
+
+默认浓度：80%
+
+如果用户要求更详细，可以降到 50%。
+如果用户要求更精简，可以升到 100%。
+
+请用 STE 风格回应用户的所有问题。</div>
+                    </div>
+                    
+                    <h4>进阶版系统提示词（含自检）</h4>
+                    <div class="prompt-block">
+                        <div class="prompt-content"># 角色定义
+你是一个遵循 STE 规范的专业技术助手。
+
+# STE 输出规范
+## 语言规则
+- 句子长度：≤ 25 字（中文）
+- 段落长度：≤ 3 句
+- 语态：主动语态 ≥ 90%
+- 名词：具体明确，不使用模糊代词
+- 术语：统一，不混用同义词
+
+## 格式规则
+- 使用 Markdown 格式
+- 步骤用编号列表
+- 要点用项目符号
+- 对比用表格
+
+# 工作流程
+1. 理解用户问题
+2. 组织答案结构
+3. 按照 STE 规则撰写
+4. 执行 STE 自检
+5. 如果自检不通过，重新撰写
+6. 输出最终版本 + 自检评分
+
+# STE 自检清单
+回答完成后，请逐项检查：
+- [ ] 所有句子 ≤ 25 字
+- [ ] 所有段落 ≤ 3 句
+- [ ] 主动语态占比 ≥ 90%
+- [ ] 没有模糊的代词指代
+- [ ] 没有套话和冗余修饰
+- [ ] 术语使用一致
+
+评分：___ / 10 分
+如果评分低于 8 分，请改写后再输出。</div>
+                    </div>
+                    
+                    <h4>特定角色 Agent 提示词</h4>
+                    <p>根据 Agent 的角色，在基础模板上增加特定要求。例如：</p>
+                    <ul>
+                        <li><strong>研究分析 Agent：</strong>所有数据必须标注来源；区分"事实"和"推测"；给出置信度</li>
+                        <li><strong>代码开发 Agent：</strong>代码注释遵循 STE 规范；函数说明包含用途、参数、返回值</li>
+                    </ul>
+                </section>
+
+                <section class="section" id="p4-3">
+                    <h3>4.3 STE 自检流程</h3>
+                    
+                    <h4>自检的 5 个步骤</h4>
+                    <p>让 Agent 在输出答案后，自己执行以下检查：</p>
+                    <ol>
+                        <li><strong>句子长度检查</strong> — 统计最长句子的字数，超过 25 字则拆分</li>
+                        <li><strong>段落长度检查</strong> — 检查每段句子数量，超过 3 句则拆分</li>
+                        <li><strong>语态检查</strong> — 统计被动语态比例，超过 10% 则改为主动语态</li>
+                        <li><strong>信息密度检查</strong> — 删除客套话、连接词、重复信息</li>
+                        <li><strong>一致性检查</strong> — 统一术语，检查代词指代</li>
+                    </ol>
+                    
+                    <h4>自检的实现方式</h4>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>方式</th><th>说明</th><th>适用场景</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>系统提示词要求自检</td><td>在系统提示词中加入自检规则</td><td>所有平台，最简单</td></tr>
+                            <tr><td>两阶段调用</td><td>第一阶段生成答案，第二阶段专门检查改写</td><td>质量要求高的场景</td></tr>
+                            <tr><td>专用 STE 检查 Agent</td><td>创建专门的"STE 检查员"Agent</td><td>多 Agent 系统</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="section" id="p4-4">
+                    <h3>4.4 STE 评分系统</h3>
+                    
+                    <h4>评分维度和权重</h4>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>维度</th><th>权重</th><th>满分</th><th>说明</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>句子简洁度</td><td>20%</td><td>20 分</td><td>句子长度、结构复杂度</td></tr>
+                            <tr><td>段落结构</td><td>15%</td><td>15 分</td><td>段落长度、列表使用</td></tr>
+                            <tr><td>语态规范</td><td>15%</td><td>15 分</td><td>主动语态比例</td></tr>
+                            <tr><td>信息密度</td><td>20%</td><td>20 分</td><td>有效信息占比</td></tr>
+                            <tr><td>术语一致性</td><td>15%</td><td>15 分</td><td>同一概念用词一致</td></tr>
+                            <tr><td>格式清晰度</td><td>15%</td><td>15 分</td><td>列表、表格、层级</td></tr>
+                            <tr><td><strong>总分</strong></td><td><strong>100%</strong></td><td><strong>100 分</strong></td><td></td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="callout note">
+                        <div class="callout-icon">📊</div>
+                        <div class="callout-content">
+                            <strong>评分参考：</strong><br>
+                            · 90-100 分：优秀，STE 规范执行到位<br>
+                            · 75-89 分：良好，有少量改进空间<br>
+                            · 60-74 分：及格，需要系统性优化<br>
+                            · 60 分以下：待改进，建议重新组织
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section" id="p4-5">
+                    <h3>4.5 多 Agent 场景下的 STE 规范传递</h3>
+                    
+                    <h4>为什么多 Agent 更需要 STE</h4>
+                    <p>在多 Agent 系统中，Agent A 的输出 = Agent B 的输入。信息每经过一个 Agent，就可能有一次失真。没有规范的话，3 次传递后信息可能完全走样。</p>
+                    <p><strong>STE 的作用：</strong>为 Agent 之间的通信提供"标准协议"。</p>
+                    
+                    <h4>三种传递策略</h4>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>策略</th><th>说明</th><th>优点</th><th>缺点</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>共享系统提示词</td><td>每个 Agent 都包含 STE 规范</td><td>简单易实现</td><td>浪费 token</td></tr>
+                            <tr><td>STE 协调员 Agent</td><td>专门的 Agent 负责检查和统一格式</td><td>质量有保障</td><td>延迟更高</td></tr>
+                            <tr><td>消息格式标准化</td><td>定义 JSON 格式的消息结构</td><td>结构化程度最高</td><td>实现成本高</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>推荐架构（STE 协调员）</h4>
+                    <div class="code-block"><pre>┌─────────────┐
+│   用户输入   │
+└──────┬──────┘
+       ▼
+┌─────────────┐     ┌─────────────┐
+│  主控 Agent │────▶│ 专业 Agent A │
+│  (任务分配)  │     └─────────────┘
+└──────┬──────┘     ┌─────────────┐
+       ├───────────▶│ 专业 Agent B │
+       ▼            └─────────────┘
+┌─────────────┐
+│ STE 协调员   │
+│ (质量检查+   │
+│  格式统一+   │
+│  结果整合)   │
+└──────┬──────┘
+       ▼
+┌─────────────┐
+│  STE 输出    │
+└─────────────┘</pre></div>
+                    
+                    <h4>实施步骤</h4>
+                    <ol>
+                        <li><strong>第一步：</strong>给主控 Agent 加上 STE 系统提示词</li>
+                        <li><strong>第二步：</strong>给专业 Agent 加上基本 STE 要求</li>
+                        <li><strong>第三步：</strong>增加 STE 协调员</li>
+                        <li><strong>第四步：</strong>定义 Agent 间消息格式</li>
+                    </ol>
+                </section>
+            </article>
+
+            <!-- ==================== 第 5 篇 ==================== -->
+            <article class="part part-5" id="part5">
+                <div class="part-header">
+                    <div class="part-badge">第 5 篇</div>
+                    <h2>代码篇——STE 在技术写作中的应用</h2>
+                    <p class="part-desc">让代码注释、技术文档、错误信息都遵循 STE 规范，提升开发效率。</p>
+                </div>
+
+                <section class="section" id="p5-1">
+                    <h3>5.1 代码注释的 STE 规范</h3>
+                    
+                    <h4>注释的 STE 规则</h4>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>规则</th><th>说明</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>只写"为什么"，不写"是什么"</td><td>代码本身说明做了什么</td></tr>
+                            <tr><td>单行注释 ≤ 30 字</td><td>长注释拆成多行</td></tr>
+                            <tr><td>不用模糊词</td><td>要么确定，要么不写</td></tr>
+                            <tr><td>说明前置条件和副作用</td><td>这些是代码看不出来的</td></tr>
+                            <tr><td>TODO 必须包含日期和负责人</td><td>格式：TODO(名字, 日期): 内容</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>对比示例</h4>
+                    <div class="compare-card">
+                        <div class="compare-col bad">
+                            <div class="compare-label">差的注释</div>
+                            <div class="compare-content">
+                                <pre style="font-size:12px;white-space:pre-wrap">// 这个函数用来处理用户的登录请求，
+// 它会先验证用户输入的信息是否有效，
+// 然后查询数据库看看有没有这个用户，
+// 如果有的话再验证密码是否正确...
+function login(username, password) {
+  // 检查用户名和密码
+  if (!username || !password) {
+    // 返回参数错误
+    return { error: "参数错误" };
+  }
+}</pre>
+                            </div>
+                        </div>
+                        <div class="compare-col good">
+                            <div class="compare-label">STE 风格注释</div>
+                            <div class="compare-content">
+                                <pre style="font-size:12px;white-space:pre-wrap">// 用户登录验证。返回 token 或错误对象。
+// 前置条件：username、password 为非空字符串
+// 副作用：更新用户最后登录时间
+function login(username, password) {
+  // 参数校验：拒绝空值
+  if (!username || !password) {
+    return { error: "参数错误" };
+  }
+  
+  // 查询用户信息（缓存优先）
+  const user = db.findUser(username);
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4>不同类型注释的 STE 写法</h4>
+                    <ul>
+                        <li><strong>文件头注释：</strong>一句话说明模块功能 + 功能列表 + 依赖列表</li>
+                        <li><strong>函数注释：</strong>一句话功能说明 + 参数说明 + 返回值说明 + 规则说明</li>
+                        <li><strong>复杂逻辑注释：</strong>说明为什么这么做（而非做了什么）+ 性能影响</li>
+                        <li><strong>TODO 注释：</strong>格式：<code>// TODO(张三, 2024-12): 重构此函数</code></li>
+                    </ul>
+                </section>
+
+                <section class="section" id="p5-2">
+                    <h3>5.2 README / 技术文档的 STE 写法</h3>
+                    
+                    <h4>README 的 STE 结构</h4>
+                    <p>一个好的 README 应该回答 3 个问题：这是什么？怎么用？怎么装？</p>
+                    
+                    <div class="code-block"><pre># {项目名称}
+
+一句话描述这个项目做什么。
+
+## 功能
+- 功能 1：一句话说明
+- 功能 2：一句话说明
+
+## 快速开始
+
+### 环境要求
+- Node.js >= 18
+- npm >= 9
+
+### 安装
+1. 克隆仓库：`git clone {url}`
+2. 安装依赖：`npm install`
+3. 启动服务：`npm start`
+
+## 配置
+| 参数 | 类型 | 默认值 | 说明 |
+|-----|------|-------|------|
+| port | number | 3000 | 服务端口 |
+
+## 常见问题
+### 问题：启动时报端口占用
+解决：修改配置文件中的 port 参数。</pre></div>
+                    
+                    <h4>技术文档的 STE 原则</h4>
+                    <ol>
+                        <li><strong>先说是什么，再说为什么，最后说怎么用</strong></li>
+                        <li><strong>每个章节有明确的目标读者</strong>（初学者/高级用户/运维）</li>
+                        <li><strong>示例代码可直接复制运行</strong> — 不要省略依赖和导入</li>
+                        <li><strong>错误信息要具体</strong> — 说"出现 X 错误时执行 Y 操作"</li>
+                    </ol>
+                </section>
+
+                <section class="section" id="p5-3">
+                    <h3>5.3 API 文档的 STE 模板</h3>
+                    
+                    <h4>REST API 文档模板</h4>
+                    <div class="code-block"><pre>## {接口名称}
+
+### 基本信息
+- 方法：GET / POST / PUT / DELETE
+- 路径：`/api/v1/{resource}`
+- 鉴权：需要 / 不需要
+- 速率限制：{N} 次/分钟
+
+### 功能说明
+一句话说明这个接口做什么。
+
+### 请求参数
+| 参数名 | 位置 | 类型 | 必填 | 说明 |
+|-------|------|------|------|------|
+| id | path | string | 是 | 资源 ID |
+| page | query | number | 否 | 页码，默认 1 |
+
+### 响应
+#### 成功响应（200）
+```json
+{
+  "code": 0,
+  "data": {
+    "id": "abc123",
+    "name": "示例名称"
+  }
+}
+```
+
+#### 错误响应
+| HTTP 状态码 | 错误码 | 说明 |
+|------------|--------|------|
+| 400 | 10001 | 参数错误 |
+| 401 | 10002 | 未授权 |</pre></div>
+                </section>
+
+                <section class="section" id="p5-4">
+                    <h3>5.4 错误信息的 STE 写法</h3>
+                    
+                    <h4>好的错误信息的 3 要素</h4>
+                    <ol>
+                        <li><strong>哪里错了</strong> — 具体的位置或参数</li>
+                        <li><strong>为什么错了</strong> — 根本原因</li>
+                        <li><strong>怎么改</strong> — 明确的修复步骤</li>
+                    </ol>
+                    
+                    <h4>对比示例</h4>
+                    <div class="compare-card">
+                        <div class="compare-col bad">
+                            <div class="compare-label">差的错误信息</div>
+                            <div class="compare-content">
+                                · 操作失败<br>
+                                · 系统错误<br>
+                                · 格式不正确<br>
+                                · 请检查后重试
+                            </div>
+                        </div>
+                        <div class="compare-col good">
+                            <div class="compare-label">STE 风格错误信息</div>
+                            <div class="compare-content">
+                                <strong>操作失败：用户 ID 不能为空</strong><br>
+                                原因：请求中缺少 user_id 字段<br>
+                                解决：在请求体中添加 user_id 参数<br><br>
+                                <strong>格式错误：email 字段格式无效</strong><br>
+                                原因：输入值 "abc" 不是合法邮箱<br>
+                                解决：请输入格式为 user@example.com 的邮箱
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4>错误信息 STE 规则</h4>
+                    <ul>
+                        <li>不使用模糊词汇（"出错了" → "用户 ID 参数缺失"）</li>
+                        <li>给出具体值（"参数超出范围" → "age 值为 200，允许范围 0-150"）</li>
+                        <li>给出解决方案（"请检查后重试" → "请将 age 修改为 0-150 之间的整数"）</li>
+                        <li>包含错误码（便于程序识别和用户搜索）</li>
+                    </ul>
+                </section>
+
+                <section class="section" id="p5-5">
+                    <h3>5.5 代码评审意见的 STE 表达</h3>
+                    
+                    <h4>评审意见的 STE 模板</h4>
+                    <div class="code-block"><pre>[问题类型] {具体描述}
+
+原因：{为什么这是个问题}
+建议：{具体怎么改}
+严重程度：[严重 / 建议 / 可选]</pre></div>
+                    
+                    <p><strong>问题类型：</strong></p>
+                    <ul>
+                        <li><strong>Bug</strong> — 功能错误</li>
+                        <li><strong>性能</strong> — 性能问题</li>
+                        <li><strong>安全</strong> — 安全隐患</li>
+                        <li><strong>可读性</strong> — 代码难以理解</li>
+                        <li><strong>规范</strong> — 不符合代码规范</li>
+                        <li><strong>架构</strong> — 设计问题</li>
+                    </ul>
+                    
+                    <h4>对比示例</h4>
+                    <div class="compare-card">
+                        <div class="compare-col bad">
+                            <div class="compare-label">差的评审意见</div>
+                            <div class="compare-content">
+                                · 这里写得不太好，改一下吧<br>
+                                · 性能会不会有问题？<br>
+                                · 变量名不太好<br>
+                                · 你这样写有问题
+                            </div>
+                        </div>
+                        <div class="compare-col good">
+                            <div class="compare-label">STE 风格评审意见</div>
+                            <div class="compare-content">
+                                <strong>[可读性]</strong> 函数有 80 行，嵌套 5 层<br>
+                                原因：难以理解和维护<br>
+                                建议：拆分为 3 个小函数<br>
+                                严重程度：建议<br><br>
+                                <strong>[性能]</strong> 循环中调用数据库查询<br>
+                                原因：循环 100 次产生 100 次查询<br>
+                                建议：改为批量查询<br>
+                                严重程度：严重
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4>评审意见的语气原则</h4>
+                    <ol>
+                        <li><strong>对事不对人</strong> — "这段代码在 X 情况下会出错"（而非"你写错了"）</li>
+                        <li><strong>用疑问句代替否定句</strong> — "如果考虑 X 情况，是否需要补充处理？"</li>
+                        <li><strong>给出具体建议</strong> — 不是只说问题，而是说怎么改</li>
+                        <li><strong>区分严重程度</strong> — 严重/建议/可选</li>
+                    </ol>
+                </section>
+            </article>
+
+            <!-- ==================== 第 6 篇 ==================== -->
+            <article class="part part-6" id="part6">
+                <div class="part-header">
+                    <div class="part-badge">第 6 篇</div>
+                    <h2>创作篇——用 STE 思路提升写作质量</h2>
+                    <p class="part-desc">将 STE 理念应用于文章、邮件、演讲、笔记等日常写作场景。</p>
+                </div>
+
+                <section class="section" id="p6-1">
+                    <h3>6.1 文章/报告写作的 STE 应用</h3>
+                    
+                    <h4>STE 不是让你写"干巴巴"的文字</h4>
+                    <p>STE 的核心是"清晰"，而不是"无趣"。对于文章和报告：核心信息用 STE 风格（确保清晰），过渡和叙事可以用普通风格（确保流畅）。推荐浓度：50% STE。</p>
+                    
+                    <h4>方法 1：结论先行（BLUF 原则）</h4>
+                    <p>BLUF = Bottom Line Up Front（结论放在最前面）。</p>
+                    <div class="compare-card">
+                        <div class="compare-col bad">
+                            <div class="compare-label">普通结构</div>
+                            <div class="compare-content">
+                                背景 → 分析 → 论证 → 结论
+                            </div>
+                        </div>
+                        <div class="compare-col good">
+                            <div class="compare-label">STE 结构</div>
+                            <div class="compare-content">
+                                结论 → 理由 → 证据 → 补充说明
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4>方法 2：信息分层法</h4>
+                    <p>把文章内容分为三层，每层信息密度不同：</p>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>层级</th><th>内容</th><th>STE 浓度</th><th>读者</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>第一层</td><td>标题 + 摘要 + 结论</td><td>100%</td><td>只看结论的人</td></tr>
+                            <tr><td>第二层</td><td>各节要点 + 图表</td><td>80%</td><td>快速浏览的人</td></tr>
+                            <tr><td>第三层</td><td>详细论证 + 案例</td><td>50%</td><td>需要深入了解的人</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>方法 3：列表化表达</h4>
+                    <p>能用列表说清楚的，就不用段落。适用场景：列举原因、特点、步骤；展示优缺点；总结要点。</p>
+                    
+                    <h4>长文写作的 STE 工作流</h4>
+                    <ol>
+                        <li><strong>列大纲</strong> — 用 STE 风格列出所有要点</li>
+                        <li><strong>填充内容</strong> — 先不管文风，把内容写出来</li>
+                        <li><strong>STE 化改写</strong> — 按照 STE 规则精简和结构化</li>
+                        <li><strong>润色流畅度</strong> — 加入必要的过渡</li>
+                        <li><strong>自检</strong> — 用自检 5 步法检查</li>
+                    </ol>
+                </section>
+
+                <section class="section" id="p6-2">
+                    <h3>6.2 邮件的 STE 写法</h3>
+                    
+                    <h4>商务邮件 STE 原则</h4>
+                    <ol>
+                        <li>主题明确，包含关键信息</li>
+                        <li>第一段说明来意（1-2 句）</li>
+                        <li>正文用要点列出</li>
+                        <li>结尾明确行动项和截止时间</li>
+                        <li>全文不超过 200 字（短邮件）</li>
+                    </ol>
+                    
+                    <h4>模板</h4>
+                    <div class="code-block"><pre>主题：{动作} - {内容摘要}
+
+{称呼}，
+
+{一句话说明写这封邮件的目的}。
+
+{要点 1}
+{要点 2}
+{要点 3}
+
+{明确的下一步行动 + 截止时间}
+
+{签名}</pre></div>
+                    
+                    <h4>对比示例（项目进度同步）</h4>
+                    <div class="compare-card">
+                        <div class="compare-col bad">
+                            <div class="compare-label">普通写法</div>
+                            <div class="compare-content" style="font-size:13px">
+                                各位好，想跟大家同步一下本周项目的进展情况。首先，关于前端部分，小王那边已经完成了用户模块的开发...后端方面，小李完成了 API 的设计和大部分接口的开发，但是支付接口遇到了一些问题...下周我们会进行第一次联调。
+                            </div>
+                        </div>
+                        <div class="compare-col good">
+                            <div class="compare-label">STE 写法</div>
+                            <div class="compare-content" style="font-size:13px">
+                                <strong>主题：周报 - 项目进度同步（第 12 周）</strong><br><br>
+                                各位好，同步本周项目进展。<br><br>
+                                <strong>进展：</strong><br>
+                                1. 前端：用户模块开发完成，测试中<br>
+                                2. 后端：大部分 API 完成，支付接口延期 2 天<br>
+                                3. 设计：新版设计稿已发布，请查看<br><br>
+                                <strong>下周计划：</strong>周三进行第一次联调<br><br>
+                                <strong>需要支持：</strong>支付接口需第三方协助
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4>技术问题求助邮件模板</h4>
+                    <div class="code-block"><pre>主题：求助 - {问题简述}
+
+{称呼}，
+
+遇到一个 {模块/功能} 的问题，向你求助。
+
+**问题现象：**
+{一句话描述}
+
+**环境信息：**
+- 系统：{操作系统/版本}
+- 软件：{软件名称/版本}
+
+**已尝试的方法：**
+1. {尝试了什么} → {结果如何}
+
+**报错信息：**
+{粘贴关键报错信息}
+
+**期望的帮助：**
+- 你是否遇到过类似问题？
+- 建议从哪个方向排查？
+
+谢谢！
+{签名}</pre></div>
+                </section>
+
+                <section class="section" id="p6-3">
+                    <h3>6.3 演示文稿的 STE 原则</h3>
+                    
+                    <h4>为什么 PPT 需要 STE</h4>
+                    <p>PPT 的本质是"视觉化的要点展示"，不是"文档搬家"。STE 风格和 PPT 的理念高度契合：简洁、要点化、信息密度高。</p>
+                    
+                    <h4>STE 风格 PPT 的 5 条原则</h4>
+                    <ol>
+                        <li><strong>一页一个核心信息</strong> — 不要把多件事塞到一页，标题就是结论</li>
+                        <li><strong>文字越少越好</strong> — 每页不超过 6 行，每行不超过 15 字，用关键词不用完整句子</li>
+                        <li><strong>用图表代替文字</strong> — 对比用表格，流程用流程图，数据用图表</li>
+                        <li><strong>结构清晰，层层递进</strong> — 目录页明确结构，每部分有小结页</li>
+                        <li><strong>演讲词和 PPT 分离</strong> — PPT 只放要点，详细内容放演讲者备注</li>
+                    </ol>
+                    
+                    <h4>常见 PPT 结构（STE 版）</h4>
+                    <ol>
+                        <li><strong>封面页</strong> — 标题（一句话）+ 副标题 + 讲者</li>
+                        <li><strong>目录页</strong> — 3-5 个部分，每部分 4-6 字</li>
+                        <li><strong>背景/问题</strong>（1-2 页）— 我们面临什么问题，为什么重要</li>
+                        <li><strong>方案/内容</strong>（主体，N 页）— 每节一个核心观点，每页一个要点</li>
+                        <li><strong>总结</strong>（1 页）— 3 个核心要点 + 1 个行动号召</li>
+                        <li><strong>Q&A / 致谢</strong></li>
+                    </ol>
+                </section>
+
+                <section class="section" id="p6-4">
+                    <h3>6.4 知识萃取：把经验变成 STE 风格的可复用资产</h3>
+                    
+                    <h4>什么是知识萃取</h4>
+                    <p>知识萃取 = 把隐性经验（脑子里的）变成显性知识（可分享的）。STE 风格特别适合知识萃取，因为要求明确具体、结构清晰、容易复用。</p>
+                    
+                    <h4>经验萃取的 STE 流程</h4>
+                    <p><strong>适用场景：</strong>完成一个项目后、解决一个难题后、学到一个新技能后</p>
+                    <ol>
+                        <li><strong>回顾成果</strong> — 最终做成了什么？用一句话总结</li>
+                        <li><strong>提取关键步骤</strong> — 做对了哪些事？哪些步骤是关键的？</li>
+                        <li><strong>总结踩过的坑</strong> — 遇到了什么问题？原因是什么？怎么解决的？</li>
+                        <li><strong>提炼方法论</strong> — 这些经验可以复用到什么场景？</li>
+                        <li><strong>归档到知识库</strong> — 创建经验萃取页面，添加标签和关联</li>
+                    </ol>
+                    
+                    <h4>经验萃取模板</h4>
+                    <div class="code-block"><pre># {项目/事件名称}经验萃取
+
+## 一句话总结
+{用一句话总结这次经历的核心收获}
+
+## 背景
+- 目标：{最初的目标是什么}
+- 结果：{实际结果如何}
+
+## 关键成功因素
+1. {做对了什么}
+2. {做对了什么}
+
+## 踩过的坑
+### 坑 1：{问题简述}
+- 现象：{具体是什么问题}
+- 原因：{根本原因是什么}
+- 解决：{怎么解决的}
+- 教训：{以后怎么避免}
+
+## 可复用的方法
+{提炼出的通用方法/流程/模板}
+
+适用场景：
+- ...</pre></div>
+                </section>
+
+                <section class="section" id="p6-5">
+                    <h3>6.5 个人笔记的 STE 整理法</h3>
+                    
+                    <h4>三种笔记的 STE 写法</h4>
+                    
+                    <h4>1. 读书/学习笔记</h4>
+                    <ol>
+                        <li>不抄原文，用自己的话（短句）</li>
+                        <li>每章提炼 3-5 个核心观点</li>
+                        <li>每个观点不超过 30 字</li>
+                        <li>标记金句（原文引用）</li>
+                        <li>写下自己的思考和应用</li>
+                    </ol>
+                    
+                    <h4>2. 会议笔记</h4>
+                    <ol>
+                        <li>不做逐字记录</li>
+                        <li>只记决策、行动项、待确认问题</li>
+                        <li>用列表，不用段落</li>
+                        <li>会后 24 小时内整理</li>
+                    </ol>
+                    
+                    <h4>3. 灵感/想法笔记</h4>
+                    <ol>
+                        <li>快速记录核心想法（1 句话）</li>
+                        <li>补充背景和为什么重要</li>
+                        <li>标记类型（产品/技术/写作/其他）</li>
+                        <li>定期 review，有用的深化，没用的删除</li>
+                    </ol>
+                    
+                    <h4>笔记整理的 STE 原则</h4>
+                    <ul>
+                        <li><strong>一笔记一事</strong> — 一篇笔记只讲一个主题</li>
+                        <li><strong>命名清晰</strong> — 标题就是内容的概括</li>
+                        <li><strong>定期整理</strong> — 每周整理零散笔记，每月 review 旧笔记</li>
+                        <li><strong>标签克制</strong> — 每个笔记 3-5 个标签最合适</li>
+                    </ul>
+                </section>
+            </article>
+
+            <!-- ==================== 第 7 篇 ==================== -->
+            <article class="part part-7" id="part7">
+                <div class="part-header">
+                    <div class="part-badge">第 7 篇</div>
+                    <h2>工具篇——STE 写作辅助工具</h2>
+                    <p class="part-desc">善用工具，让 STE 写作更轻松、更高效。</p>
+                </div>
+
+                <section class="section" id="p7-1">
+                    <h3>7.1 LLM 作为 STE 检查员</h3>
+                    
+                    <h4>为什么用 LLM 做 STE 检查</h4>
+                    <p>STE 规则虽然明确，但人工检查费时费力。LLM 可以秒级完成检查，同时检查多个维度，直接给出修改建议，成本极低。</p>
+                    
+                    <h4>STE 检查员 Prompt</h4>
+                    <div class="prompt-block">
+                        <div class="prompt-content">你是一名 STE（简化技术英语）检查员。请检查以下内容是否符合 STE 规范。
+
+检查维度：
+1. 句子简洁度：句子是否过长（>25字），结构是否复杂
+2. 段落结构：段落是否过长（>3句），是否应使用列表
+3. 语态规范：被动语态是否过多（>10%）
+4. 信息密度：是否有套话、冗余、重复
+5. 术语一致性：同一概念是否用词一致
+6. 代词明确：代词是否有明确指代
+7. 格式清晰：列表、表格、层级是否恰当
+
+输出格式：
+---
+STE 评分：X/100
+各维度得分：
+- 句子简洁度：X/20
+- 段落结构：X/15
+- 语态规范：X/15
+- 信息密度：X/20
+- 术语一致性：X/15
+- 格式清晰度：X/15
+
+主要问题：
+1. {问题描述} → {修改建议}
+2. {问题描述} → {修改建议}
+
+修改后的版本：
+{STE 风格的改写版本}
+---
+
+待检查内容：
+{在此粘贴待检查的文本}</div>
+                    </div>
+                    
+                    <h4>使用场景</h4>
+                    <ul>
+                        <li><strong>写完后检查</strong> — 写完任何东西都先丢给 LLM 过一遍</li>
+                        <li><strong>学习 STE</strong> — 对比原文和修改版，学习 STE 写法</li>
+                        <li><strong>批量处理</strong> — 用脚本批量检查大量文档的 STE 质量</li>
+                    </ul>
+                    
+                    <div class="callout warning">
+                        <div class="callout-icon">⚠️</div>
+                        <div class="callout-content">
+                            <strong>局限性：</strong>LLM 可能会误解原文意思，修改后信息有偏差；对于专业术语，LLM 可能不知道正确的统一用法。建议 LLM 作为辅助工具，最终质量由人把控。
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section" id="p7-2">
+                    <h3>7.2 自动检查脚本</h3>
+                    
+                    <h4>Python STE 检查器（基础版）</h4>
+                    <p>以下是一个简单的 Python 脚本，可以自动检测一些常见的非 STE 特征。</p>
+                    
+                    <div class="code-block"><pre>"""
+STE 风格自动检查工具（中文）
+检查内容：
+1. 长句检测（>25字）
+2. 长段落检测（>3句）
+3. 被动语态检测
+4. 套话/冗余词检测
+5. 模糊代词检测
+"""
+
+import re
+from typing import Dict, List, Tuple
+
+
+def split_sentences(text: str) -> List[str]:
+    """按中文句号、问号、感叹号拆分句子"""
+    sentences = re.split(r'[。！？\n]', text)
+    return [s.strip() for s in sentences if s.strip()]
+
+
+def check_long_sentences(sentences, max_len=25):
+    """检测长句"""
+    result = []
+    for i, s in enumerate(sentences):
+        if len(s) > max_len:
+            result.append((i + 1, s, len(s)))
+    return result
+
+
+# 被动语态常见模式
+PASSIVE_PATTERNS = [
+    r'被\w+', r'受到\w+', r'遭到\w+',
+    r'得以\w+', r'由\w+所', r'为\w+所',
+]
+
+# 套话/冗余词列表
+FILLER_WORDS = [
+    '非常', '十分', '相当', '比较', '特别',
+    '其实', '事实上', '实际上', '基本上',
+    '众所周知', '不言而喻', '毫无疑问',
+    '综上所述', '总而言之', '由此可见',
+    '值得一提的是', '需要指出的是',
+    '在某种程度上', '在一定程度上',
+    '为了', '以便', '从而', '因此', '然而',
+]
+
+
+def ste_check(text: str) -> Dict:
+    """执行完整的 STE 检查"""
+    sentences = split_sentences(text)
+    paragraphs = re.split(r'\n\s*\n', text)
+    paragraphs = [p.strip() for p in paragraphs if p.strip()]
+    
+    long_sentences = check_long_sentences(sentences)
+    
+    # 计算分数（简化版）
+    total = len(sentences)
+    long_ratio = len(long_sentences) / max(total, 1)
+    sentence_score = max(0, 20 - long_ratio * 40)
+    
+    return {
+        "score": round(sentence_score + 60, 1),  # 基础分 + 句子分
+        "stats": {
+            "total_sentences": total,
+            "total_paragraphs": len(paragraphs),
+            "long_sentence_count": len(long_sentences),
+        },
+        "issues": {
+            "long_sentences": long_sentences,
+        }
+    }</pre></div>
+                    
+                    <h4>扩展方向</h4>
+                    <ul>
+                        <li>增加术语一致性检查（需要术语表）</li>
+                        <li>增加名词堆叠检测</li>
+                        <li>增加可读性评分</li>
+                        <li>接入 LLM API 做深度检查</li>
+                        <li>集成到 CI/CD 流程中</li>
+                    </ul>
+                </section>
+
+                <section class="section" id="p7-3">
+                    <h3>7.3 Obsidian 插件推荐</h3>
+                    
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>插件</th><th>功能</th><th>STE 价值</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>LanguageTool Integration</strong></td>
+                                <td>语法和拼写检查</td>
+                                <td>可自定义规则，检查长句、被动语态</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Better Word Count</strong></td>
+                                <td>实时字数统计</td>
+                                <td>实时显示当前句子字数，提醒是否过长</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Templater</strong></td>
+                                <td>高级模板功能</td>
+                                <td>快速插入 STE 风格的页面模板</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dataview</strong></td>
+                                <td>动态查询和列表</td>
+                                <td>自动生成索引页面，保持结构清晰</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Linter</strong></td>
+                                <td>自动格式化 Markdown</td>
+                                <td>保持格式一致，自动修复格式问题</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Text Generator / Copilot</strong></td>
+                                <td>在 Obsidian 中调用 AI</td>
+                                <td>一键改写为 STE 风格，快速生成知识卡片</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="section" id="p7-4">
+                    <h3>7.4 浏览器扩展推荐</h3>
+                    
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>扩展</th><th>功能</th><th>STE 价值</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>LanguageTool</strong></td>
+                                <td>网页上的语法检查</td>
+                                <td>在任何网页文本框中检查写作质量</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Grammarly</strong></td>
+                                <td>英文写作检查</td>
+                                <td>英文 STE 写作的好帮手，检测被动语态、冗长句子</td>
+                            </tr>
+                            <tr>
+                                <td><strong>DeepL Write</strong></td>
+                                <td>AI 写作助手</td>
+                                <td>可以将文本改写为更简洁的风格</td>
+                            </tr>
+                            <tr>
+                                <td><strong>阅读模式</strong></td>
+                                <td>去除网页干扰</td>
+                                <td>阅读长文时开启，便于提取要点</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ChatGPT / Claude 扩展</strong></td>
+                                <td>网页上调用 AI</td>
+                                <td>选中文字 → 一键 STE 摘要/改写/检查</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>日常 STE 检查流程</h4>
+                    <ol>
+                        <li>写完内容</li>
+                        <li>用 LanguageTool 检查语法和长句</li>
+                        <li>用 LLM 做深度 STE 检查和改写</li>
+                        <li>人工审核修改结果</li>
+                        <li>发布/保存</li>
+                    </ol>
+                </section>
+            </article>
+
+            <!-- ==================== 第 8 篇 ==================== -->
+            <article class="part part-8" id="part8">
+                <div class="part-header">
+                    <div class="part-badge">第 8 篇</div>
+                    <h2>速查篇——一页纸 STE 速查卡</h2>
+                    <p class="part-desc">把最核心的 STE 规则浓缩到一页，随时查阅，快速上手。</p>
+                </div>
+
+                <p class="print-hint">💡 本页可直接打印，建议贴在工位上随时查阅</p>
+                
+                <div class="cheat-sheet">
+                    <h3 id="p8-1">8.1 STE 核心 10 条速记</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>编号</th><th>规则</th><th>记忆口诀</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1</td><td>句子要短，每句不超过 25 字</td><td>短句原则</td></tr>
+                            <tr><td>2</td><td>每段不超过 3 句话</td><td>短段原则</td></tr>
+                            <tr><td>3</td><td>优先使用主动语态</td><td>主动原则</td></tr>
+                            <tr><td>4</td><td>用具体名词，不用模糊代词</td><td>具体原则</td></tr>
+                            <tr><td>5</td><td>一个术语只有一个含义</td><td>一致原则</td></tr>
+                            <tr><td>6</td><td>删除套话、客套话、连接词</td><td>精简原则</td></tr>
+                            <tr><td>7</td><td>用列表代替段落式列举</td><td>列表原则</td></tr>
+                            <tr><td>8</td><td>结论先行，先说结果再说原因</td><td>结论先行</td></tr>
+                            <tr><td>9</td><td>操作步骤用祈使句</td><td>祈使原则</td></tr>
+                            <tr><td>10</td><td>每句话都要有信息量</td><td>信息原则</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="callout tip" style="background:#f0fdf4;border-left-color:#22c55e;color:#166534">
+                        <div class="callout-icon">✨</div>
+                        <div class="callout-content">
+                            <strong>一句话记忆：</strong>短句短段主动态，具体一致去套话，列表结论祈使句，每句都要有信息。
+                        </div>
+                    </div>
+                    
+                    <h3 id="p8-2">8.2 常见替换词表（20 个非 STE 表达）</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>序号</th><th>非 STE 表达</th><th>STE 表达</th><th>说明</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1</td><td>非常好 / 十分好</td><td>好</td><td>删除程度副词</td></tr>
+                            <tr><td>2</td><td>进行优化</td><td>优化</td><td>删除"进行"</td></tr>
+                            <tr><td>3</td><td>给予支持</td><td>支持</td><td>删除"给予"</td></tr>
+                            <tr><td>4</td><td>开展工作</td><td>工作</td><td>删除"开展"</td></tr>
+                            <tr><td>5</td><td>实现了提升</td><td>提升了</td><td>直接说结果</td></tr>
+                            <tr><td>6</td><td>因此 / 所以</td><td>（删除）</td><td>删除连接词</td></tr>
+                            <tr><td>7</td><td>然而 / 但是</td><td>（改用对比列表）</td><td>删除转折词</td></tr>
+                            <tr><td>8</td><td>综上所述</td><td>结论：</td><td>直接说结论</td></tr>
+                            <tr><td>9</td><td>众所周知</td><td>（删除）</td><td>删除套话</td></tr>
+                            <tr><td>10</td><td>值得一提的是</td><td>（删除）</td><td>删除套话</td></tr>
+                            <tr><td>11</td><td>它 / 这 / 那</td><td>具体名词</td><td>避免歧义</td></tr>
+                            <tr><td>12</td><td>相关 / 相应</td><td>具体说明关系</td><td>太模糊</td></tr>
+                            <tr><td>13</td><td>一定程度上</td><td>具体说明程度</td><td>太模糊</td></tr>
+                            <tr><td>14</td><td>可能 / 也许</td><td>给出概率或置信度</td><td>太模糊</td></tr>
+                            <tr><td>15</td><td>被 ... 所 ...</td><td>主动语态表达</td><td>被动改主动</td></tr>
+                            <tr><td>16</td><td>为了 ... 以便 ...</td><td>直接说目的和动作</td><td>简化</td></tr>
+                            <tr><td>17</td><td>通过 ... 的方式</td><td>用 ...</td><td>简化</td></tr>
+                            <tr><td>18</td><td>大量的 / 很多</td><td>具体数字或"多"</td><td>删除冗余</td></tr>
+                            <tr><td>19</td><td>不同的 / 各种各样的</td><td>（通常可以删除）</td><td>删除冗余</td></tr>
+                            <tr><td>20</td><td>基本上 / 大概</td><td>具体数值或范围</td><td>避免模糊</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <h3 id="p8-3">8.3 STE 浓度调节指南</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>场景</th><th>推荐浓度</th><th>操作提示</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>操作手册 / 安全指南</td><td>100%</td><td>严格执行所有规则</td></tr>
+                            <tr><td>API 文档 / 技术规范</td><td>100%</td><td>精确无歧义</td></tr>
+                            <tr><td>Agent 系统提示词</td><td>100%</td><td>指令清晰</td></tr>
+                            <tr><td>知识库概念页</td><td>80%</td><td>信息密度优先</td></tr>
+                            <tr><td>技术教程</td><td>80%</td><td>步骤清晰</td></tr>
+                            <tr><td>日常 AI 对话</td><td>80%</td><td>效率优先</td></tr>
+                            <tr><td>工作邮件</td><td>80% → 50%</td><td>专业且不失礼貌</td></tr>
+                            <tr><td>技术文章 / 博客</td><td>50%</td><td>兼顾可读性</td></tr>
+                            <tr><td>产品方案 / 报告</td><td>50%</td><td>专业流畅</td></tr>
+                            <tr><td>创意写作 / 小说</td><td>0%</td><td>STE 不适用</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>浓度调节技巧</h4>
+                    <p><strong>提高浓度（50% → 80%）：</strong></p>
+                    <ol>
+                        <li>删除所有形容词和副词</li>
+                        <li>把段落拆成列表</li>
+                        <li>被动语态改主动语态</li>
+                        <li>删除连接词和过渡语</li>
+                        <li>每段控制在 3 句以内</li>
+                    </ol>
+                    <p><strong>降低浓度（80% → 50%）：</strong></p>
+                    <ol>
+                        <li>加入必要的过渡句</li>
+                        <li>适当展开解释</li>
+                        <li>增加例子和类比</li>
+                        <li>保留一些礼貌用语</li>
+                        <li>段落可以稍长一些</li>
+                    </ol>
+                    
+                    <h3 id="p8-4">8.4 STE 自检 5 步法</h3>
+                    <p>写完任何内容后，按以下 5 步检查：</p>
+                    
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>步骤</th><th>名称</th><th>操作</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>第 1 步</td><td>删套话</td>
+                                <td>找出"非常""十分""众所周知""综上所述"等词，直接删除</td>
+                            </tr>
+                            <tr>
+                                <td>第 2 步</td><td>拆长句</td>
+                                <td>找出超过 25 字的句子，每句拆成 2-3 个短句</td>
+                            </tr>
+                            <tr>
+                                <td>第 3 步</td><td>改语态</td>
+                                <td>找出被动语态（"被""受到"），改为主动语态</td>
+                            </tr>
+                            <tr>
+                                <td>第 4 步</td><td>换代词</td>
+                                <td>找出"它""这""那"，替换为具体名词</td>
+                            </tr>
+                            <tr>
+                                <td>第 5 步</td><td>结构优化</td>
+                                <td>能用列表的不用段落，结论放最前面</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h4>自检时间估计</h4>
+                    <table class="styled-table">
+                        <thead>
+                            <tr><th>内容长度</th><th>预计自检时间</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>100 字以内</td><td>1 分钟</td></tr>
+                            <tr><td>500 字以内</td><td>3-5 分钟</td></tr>
+                            <tr><td>1000 字以内</td><td>10 分钟</td></tr>
+                            <tr><td>长文（逐篇检查）</td><td>每篇 5-10 分钟</td></tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="callout tip" style="background:#f0fdf4;border-left-color:#22c55e;color:#166534">
+                        <div class="callout-icon">💪</div>
+                        <div class="callout-content">
+                            <strong>建议：</strong>先养成习惯，每次写完花 1 分钟自检。熟练后速度会越来越快，最终 STE 思维会内化为你的写作本能。
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 页脚 -->
+            <footer class="footer">
+                <p>ASD-STE100 AI 时代应用手册 · v1.0 · 2026.10</p>
+                <p style="margin-top:8px; font-size:12px;">本手册本身也遵循 STE 规范撰写（约 80% 浓度）</p>
+            </footer>
+
+        </div>
+    </main>
+</div>
+
+<script>
+// ========== 导航数据 ==========
+const navData = [
+    {
+        part: 1,
+        title: '基础篇',
+        subtitle: '为什么 STE 能让 AI 输出更有价值',
+        gradient: 'linear-gradient(135deg, #1e3a5f 0%, #7c3aed 100%)',
+        items: [
+            { id: 'p1-1', title: '什么是 ASD-STE100' },
+            { id: 'p1-2', title: 'Karpathy 为什么推荐用它' },
+            { id: 'p1-3', title: 'STE 提升 AI 输出质量的 5 个原理' },
+            { id: 'p1-4', title: 'STE vs 普通写作：对比示例' },
+            { id: 'p1-5', title: 'STE "浓度"概念' },
+        ]
+    },
+    {
+        part: 2,
+        title: 'Prompt 篇',
+        subtitle: '写出 STE 风格的提示词',
+        gradient: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
+        items: [
+            { id: 'p2-1', title: '核心 Prompt 模板' },
+            { id: 'p2-2', title: '12 个即用 Prompt 模板' },
+            { id: 'p2-3', title: 'Prompt 使用技巧' },
+        ]
+    },
+    {
+        part: 3,
+        title: '知识库篇',
+        subtitle: '用 STE 构建高质量个人知识库',
+        gradient: 'linear-gradient(135deg, #7c3aed 0%, #ec4899 100%)',
+        items: [
+            { id: 'p3-1', title: '为什么知识库需要 STE 规范' },
+            { id: 'p3-2', title: 'STE-Wiki 三层架构设计' },
+            { id: 'p3-3', title: '页面模板' },
+            { id: 'p3-4', title: '三大工作流' },
+            { id: 'p3-5', title: '实操：从零搭建 STE 知识库' },
+            { id: 'p3-6', title: '质量自检清单' },
+        ]
+    },
+    {
+        part: 4,
+        title: 'Agent 篇',
+        subtitle: '让 Agent 输出符合 STE 规范',
+        gradient: 'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)',
+        items: [
+            { id: 'p4-1', title: '为什么 Agent 需要 STE 约束' },
+            { id: 'p4-2', title: 'Agent 系统提示词模板' },
+            { id: 'p4-3', title: 'STE 自检流程' },
+            { id: 'p4-4', title: 'STE 评分系统' },
+            { id: 'p4-5', title: '多 Agent 场景下的 STE 规范传递' },
+        ]
+    },
+    {
+        part: 5,
+        title: '代码篇',
+        subtitle: 'STE 在技术写作中的应用',
+        gradient: 'linear-gradient(135deg, #10b981 0%, #06b6d4 100%)',
+        items: [
+            { id: 'p5-1', title: '代码注释的 STE 规范' },
+            { id: 'p5-2', title: 'README / 技术文档的 STE 写法' },
+            { id: 'p5-3', title: 'API 文档的 STE 模板' },
+            { id: 'p5-4', title: '错误信息的 STE 写法' },
+            { id: 'p5-5', title: '代码评审意见的 STE 表达' },
+        ]
+    },
+    {
+        part: 6,
+        title: '创作篇',
+        subtitle: '用 STE 思路提升写作质量',
+        gradient: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
+        items: [
+            { id: 'p6-1', title: '文章/报告写作的 STE 应用' },
+            { id: 'p6-2', title: '邮件的 STE 写法' },
+            { id: 'p6-3', title: '演示文稿的 STE 原则' },
+            { id: 'p6-4', title: '知识萃取：把经验变成可复用资产' },
+            { id: 'p6-5', title: '个人笔记的 STE 整理法' },
+        ]
+    },
+    {
+        part: 7,
+        title: '工具篇',
+        subtitle: 'STE 写作辅助工具',
+        gradient: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+        items: [
+            { id: 'p7-1', title: 'LLM 作为 STE 检查员' },
+            { id: 'p7-2', title: '自动检查脚本' },
+            { id: 'p7-3', title: 'Obsidian 插件推荐' },
+            { id: 'p7-4', title: '浏览器扩展推荐' },
+        ]
+    },
+    {
+        part: 8,
+        title: '速查篇',
+        subtitle: '一页纸 STE 速查卡',
+        gradient: 'linear-gradient(135deg, #f97316 0%, #f43f5e 100%)',
+        items: [
+            { id: 'p8-1', title: 'STE 核心 10 条速记' },
+            { id: 'p8-2', title: '常见替换词表' },
+            { id: 'p8-3', title: 'STE 浓度调节指南' },
+            { id: 'p8-4', title: 'STE 自检 5 步法' },
+        ]
+    }
+];
+
+// ========== 生成导航 ==========
+function generateNav() {
+    const navMenu = document.getElementById('navMenu');
+    
+    navData.forEach((part, index) => {
+        const partDiv = document.createElement('div');
+        partDiv.className = 'nav-part';
+        partDiv.dataset.part = part.part;
+        
+        partDiv.innerHTML = `
+            <div class="nav-part-title" onclick="togglePart(${part.part})">
+                <span class="part-num" style="background: ${part.gradient}">${part.part}</span>
+                <span>${part.title}</span>
+                <span class="toggle-icon">▼</span>
+            </div>
+            <div class="nav-subitems">
+                ${part.items.map(item => `
+                    <a href="#${item.id}" class="nav-subitem" data-target="${item.id}">${item.title}</a>
+                `).join('')}
+            </div>
+        `;
+        
+        navMenu.appendChild(partDiv);
+    });
+}
+
+// ========== 折叠/展开 Part ==========
+function togglePart(partNum) {
+    const partEl = document.querySelector(`.nav-part[data-part="${partNum}"]`);
+    partEl.classList.toggle('collapsed');
+}
+
+// ========== 移动端侧边栏切换 ==========
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('open');
+}
+
+// ========== 滚动高亮当前章节 ==========
+function updateActiveNav() {
+    const sections = document.querySelectorAll('.section[id]');
+    let current = '';
+    
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        if (window.scrollY >= sectionTop - 100) {
+            current = section.id;
+        }
+    });
+    
+    document.querySelectorAll('.nav-subitem').forEach(item => {
+        item.classList.remove('active');
+        if (item.dataset.target === current) {
+            item.classList.add('active');
+        }
+    });
+}
+
+// ========== 点击导航项关闭移动端侧边栏 ==========
+function setupNavClick() {
+    document.querySelectorAll('.nav-subitem').forEach(item => {
+        item.addEventListener('click', () => {
+            if (window.innerWidth <= 1024) {
+                document.getElementById('sidebar').classList.remove('open');
+            }
+        });
+    });
+}
+
+// ========== 初始化 ==========
+document.addEventListener('DOMContentLoaded', () => {
+    generateNav();
+    setupNavClick();
+    window.addEventListener('scroll', updateActiveNav);
+    updateActiveNav();
+});
+</script>
+
+</body>
+</html>
