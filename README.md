@@ -38,7 +38,8 @@ clear-expression/
 │   └── images/             #   图片素材
 │
 ├── reference/              # 外部标准语料（只读参照）
-│   └── ste100/             #   ASD-STE100：原文 PDF、英文提取、中译、解读、白皮书
+│   ├── ste100/             #   ASD-STE100：原文 PDF、英文提取、中译、解读、白皮书
+│   └── writing/            #   写作风格指南、4 份参考、3 张场景卡
 │
 ├── research/               # 规则来源与研究记录
 │   ├── analysis/           #   现状分析、缺口分析、外部用法评价、推文整理
