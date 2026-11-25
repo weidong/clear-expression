@@ -30,7 +30,7 @@ Obsidian 是一款笔记软件。它基于本地 Markdown 文件。
 - 查看 raw/ 目录中的原始资料。
 - 浏览 wiki/ 目录中的编译页面。
 - 使用 Web Clipper 插件剪藏网页文章。
-- 使用 Dataview 插件进行动态查询。
+- 使用 Dataview 插件动态查询。
 
 ## 相关链接
 
