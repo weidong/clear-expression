@@ -5,6 +5,37 @@
 
 ---
 
+## [2026-11-25] handoff | 会话交接：资料收拢完成，遗留事项清单
+
+- 语料、分析、写作素材已全部收进本仓库，GitHub 同步完成。过程见 `docs/资料收拢记录-2026-11-25.md`。
+- 四处来源目录各留一份迁移说明，写明原内容、去向与还原方法。
+- 当前状态：30 条规则、10 类 lint 检查、全库 0 问题。
+
+待办，按优先级排序：
+
+1. 核对 `reference/writing/` 与 `research/extraction/` 内部互引是否断链。这些是外部素材搬入的，相对路径可能已失效。
+2. 比对 `research/extraction/中文技术表达规范.md` 与 `schema/RULES.md`。前者是早期草稿，后者是现行 30 条，差异需要明确取舍。
+3. `README.md` 仍有 3 处把规范写成「写作规范」「写作规则」，与「表达不限于写作」的定位不符，待改。
+4. 规则 30 的「引用提交写提交号」没有自动检查。提交号与普通单词难分，硬做会误报，需先定规则再实现。
+5. `learn-ai/expr-wiki` 是只读冷备。本仓库稳定运行一段时间后可以删除。
+6. `weidong/2026-11-25` 是被进程占用的空目录，三次删除失败，可随时手工清理。
+7. lint 未接入 CI。目前只在本地手动运行。
+
+---
+
+
+
+## [2026-11-25] update | 简明表达规范迁移收尾：清除残留旧名
+
+- 本仓库是简明表达规范的最终落地点（原名 expr-wiki → 当前 clear-expression）。核心迁移工作已在 11-24 完成，本次只扫残留。
+- `schema/WIKI-SCHEMA.md` 目录结构示例根目录名由 `expr-wiki/` 改为 `clear-expression/`。
+- `viewer/index.html` 两处残留：badge 文字由 `Plain Expression` 改为 `Clear Expression Standard`；目录树根目录名由 `expr-wiki/` 改为 `clear-expression/`。
+- `README.md` 规则速览段落补充说明：共 30 条规则，核心 8 条，其余 22 条覆盖拆句补衔接、句长分档、状态词固定、证据可定位等。示例内容的概念计数由 6 个对齐为实际的 13 个。
+- research/ 下的历史分析文档保留旧名（ste-wiki、STE-RULES 等），属于 raw 性质的原始素材，按「原始资料只读」原则不动。
+- 全库 lint 验证：总问题 0。
+
+---
+
 ## [2026-11-25] update | 规范英文名定为 Clear Expression Standard
 
 - 「简明表达规范」的英文名由 Plain Expression 改为 Clear Expression Standard，不设英文缩写。
