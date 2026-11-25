@@ -393,11 +393,12 @@ def _raw_sentences(content):
 def check_evidence(content):
     """检查证据是否可定位（规则 30）。
 
-    两类硬问题：
+    三类硬问题：
       A. 引用了代码文件，但整句没有行号。
       B. 写了"第 N 行"，但整句没有文件。
+      C. 显式说"commit/提交"，但没附 7–40 位 hex 短 hash。
     一类软提示（不计入问题数）：
-      C. 引用了 .md 文档，但没有行号、锚点或章节号。
+      D. 引用了 .md 文档，但没有行号、锚点或章节号。
     返回 (硬问题列表, 软提示列表)，元素为 (句子, 说明)。
 
     URL 里的 .html、.md 不是本地文件引用，先剥掉再判断；
@@ -406,6 +407,13 @@ def check_evidence(content):
     hard, soft = [], []
     _, body = parse_frontmatter(content)
     body = re.split(r'\n## 来源', body, maxsplit=1)[0]
+
+    # 规则 30 提交号检查：显式标记触发（方案 A）
+    # 句子里有 git commit 命令 → 整句是命令语境，跳过触发检查
+    # 否则裸 commit/提交/提交号/commit号 是触发词，要求同句有 7-40 位 hex
+    GIT_CMD_RE = re.compile(r'\bgit\s+commit\b', re.IGNORECASE)
+    COMMIT_TRIGGER = re.compile(r'commit号|提交号|提交|\bcommit\b', re.IGNORECASE)
+    HASH_RE = re.compile(r'\b[0-9a-f]{7,40}\b')
 
     for s in _raw_sentences(body):
         if '❌' in s:
@@ -425,6 +433,13 @@ def check_evidence(content):
         if BARE_LINE_RE.search(s_clean) and not (has_code_file or has_md_file):
             hard.append((s, '写了行号但没写文件名'))
             continue
+
+        # 提交号检查：显式说"commit/提交"但没附 hash
+        # 整句有 git commit 命令 → 命令语境，跳过
+        if not GIT_CMD_RE.search(s_clean):
+            if COMMIT_TRIGGER.search(s_clean) and not HASH_RE.search(s_clean):
+                hard.append((s, '提到 commit/提交但没附 7-40 位短 hash'))
+                continue
 
         if has_md_file and not (has_line or has_section):
             soft.append((s, '引用文档但没写行号或章节'))
