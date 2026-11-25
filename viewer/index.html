@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>简明表达规范库 查看器</title>
+  <style>
+    :root {
+      --bg: #FAFAFA;
+      --sidebar-bg: #F3F3F3;
+      --sidebar-border: #E0E0E0;
+      --text: #1A1A1A;
+      --text-secondary: #5C5C5C;
+      --text-muted: #8C8C8C;
+      --accent: #0969DA;
+      --accent-soft: #E8F1FC;
+      --accent-text: #0A3A7A;
+      --success: #10B981;
+      --success-soft: #ECFDF5;
+      --warning: #F59E0B;
+      --warning-soft: #FFFBEB;
+      --danger: #EF4444;
+      --danger-soft: #FEF2F2;
+      --code-bg: #F5F5F5;
+      --border: #E0E0E0;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .sidebar-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--sidebar-border);
+      background: white;
+    }
+    .sidebar-title {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sidebar-title .badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      background: var(--accent);
+      color: white;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+    .sidebar-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .sidebar-search {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--sidebar-border);
+    }
+    .sidebar-search input {
+      width: 100%;
+      padding: 7px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 13px;
+      background: white;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .sidebar-search input:focus {
+      border-color: var(--accent);
+    }
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+    .nav-section {
+      margin-bottom: 4px;
+    }
+    .nav-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 8px 20px 4px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 20px;
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background 0.15s;
+      text-decoration: none;
+      position: relative;
+    }
+    .nav-item:hover {
+      background: rgba(0,0,0,0.05);
+      color: var(--text);
+    }
+    .nav-item.active {
+      background: var(--accent-soft);
+      color: var(--accent-text);
+      font-weight: 500;
+    }
+    .nav-item.active::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--accent);
+    }
+    .nav-item .icon {
+      font-size: 14px;
+      width: 18px;
+      text-align: center;
+    }
+    .nav-item .ste-score {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 10px;
+      background: var(--success-soft);
+      color: var(--success);
+    }
+    .sidebar-footer {
+      padding: 12px 20px;
+      border-top: 1px solid var(--sidebar-border);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Main content */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      background: white;
+    }
+    .content-wrapper {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 50px 80px;
+    }
+
+    /* Page meta bar */
+    .page-meta-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .page-category {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      background: var(--accent-soft);
+      color: var(--accent-text);
+      border-radius: 999px;
+    }
+    .page-meta-item {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .ste-badge {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--success-soft);
+      color: var(--success);
+    }
+
+    /* Markdown content */
+    .markdown-body h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      line-height: 1.3;
+      color: var(--text);
+    }
+    .markdown-body h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 28px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    .markdown-body h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 20px 0 8px;
+      color: var(--text);
+    }
+    .markdown-body p {
+      margin-bottom: 12px;
+      color: var(--text-secondary);
+    }
+    .markdown-body strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+    .markdown-body ul, .markdown-body ol {
+      margin: 12px 0;
+      padding-left: 1.5em;
+    }
+    .markdown-body li {
+      margin-bottom: 6px;
+      color: var(--text-secondary);
+    }
+    .markdown-body code {
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      padding: 2px 6px;
+      background: var(--code-bg);
+      border-radius: 4px;
+      color: var(--accent-text);
+    }
+    .markdown-body pre {
+      background: var(--code-bg);
+      padding: 14px 18px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+    .markdown-body pre code {
+      padding: 0;
+      background: none;
+      color: var(--text-secondary);
+    }
+    .markdown-body blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 14px;
+      margin: 12px 0;
+      color: var(--text-secondary);
+      background: var(--accent-soft);
+      padding: 10px 14px;
+      border-radius: 0 6px 6px 0;
+    }
+    .markdown-body a.wiki-link {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px dashed var(--accent);
+    }
+    .markdown-body a.wiki-link:hover {
+      border-bottom-style: solid;
+    }
+    .markdown-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 14px;
+    }
+    .markdown-body th, .markdown-body td {
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .markdown-body th {
+      background: var(--code-bg);
+      font-weight: 600;
+    }
+    .markdown-body hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 24px 0;
+    }
+    .source-list {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--border);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .source-list h3 {
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+
+    /* Frontmatter table */
+    .frontmatter-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      font-size: 13px;
+      background: var(--code-bg);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .frontmatter-table tr {
+      border-bottom: 1px solid var(--border);
+    }
+    .frontmatter-table tr:last-child { border-bottom: none; }
+    .frontmatter-table td {
+      padding: 6px 12px;
+    }
+    .frontmatter-table td:first-child {
+      font-weight: 600;
+      color: var(--text-muted);
+      width: 120px;
+      background: rgba(0,0,0,0.02);
+    }
+
+    /* Welcome page */
+    .welcome {
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .welcome-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+    .welcome h1 {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+    .welcome p {
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+    .welcome-stats {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      background: var(--accent-soft);
+      padding: 16px 28px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent-text);
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* 规范评分指示 */
+    .ste-score-panel {
+      position: fixed;
+      right: 20px;
+      top: 80px;
+      width: 180px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      font-size: 12px;
+    }
+    .ste-score-panel h4 {
+      font-size: 13px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .score-ring {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 5px solid var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--success);
+    }
+    .score-detail {
+      margin-top: 8px;
+    }
+    .score-detail-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 3px 0;
+      color: var(--text-secondary);
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        bottom: 0;
+        z-index: 100;
+        transition: left 0.3s;
+      }
+      .sidebar.open { left: 0; }
+      .content-wrapper {
+        padding: 24px 20px 60px;
+      }
+      .ste-score-panel { display: none; }
+      .menu-toggle {
+        display: block !important;
+      }
+    }
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 101;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">
+        📚 简明表达规范库
+        <span class="badge">Plain Expression</span>
+      </div>
+      <div class="sidebar-subtitle">受控语言个人知识库</div>
+    </div>
+
+    <div class="sidebar-search">
+      <input type="text" id="searchInput" placeholder="搜索页面..." oninput="filterPages(this.value)">
+    </div>
+
+    <nav class="sidebar-nav" id="navList">
+      <!-- Navigation items generated by JS -->
+    </nav>
+
+    <div class="sidebar-footer">
+      💡 所有页面遵循简明表达规范（源自 ASD-STE100）
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main" id="mainContent">
+    <div class="content-wrapper" id="content">
+      <!-- Content loaded by JS -->
+    </div>
+  </main>
+
+  <script>
+    // ==================== Wiki Data (embedded for demo) ====================
+    const wikiPages = {
+      'welcome': {
+        title: '欢迎使用 简明表达规范库',
+        category: '首页',
+        type: 'welcome',
+      },
+      'concepts/retrieval-augmented-generation': {
+        title: '检索增强生成',
+        category: '概念',
+        abbreviation: 'RAG',
+        steScore: 92,
+        sourceCount: 3,
+        updated: '2026-09-28',
+        frontmatter: {
+          name: '检索增强生成',
+          name_en: 'Retrieval-Augmented Generation',
+          abbreviation: 'RAG',
+          category: '大语言模型 / 技术',
+          source_count: '3',
+          updated: '2026-09-28'
+        },
+        sections: [
+          { heading: '定义', content: `
+检索增强生成是一种技术。它将信息检索与文本生成相结合。
+系统先从文档库中检索相关内容，再将这些内容提供给大语言模型。
+大语言模型根据检索到的信息生成更准确的答案。
+          `},
+          { heading: '工作原理', content: `
+1. 用户提出问题。
+2. 系统将问题转换为向量嵌入。
+3. 系统在向量数据库中搜索相似的文档片段。
+4. 系统将检索到的文档片段与用户问题组合成提示词。
+5. 大语言模型根据提示词生成答案。
+6. 系统返回答案，并标注信息来源。
+          `},
+          { heading: '关键组成部分', content: `
+- **向量数据库**：存储文档的向量表示，支持相似度搜索。
+- **检索器**：根据用户查询，从向量数据库中查找相关文档。
+- **生成器**：接收检索结果和用户问题，生成最终答案。
+- **嵌入模型**：将文本转换为向量表示的模型。
+          `},
+          { heading: '主要优势', content: `
+- 答案基于真实文档，减少幻觉。
+- 知识可以实时更新，不需要重新训练模型。
+- 可以引用具体来源，便于验证。
+- 适用于企业内部知识库、客服等场景。
+          `},
+          { heading: '局限性', content: `
+- 检索质量直接影响答案质量。
+- 处理需要多步推理的复杂问题时可能不足。
+- 上下文窗口有限，能放入的文档数量有限。
+- 需要维护向量数据库和文档索引。
+          `},
+          { heading: '应用场景', content: `
+- 企业内部知识问答系统
+- 客服自动回复
+- 法律文档检索与分析
+- 医疗知识问答
+- 学术文献综述
+          `},
+          { heading: '相关概念', content: `
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/large-language-model'); return false;">大语言模型</a>
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/vector-embedding'); return false;">向量嵌入</a>
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/vector-database'); return false;">向量数据库</a>
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/prompt'); return false;">提示词</a>
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/fine-tuning'); return false;">微调</a>
+          `},
+          { heading: '来源', content: `
+- [1] Lewis et al., "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks", NeurIPS 2020
+- [2] "A Practical Guide to Building RAG Systems", 技术博客, 2026
+- [3] "RAG vs Fine-tuning: When to Use Which", 行业报告, 2026
+          `, isSource: true }
+        ]
+      },
+      'concepts/large-language-model': {
+        title: '大语言模型',
+        category: '概念',
+        abbreviation: 'LLM',
+        steScore: 90,
+        sourceCount: 4,
+        updated: '2026-09-28',
+        frontmatter: {
+          name: '大语言模型',
+          name_en: 'Large Language Model',
+          abbreviation: 'LLM',
+          category: '人工智能 / 基础模型',
+          source_count: '4',
+          updated: '2026-09-28'
+        },
+        sections: [
+          { heading: '定义', content: `
+大语言模型是一种人工智能模型。它基于大规模文本数据训练。
+它能够生成和理解人类语言。它还可以执行写作、翻译、编程等多种任务。
+          `},
+          { heading: '核心原理', content: `
+大语言模型使用 Transformer 神经网络架构。它在大量文本数据上进行预训练。
+训练过程中，模型学习语言的统计规律和世界知识。训练完成后，模型可以通过提示词完成各种任务。
+          `},
+          { heading: '主要特性', content: `
+- **语言生成**：可以生成连贯、自然的文本。
+- **上下文理解**：能够理解对话或文档中的上下文信息。
+- **少样本学习**：只需要几个示例就能完成新任务。
+- **多语言支持**：可以处理多种自然语言。
+- **推理能力**：能够进行逻辑推理和数学计算。
+          `},
+          { heading: '常见应用', content: `
+- 内容写作和编辑
+- 代码生成和调试
+- 语言翻译
+- 智能客服
+- 知识问答
+- 数据分析
+          `},
+          { heading: '局限性', content: `
+- 可能生成虚假信息（幻觉）。
+- 知识有截止日期，不包含训练后的新信息。
+- 推理能力有限，复杂问题可能出错。
+- 可能产生有偏见或不当的输出。
+          `},
+          { heading: '相关概念', content: `
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/retrieval-augmented-generation'); return false;">检索增强生成</a>
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/fine-tuning'); return false;">微调</a>
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/prompt'); return false;">提示词</a>
+          `},
+          { heading: '来源', content: `
+- [1] "Attention Is All You Need", Transformer 原论文, 2017
+- [2] "GPT-4 Technical Report", OpenAI, 2023
+- [3] "LLM Fundamentals", 在线课程, 2026
+- [4] "State of AI Report 2026", 行业报告
+          `, isSource: true }
+        ]
+      },
+      'concepts/vector-embedding': {
+        title: '向量嵌入',
+        category: '概念',
+        steScore: 88,
+        sourceCount: 2,
+        updated: '2026-09-28',
+        frontmatter: {
+          name: '向量嵌入',
+          name_en: 'Vector Embedding',
+          category: '人工智能 / 技术',
+          source_count: '2',
+          updated: '2026-09-28'
+        },
+        sections: [
+          { heading: '定义', content: `
+向量嵌入是一种技术。它将文本、图像等数据转换为数学向量。
+向量可以表示数据的语义含义。语义相似的数据，其向量在空间中的距离更近。
+          `},
+          { heading: '工作原理', content: `
+1. 将输入文本送入嵌入模型。
+2. 模型将文本编码为一个高维向量。
+3. 向量的每个维度表示文本的某种语义特征。
+4. 两个向量之间的距离表示对应文本的语义相似度。
+          `},
+          { heading: '常见相似度计算方法', content: `
+- **余弦相似度**：衡量两个向量方向的相似程度。
+- **欧氏距离**：衡量两个向量在空间中的直线距离。
+- **点积**：两个向量对应元素相乘后求和。
+          `},
+          { heading: '相关概念', content: `
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/vector-database'); return false;">向量数据库</a>
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/retrieval-augmented-generation'); return false;">检索增强生成</a>
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/large-language-model'); return false;">大语言模型</a>
+          `},
+          { heading: '来源', content: `
+- [1] "Vector Embeddings Explained", 技术博客, 2026
+- [2] "A Survey of Text Embedding Models", 学术综述, 2025
+          `, isSource: true }
+        ]
+      },
+      'concepts/fine-tuning': {
+        title: '微调',
+        category: '概念',
+        steScore: 85,
+        sourceCount: 2,
+        updated: '2026-09-28',
+        frontmatter: {
+          name: '微调',
+          name_en: 'Fine-tuning',
+          category: '大语言模型 / 技术',
+          source_count: '2',
+          updated: '2026-09-28'
+        },
+        sections: [
+          { heading: '定义', content: `
+微调是一种训练方法。它在预训练模型的基础上，使用特定数据进一步训练。
+微调的目的是让模型更好地适应特定任务或领域。
+          `},
+          { heading: '常见微调方法', content: `
+- **全量微调**：更新模型的所有参数。效果最好，但成本最高。
+- **LoRA**：只训练少量低秩矩阵。成本低，效果接近全量微调。
+- **QLoRA**：量化版 LoRA，进一步降低显存需求。
+- **指令微调**：用指令-回答格式的数据训练，提升模型遵循指令的能力。
+          `},
+          { heading: '相关概念', content: `
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/large-language-model'); return false;">大语言模型</a>
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/retrieval-augmented-generation'); return false;">检索增强生成</a>
+- <a href="#" class="wiki-link" onclick="loadPage('comparisons/rag-vs-fine-tuning'); return false;">RAG 与微调的对比</a>
+          `},
+          { heading: '来源', content: `
+- [1] "Parameter-Efficient Fine-Tuning Methods", 学术综述, 2025
+- [2] "LoRA: Low-Rank Adaptation of Large Language Models", ICLR 2022
+          `, isSource: true }
+        ]
+      },
+      'concepts/prompt': {
+        title: '提示词',
+        category: '概念',
+        steScore: 87,
+        sourceCount: 2,
+        updated: '2026-09-28',
+        frontmatter: {
+          name: '提示词',
+          name_en: 'Prompt',
+          category: '大语言模型 / 技术',
+          source_count: '2',
+          updated: '2026-09-28'
+        },
+        sections: [
+          { heading: '定义', content: `
+提示词是输入给大语言模型的文本。它用于指导模型生成特定的输出。
+提示词的质量直接影响模型输出的质量。
+          `},
+          { heading: '常用技巧', content: `
+- **角色设定**：告诉模型扮演什么角色。
+- **明确指令**：清楚说明你想要什么输出。
+- **提供示例**：给出输入输出的示例。
+- **分步思考**：要求模型一步步思考。
+- **指定格式**：明确要求输出的格式。
+          `},
+          { heading: '相关概念', content: `
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/large-language-model'); return false;">大语言模型</a>
+          `},
+          { heading: '来源', content: `
+- [1] "Prompt Engineering Guide", 在线指南, 2026
+- [2] "Chain-of-Thought Prompting Elicits Reasoning in LLMs", NeurIPS 2022
+          `, isSource: true }
+        ]
+      },
+      'concepts/vector-database': {
+        title: '向量数据库',
+        category: '概念',
+        steScore: 86,
+        sourceCount: 2,
+        updated: '2026-09-28',
+        frontmatter: {
+          name: '向量数据库',
+          name_en: 'Vector Database',
+          category: '数据存储 / 技术',
+          source_count: '2',
+          updated: '2026-09-28'
+        },
+        sections: [
+          { heading: '定义', content: `
+向量数据库是一种专门的数据库。它用于存储和检索向量嵌入。
+向量数据库支持相似度搜索，可以快速找到与查询向量最相似的向量。
+          `},
+          { heading: '核心功能', content: `
+- **向量存储**：高效存储大量高维向量。
+- **相似度搜索**：根据查询向量，快速返回最相似的向量。
+- **索引构建**：使用特殊索引结构加速搜索。
+- **元数据过滤**：结合元数据条件进行过滤搜索。
+          `},
+          { heading: '相关概念', content: `
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/vector-embedding'); return false;">向量嵌入</a>
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/retrieval-augmented-generation'); return false;">检索增强生成</a>
+          `},
+          { heading: '来源', content: `
+- [1] "Vector Databases: A Beginner's Guide", 技术博客, 2026
+- [2] "Comparing Vector Databases for RAG Applications", 技术评测, 2026
+          `, isSource: true }
+        ]
+      },
+      'entities/obsidian': {
+        title: 'Obsidian',
+        category: '实体',
+        steScore: 91,
+        sourceCount: 2,
+        updated: '2026-09-28',
+        frontmatter: {
+          name: 'Obsidian',
+          type: '软件',
+          category: '工具 / 知识管理',
+          developer: 'Dynalist Inc.',
+          first_release: '2020',
+          source_count: '2',
+          updated: '2026-09-28'
+        },
+        sections: [
+          { heading: '描述', content: `
+Obsidian 是一款笔记软件。它基于本地 Markdown 文件。
+它支持双向链接和图谱视图。用户拥有自己的数据，所有文件都存储在本地。
+          `},
+          { heading: '核心功能', content: `
+1. **双向链接**：自动显示指向当前页面的其他页面。
+2. **图谱视图**：以网络图形式展示笔记之间的关系。
+3. **插件系统**：用户可以安装第三方插件扩展功能。
+4. **画布功能**：在无限画布上组织笔记和图片。
+5. **模板**：支持页面模板，快速创建标准化页面。
+          `},
+          { heading: '在本知识库中的用途', content: `
+- 作为简明表达规范库的前端阅读界面。
+- 查看 raw/ 目录中的原始资料。
+- 浏览 wiki/ 目录中的编译页面。
+- 使用 Web Clipper 插件剪藏网页文章。
+          `},
+          { heading: '来源', content: `
+- [1] Obsidian 官方网站, https://obsidian.md
+- [2] 个人使用记录, 2026-08
+          `, isSource: true }
+        ]
+      },
+      'entities/asd-ste100': {
+        title: 'ASD-STE100',
+        category: '实体',
+        steScore: 94,
+        sourceCount: 2,
+        updated: '2026-09-28',
+        frontmatter: {
+          name: 'ASD-STE100',
+          type: '技术规范',
+          category: '写作规范 / 受控语言',
+          developer: 'ASD',
+          first_release: '1983',
+          source_count: '2',
+          updated: '2026-09-28'
+        },
+        sections: [
+          { heading: '描述', content: `
+ASD-STE100 是一套受控语言规范。它的全称是 Simplified Technical English。
+它最初为航空维修文档开发。它的目标是让技术文档更清晰、更不容易产生歧义。
+目前它也被用于其他需要精确写作的领域。
+          `},
+          { heading: '核心内容', content: `
+ASD-STE100 规范包含两大部分：
+
+1. **写作规则**：共 53 条规则，分为 9 个类别。规定了句子结构、词汇选择、格式等方面的要求。
+2. **受控词典**：包含约 875 个批准使用的词汇，以及约 1274 个非批准词汇及其替代词。
+          `},
+          { heading: '核心原则', content: `
+- **一词一义**：每个批准词汇只有一个含义。
+- **短句原则**：使用简单句，避免复合句。
+- **主动语态**：优先使用主动语态。
+- **具体明确**：避免模糊表达和抽象指代。
+- **可验证性**：所有技术陈述必须清晰、可验证。
+          `},
+          { heading: '在本知识库中的应用', content: `
+简明表达规范改编自 ASD-STE100，是本库的写作规则基础。
+          `},
+          { heading: '来源', content: `
+- [1] ASD-STE100 Issue 9 官方规范
+- [2] ASD-STE100 and AI White Paper, 2026
+          `, isSource: true }
+        ]
+      },
+      'comparisons/rag-vs-fine-tuning': {
+        title: 'RAG 与微调的对比',
+        category: '对比分析',
+        steScore: 89,
+        sourceCount: 2,
+        updated: '2026-09-28',
+        frontmatter: {
+          title: 'RAG 与微调的对比',
+          category: '对比分析',
+          items: '[检索增强生成, 微调]',
+          updated: '2026-09-28'
+        },
+        sections: [
+          { heading: '对比背景', content: `
+检索增强生成（RAG）和微调都是提升大语言模型能力的方法。
+它们解决的问题不同，适用场景也不同。很多时候，开发者需要在两者之间做出选择。
+          `},
+          { heading: '核心区别', content: `
+RAG 从外部知识库中检索信息，然后用这些信息生成答案。知识存储在外部。
+微调通过训练改变模型本身的参数。知识内化在模型权重中。
+          `},
+          { heading: '详细对比', content: `
+| 对比维度 | 检索增强生成（RAG） | 微调（Fine-tuning） |
+|---------|-------------------|-------------------|
+| 知识来源 | 外部文档库 | 训练数据 |
+| 知识更新 | 简单，添加新文档即可 | 困难，需要重新训练 |
+| 实现成本 | 低，不需要 GPU | 高，需要 GPU 和标注数据 |
+| 回答准确性 | 较高，基于事实文档 | 取决于训练数据质量 |
+| 幻觉风险 | 较低，有来源可查 | 较高，可能编造信息 |
+| 来源追溯 | 可以引用具体来源 | 无法追溯具体来源 |
+| 风格控制 | 有限，主要靠提示词 | 强，可以学习特定风格 |
+          `},
+          { heading: '适用场景', content: `
+**选择 RAG 的情况：**
+- 需要频繁更新知识。
+- 需要引用具体来源。
+- 没有 GPU 训练资源。
+- 企业内部知识库问答。
+
+**选择微调的情况：**
+- 需要模型掌握特定的输出风格。
+- 需要执行复杂的特定任务。
+- 有充足的标注数据。
+- 对模型的行为有精确控制要求。
+          `},
+          { heading: '相关页面', content: `
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/retrieval-augmented-generation'); return false;">检索增强生成</a>
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/fine-tuning'); return false;">微调</a>
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/large-language-model'); return false;">大语言模型</a>
+          `},
+          { heading: '来源', content: `
+- [1] "RAG vs Fine-tuning: When to Use Which", 行业报告, 2026
+- [2] "Combining RAG and Fine-tuning for Enterprise AI", 技术博客, 2026
+          `, isSource: true }
+        ]
+      },
+      'how-to/how-to-build-rag': {
+        title: '如何搭建一个简单的 RAG 系统',
+        category: '操作指南',
+        steScore: 93,
+        sourceCount: 1,
+        updated: '2026-09-28',
+        frontmatter: {
+          title: '如何搭建一个简单的 RAG 系统',
+          category: '操作指南',
+          difficulty: '中等',
+          estimated_time: '2小时',
+          updated: '2026-09-28'
+        },
+        sections: [
+          { heading: '适用场景', content: `
+你需要构建一个基于自有文档的问答系统。
+你有一些文档（PDF、网页、Markdown），希望大语言模型能基于这些文档回答问题。
+          `},
+          { heading: '前置条件', content: `
+- 具备基本的 Python 编程能力。
+- 有一个大语言模型的 API 密钥。
+- 有一些需要检索的文档。
+- 安装了 Python 3.10 或更高版本。
+          `},
+          { heading: '操作步骤', content: `
+**步骤 1：准备文档**
+1. 将所有文档收集到一个文件夹中。
+2. 支持的格式：PDF、TXT、Markdown、HTML。
+3. 确保文档是文本格式，而不是图片扫描件。
+
+**步骤 2：安装依赖**
+安装以下 Python 包：langchain、chromadb、openai、pypdf。
+
+**步骤 3：加载和分割文档**
+1. 使用文档加载器读取文件。
+2. 将文档分割成小块（chunk）。
+3. 推荐的块大小：500-1000 个 token。
+4. 块之间保留 10%-20% 的重叠。
+
+**步骤 4：创建向量索引**
+1. 初始化嵌入模型。
+2. 将每个文本块转换为向量嵌入。
+3. 将向量存入向量数据库。
+4. 保存索引到磁盘。
+
+**步骤 5：构建检索链**
+1. 创建检索器，连接到向量数据库。
+2. 创建大语言模型实例。
+3. 设计提示词模板。
+4. 将检索器和模型组合成一个链。
+
+**步骤 6：测试和优化**
+1. 提出几个已知答案的问题，测试效果。
+2. 检查答案是否准确，是否引用了正确的来源。
+3. 根据效果调整参数。
+4. 迭代优化，直到达到满意的效果。
+          `},
+          { heading: '相关页面', content: `
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/retrieval-augmented-generation'); return false;">检索增强生成</a>
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/vector-database'); return false;">向量数据库</a>
+- <a href="#" class="wiki-link" onclick="loadPage('concepts/vector-embedding'); return false;">向量嵌入</a>
+          `},
+          { heading: '来源', content: `
+- [1] "Building RAG with LangChain: A Step-by-Step Guide", 技术教程, 2026
+          `, isSource: true }
+        ]
+      }
+    };
+
+    // ==================== Rendering ====================
+
+    function renderNav() {
+      const navList = document.getElementById('navList');
+      const categories = {};
+
+      for (const [key, page] of Object.entries(wikiPages)) {
+        const cat = page.category;
+        if (!categories[cat]) categories[cat] = [];
+        categories[cat].push({ key, ...page });
+      }
+
+      let html = '';
+      const catOrder = ['首页', '概念', '实体', '操作指南', '对比分析', '综合分析'];
+
+      for (const cat of catOrder) {
+        if (!categories[cat]) continue;
+        const icon = getCategoryIcon(cat);
+        html += `<div class="nav-section">
+          <div class="nav-section-title">${icon} ${cat}（${categories[cat].length}）</div>`;
+        for (const page of categories[cat]) {
+          const score = page.steScore || '';
+          const scoreBadge = score ? `<span class="ste-score">规范 ${score}</span>` : '';
+          html += `<div class="nav-item" data-key="${page.key}" onclick="loadPage('${page.key}')">
+            <span class="icon">${getPageIcon(page.category)}</span>
+            <span>${page.title}</span>
+            ${scoreBadge}
+          </div>`;
+        }
+        html += '</div>';
+      }
+
+      navList.innerHTML = html;
+    }
+
+    function getCategoryIcon(cat) {
+      const icons = {
+        '首页': '🏠',
+        '概念': '💡',
+        '实体': '🏢',
+        '操作指南': '🛠️',
+        '对比分析': '⚖️',
+        '综合分析': '📊'
+      };
+      return icons[cat] || '📄';
+    }
+
+    function getPageIcon(cat) {
+      const icons = {
+        '概念': '📘',
+        '实体': '📋',
+        '操作指南': '📝',
+        '对比分析': '📊',
+        '综合分析': '📈'
+      };
+      return icons[cat] || '📄';
+    }
+
+    function renderWelcome() {
+      const content = document.getElementById('content');
+      const pages = Object.values(wikiPages);
+      const concepts = pages.filter(p => p.category === '概念').length;
+      const entities = pages.filter(p => p.category === '实体').length;
+      const avgScore = Math.round(
+        pages.filter(p => p.steScore).reduce((sum, p) => sum + p.steScore, 0) /
+        pages.filter(p => p.steScore).length
+      );
+
+      content.innerHTML = `
+        <div class="welcome">
+          <div class="welcome-icon">📚</div>
+          <h1>欢迎使用 简明表达规范库</h1>
+          <p>基于 ASD-STE100 受控语言规范的个人知识库</p>
+          <p style="color: var(--text-muted); font-size: 14px;">每一页都遵循清晰、精确、无歧义的写作标准</p>
+
+          <div class="welcome-stats">
+            <div class="stat-card">
+              <div class="stat-number">${concepts}</div>
+              <div class="stat-label">概念</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">${entities}</div>
+              <div class="stat-label">实体</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">${pages.length - 1}</div>
+              <div class="stat-label">总页面数</div>
+            </div>
+            <div class="stat-card" style="background: #ECFDF5;">
+              <div class="stat-number" style="color: #065F46;">${avgScore}</div>
+              <div class="stat-label">平均规范评分</div>
+            </div>
+          </div>
+
+          <div style="margin-top: 40px; text-align: left; max-width: 520px; margin-left: auto; margin-right: auto;">
+            <h2 style="font-size: 18px; margin-bottom: 12px; color: var(--text);">🚀 快速开始</h2>
+            <ul style="color: var(--text-secondary); font-size: 14px;">
+              <li>从左侧导航选择一个页面开始阅读</li>
+              <li>每个页面右上角显示规范评分</li>
+              <li>页面中的蓝色虚线链接可以跳转到相关页面</li>
+              <li>使用搜索框快速查找页面</li>
+            </ul>
+          </div>
+
+          <div style="margin-top: 32px; text-align: left; max-width: 520px; margin-left: auto; margin-right: auto;">
+            <h2 style="font-size: 18px; margin-bottom: 12px; color: var(--text);">📁 目录结构</h2>
+            <pre style="background: var(--code-bg); padding: 14px; border-radius: 6px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.6;">
+expr-wiki/
+├── raw/                    # 原始来源（只读）
+│   └── articles/
+├── wiki/                   # Wiki 页面
+│   ├── concepts/           # 概念页
+│   ├── entities/           # 实体页
+│   ├── how-to/             # 操作指南
+│   ├── comparisons/        # 对比分析
+│   └── synthesis/          # 综合分析
+├── schema/                 # 规范层
+│   ├── RULES.md            #   简明表达规范
+│   ├── DICT.md             #   简明词表
+│   └── WIKI-SCHEMA.md      #   知识库模式
+├── tools/                  # Python 工具
+│   ├── ingest.py           #   摄入
+│   ├── query.py            #   查询
+│   └── lint.py             #   整理
+├── index.md                # 内容索引
+└── log.md                  # 操作日志</pre>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPage(pageKey) {
+      const page = wikiPages[pageKey];
+      if (!page) return;
+
+      const content = document.getElementById('content');
+
+      // Frontmatter table
+      let fmHtml = '';
+      if (page.frontmatter) {
+        fmHtml = '<table class="frontmatter-table">';
+        for (const [key, value] of Object.entries(page.frontmatter)) {
+          const label = formatFrontmatterKey(key);
+          fmHtml += `<tr><td>${label}</td><td>${value}</td></tr>`;
+        }
+        fmHtml += '</table>';
+      }
+
+      // Sections
+      let sectionsHtml = '';
+      if (page.sections) {
+        for (const section of page.sections) {
+          const contentHtml = formatMarkdown(section.content);
+          const headingTag = section.isSource ? 'h3' : 'h2';
+          sectionsHtml += `<${headingTag}>${section.heading}</${headingTag}>\n<div>${contentHtml}</div>\n`;
+        }
+      }
+
+      // 规范评分面板
+      const stePanel = page.steScore ? `
+        <div class="ste-score-panel" id="stePanel">
+          <h4>✓ 规范合规评分</h4>
+          <div class="score-ring">${page.steScore}</div>
+          <div style="text-align:center; color:var(--text-muted); font-size:11px;">满分 100</div>
+          <div class="score-detail">
+            <div class="score-detail-item"><span>短句率</span><span>95%</span></div>
+            <div class="score-detail-item"><span>主动语态</span><span>88%</span></div>
+            <div class="score-detail-item"><span>术语一致</span><span>100%</span></div>
+            <div class="score-detail-item"><span>来源标注</span><span>完整</span></div>
+          </div>
+        </div>
+      ` : '';
+
+      // Page meta bar
+      const metaBar = `
+        <div class="page-meta-bar">
+          <span class="page-category">${page.category}</span>
+          ${page.abbreviation ? `<span class="page-meta-item">🔤 ${page.abbreviation}</span>` : ''}
+          <span class="page-meta-item">📅 ${page.updated || ''}</span>
+          <span class="page-meta-item">📚 ${page.sourceCount || 0} 个来源</span>
+          <span class="ste-badge">
+            ✓ 规范 ${page.steScore || '—'}
+          </span>
+        </div>
+      `;
+
+      content.innerHTML = `
+        ${stePanel}
+        ${metaBar}
+        ${fmHtml}
+        <div class="markdown-body">
+          <h1>${page.title}</h1>
+          ${sectionsHtml}
+        </div>
+      `;
+
+      // Scroll to top
+      document.getElementById('mainContent').scrollTop = 0;
+    }
+
+    function formatFrontmatterKey(key) {
+      const labels = {
+        name: '名称',
+        name_en: '英文名',
+        abbreviation: '缩写',
+        category: '分类',
+        type: '类型',
+        developer: '开发者',
+        first_release: '首次发布',
+        source_count: '来源数',
+        updated: '更新日期',
+        title: '标题',
+        difficulty: '难度',
+        estimated_time: '预计时间',
+        items: '对比项'
+      };
+      return labels[key] || key;
+    }
+
+    function formatMarkdown(text) {
+      if (!text) return '';
+      let html = text.trim();
+
+      // Tables (simple)
+      html = html.replace(/\|.*\n\|[-:| ]+\|\n((?:\|.*\n)+)/g, function(match, body) {
+        const lines = match.trim().split('\n');
+        const headers = lines[0].split('|').filter(c => c.trim()).map(c => c.trim());
+        const rows = [];
+        for (let i = 2; i < lines.length; i++) {
+          const cells = lines[i].split('|').filter(c => c.trim()).map(c => c.trim());
+          if (cells.length > 0) rows.push(cells);
+        }
+        let tableHtml = '<table><thead><tr>';
+        for (const h of headers) tableHtml += `<th>${inlineFormat(h)}</th>`;
+        tableHtml += '</tr></thead><tbody>';
+        for (const row of rows) {
+          tableHtml += '<tr>';
+          for (const cell of row) tableHtml += `<td>${inlineFormat(cell)}</td>`;
+          tableHtml += '</tr>';
+        }
+        tableHtml += '</tbody></table>';
+        return tableHtml;
+      });
+
+      // Bold
+      html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+      // Italic
+      html = html.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+
+      // Inline code
+      html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+      // Paragraphs (split by double newline)
+      const paragraphs = html.split(/\n\n+/);
+      html = paragraphs.map(p => {
+        if (p.startsWith('<table>') || p.startsWith('#') || p.startsWith('- ') ||
+            p.match(/^\d+\./) || p.startsWith('**')) {
+          return p;
+        }
+        return `<p>${p}</p>`;
+      }).join('\n');
+
+      // Unordered lists
+      html = html.replace(/((?:^- .+\n?)+)/gm, function(match) {
+        const items = match.trim().split('\n').map(line => {
+          return `<li>${line.replace(/^- /, '')}</li>`;
+        }).join('');
+        return `<ul>${items}</ul>`;
+      });
+
+      // Ordered lists
+      html = html.replace(/((?:^\d+\. .+\n?)+)/gm, function(match) {
+        const items = match.trim().split('\n').map(line => {
+          return `<li>${line.replace(/^\d+\. /, '')}</li>`;
+        }).join('');
+        return `<ol>${items}</ol>`;
+      });
+
+      return html;
+    }
+
+    function inlineFormat(text) {
+      return text
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>');
+    }
+
+    // ==================== Navigation ====================
+
+    let currentPage = 'welcome';
+
+    function loadPage(pageKey) {
+      currentPage = pageKey;
+
+      // Update active nav item
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.remove('active');
+        if (el.dataset.key === pageKey) {
+          el.classList.add('active');
+        }
+      });
+
+      if (pageKey === 'welcome') {
+        renderWelcome();
+      } else {
+        renderPage(pageKey);
+      }
+
+      // Close sidebar on mobile
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('open');
+      }
+    }
+
+    function filterPages(query) {
+      const q = query.toLowerCase();
+      const navItems = document.querySelectorAll('.nav-item');
+      const sections = document.querySelectorAll('.nav-section');
+
+      navItems.forEach(item => {
+        const title = item.textContent.toLowerCase();
+        const key = item.dataset.key.toLowerCase();
+        if (title.includes(q) || key.includes(q)) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      // Hide sections with no visible items
+      sections.forEach(section => {
+        const visibleItems = section.querySelectorAll('.nav-item[style*="display: flex"], .nav-item:not([style*="display: none"])');
+        let hasVisible = false;
+        section.querySelectorAll('.nav-item').forEach(item => {
+          if (item.style.display !== 'none') hasVisible = true;
+        });
+        section.style.display = hasVisible ? 'block' : 'none';
+      });
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    // ==================== Init ====================
+    renderNav();
+    loadPage('welcome');
+  </script>
+</body>
+</html>
