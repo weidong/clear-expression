@@ -5,6 +5,36 @@
 
 ---
 
+## [2026-11-25] update | 采纳草稿 A 类 4 条规则 + 术语口径对齐 + README 口径统一
+
+- 采纳 research/extraction/中文技术表达规范.md（v1.0 早期草稿）的 A 类 4 条：
+  - 规则 31：禁用分号。`；` / `;` 一律改成句号。
+  - 规则 32：禁用虚动词名词化。虚动词黑名单：进行、做出、予以、加以、开展、实施。
+  - 规则 33：模糊词分级禁令。强模糊词（可能、大概...）出现即报；弱模糊词（最好、一些...）每段 ≥3 个才报。
+  - 规则 34：每句必须有明确主语。中文独有的问题，STE 不覆盖。
+- 术语口径选草稿 T2 版本：英文缩写已占主导的术语（LLM、RAG、MCP、Token）正文直接用缩写，首次出现给中文全称。规则 6 补充说明，例子改为"正文统一用 LLM，首次出现写 LLM（大语言模型）"。
+- `tools/lint.py` 新增三项检查：
+  - `check_semicolon`（规则 31）：`python tools/lint.py --check semicolon`
+  - `check_nominalization`（规则 32）：`python tools/lint.py --check nominalization`
+  - `check_vague_words`（规则 33）：`python tools/lint.py --check vague`，分强弱两级
+  - 规则 34（主语）暂无非自动化检查，等后续补
+- 新检查首次运行发现 wiki 页面里已有 6 处名词化（`进行预训练`、`做出选择` 等）+ 7 处强模糊词（`可能`）。这些是 wiki 页面存量问题，本次不改，列入后续清理计划。
+- `README.md` 4 处「写作规范/写作规则」→「表达规范/表达规则」。`schema/RULES.md` 开头两处「写作规则/写作宪法」→「表达规则/表达宪法」。口径统一：表达不限于写作。
+- 规则总数：30 → 34。
+
+---
+
+## [2026-11-25] update | 修复 research/extraction/ 断链：旧绝对路径 → 仓库相对路径
+
+- `reference/writing/` 8 文件：0 断链，只有 1 处外部 URL（少数派风格指南）有效。
+- `research/extraction/` 4 文件：12 处断链，集中在 2 个文件，全部是收拢前的 `D:/Projects/learn-ai/asd-ste100-docs/...` / `D:/Projects/learn-ai/asd-ste100-guide/...` 绝对路径。
+- `STE100-六份材料结构化提取.md`：6 处断链（读取状态表 4 处 + 5.1/5.2 节各 1 处），全部替换为 `reference/ste100/` 下的仓库相对路径。
+- `asd-ste100-zh-structure-extraction.md`：6 处断链（文件开头分析对象列表），同上。
+- 两个 `C:/weidong_dotfiles/...` 路径保持原样（不在收拢范围内）。
+- 修复后 grep 验证：旧路径零残留。
+
+---
+
 ## [2026-11-25] handoff | 会话交接：资料收拢完成，遗留事项清单
 
 - 语料、分析、写作素材已全部收进本仓库，GitHub 同步完成。过程见 `docs/资料收拢记录-2026-11-25.md`。

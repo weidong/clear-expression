@@ -16,9 +16,12 @@
   8. 首句过程叙述（规则 25）
   9. 改写前后信息点对比（规则 27 配套，规则 22「不要删信息」）
  10. 证据可定位（规则 30）
+ 11. 禁用分号（规则 31）
+ 12. 虚动词名词化（规则 32）
+ 13. 模糊词分级（规则 33）
 
 用法：
-  python tools/lint.py [--check long-sentences|passive|terms|punctuation|dashes|status|lead|evidence|all]
+  python tools/lint.py [--check long-sentences|passive|terms|punctuation|dashes|status|lead|evidence|semicolon|nominalization|vague|all]
                        [--max-length 25]
   python tools/lint.py --compare 原稿.md 改写稿.md
 """
@@ -429,6 +432,74 @@ def check_evidence(content):
     return hard, soft
 
 
+def check_semicolon(content):
+    """检查分号（规则 31）。
+    返回 [(行摘要,)]。
+    """
+    text = strip_markdown_structure(content)
+    issues = []
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or '❌' in line:
+            continue
+        # 代码块里的分号不属于正文问题，strip_markdown_structure 已剥离
+        if '；' in line or ';' in line:
+            issues.append((line[:80],))
+    return issues
+
+
+NOMINALIZATION_PATTERN = re.compile(
+    r'(进行|做出|予以|加以|开展|实施)\s*[一-龥A-Za-z]+'
+)
+
+
+def check_nominalization(content):
+    """检查虚动词名词化（规则 32）。
+    返回 [(句子, 模式)]。
+    """
+    sentences = split_sentences(content)
+    findings = []
+    for s in sentences:
+        if '❌' in s:
+            continue
+        m = NOMINALIZATION_PATTERN.search(s)
+        if m:
+            findings.append((s[:80], m.group(0)))
+    return findings
+
+
+STRONG_VAGUE = ['可能', '大概', '也许', '或许', '好像', '似乎',
+                '看起来', '想必', '不一定', '不太可能']
+WEAK_VAGUE = ['最好', '可以考虑', '一些', '若干', '之类的', '类似的',
+              '等等', '非常', '极其', '相当', '十分', '无比', '颇为']
+
+
+def check_vague_words(content):
+    """检查模糊词分级（规则 33）。
+    强模糊词：出现 1 次即报。
+    弱模糊词：同一段落 ≥3 个才报。
+    返回 (强模糊词问题列表, 弱模糊词问题列表)。
+    """
+    text = strip_markdown_structure(content)
+    strong_issues = []
+    weak_issues = []
+
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or '❌' in line:
+            continue
+
+        found_strong = [w for w in STRONG_VAGUE if w in line]
+        if found_strong:
+            strong_issues.append((line[:80], found_strong))
+
+        found_weak = [w for w in WEAK_VAGUE if w in line]
+        if len(found_weak) >= 3:
+            weak_issues.append((line[:80], found_weak))
+
+    return strong_issues, weak_issues
+
+
 def load_term_alternatives():
     """从 DICT.md 中提取术语及其同义表达。
 
@@ -650,6 +721,10 @@ def run_lint(check_type='all', max_sentence_length=25):
         'lead_issues': [],
         'evidence_issues': [],
         'evidence_soft': [],
+        'semicolon_issues': [],
+        'nominalization_issues': [],
+        'vague_strong': [],
+        'vague_weak': [],
     }
 
     for page_path in all_pages:
@@ -722,6 +797,36 @@ def run_lint(check_type='all', max_sentence_length=25):
                     'page': rel_path,
                     'sentence': s[:80] + ('...' if len(s) > 80 else ''),
                     'issue': issue
+                })
+
+        if check_type in ['all', 'semicolon']:
+            for row in check_semicolon(content):
+                report['semicolon_issues'].append({
+                    'page': rel_path,
+                    'line': row[0]
+                })
+
+        if check_type in ['all', 'nominalization']:
+            for s, pattern in check_nominalization(content):
+                report['nominalization_issues'].append({
+                    'page': rel_path,
+                    'sentence': s[:80],
+                    'pattern': pattern
+                })
+
+        if check_type in ['all', 'vague']:
+            strong, weak = check_vague_words(content)
+            for line, words in strong:
+                report['vague_strong'].append({
+                    'page': rel_path,
+                    'line': line,
+                    'words': words
+                })
+            for line, words in weak:
+                report['vague_weak'].append({
+                    'page': rel_path,
+                    'line': line,
+                    'words': words
                 })
 
         if check_type in ['all', 'punctuation']:
@@ -887,6 +992,37 @@ def format_report(report):
     if soft:
         output += f"    ℹ️  另有 {len(soft)} 处引用文档未写行号或章节（不计入问题数）\n"
 
+    # 禁用分号
+    n = len(report.get('semicolon_issues', []))
+    output += f"\n  ✂️  禁用分号：{n} 处\n"
+    if n > 0:
+        for item in report['semicolon_issues'][:5]:
+            output += f"    • [{item['page']}] {item['line']}\n"
+    else:
+        output += "    ✅ 正文无分号\n"
+
+    # 虚动词名词化
+    n = len(report.get('nominalization_issues', []))
+    output += f"\n  🧩 虚动词名词化：{n} 处\n"
+    if n > 0:
+        for item in report['nominalization_issues'][:5]:
+            output += f"    • [{item['page']}] ({item['pattern']}) {item['sentence']}\n"
+    else:
+        output += "    ✅ 动作词使用明确\n"
+
+    # 模糊词
+    strong = report.get('vague_strong', [])
+    weak = report.get('vague_weak', [])
+    n = len(strong)
+    output += f"\n  🌫️  模糊词（强）：{n} 处\n"
+    if n > 0:
+        for item in strong[:5]:
+            output += f"    • [{item['page']}] {', '.join(item['words'])} — {item['line']}\n"
+    else:
+        output += "    ✅ 无强模糊词\n"
+    if weak:
+        output += f"    ℹ️  另有 {len(weak)} 处弱模糊词段落（≥3 个/段，不计入问题数）\n"
+
     # frontmatter
     n = len(report['frontmatter_issues'])
     output += f"\n  📋 Frontmatter 问题：{n} 处\n"
@@ -930,7 +1066,10 @@ def format_report(report):
         len(report['broken_links']) +
         len(report.get('status_issues', [])) +
         len(report.get('lead_issues', [])) +
-        len(report.get('evidence_issues', []))
+        len(report.get('evidence_issues', [])) +
+        len(report.get('semicolon_issues', [])) +
+        len(report.get('nominalization_issues', [])) +
+        len(report.get('vague_strong', []))
     )
 
     output += f"""
@@ -957,6 +1096,7 @@ def main():
                         choices=['all', 'long-sentences', 'passive',
                                  'terms', 'sources', 'punctuation', 'dashes',
                                  'status', 'lead', 'evidence',
+                                 'semicolon', 'nominalization', 'vague',
                                  'frontmatter', 'backlinks'],
                         help='检查类型（默认 all）')
     parser.add_argument('--max-length', type=int, default=25,
