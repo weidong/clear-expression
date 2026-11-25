@@ -1,12 +1,12 @@
 # ASD-STE100 中文材料结构化提取
 
 > 分析对象（只读，未改动）：
-> - [asd-ste100-writing-rules.zh-CN.md](D:/Projects/learn-ai/asd-ste100-docs/zh-translation/asd-ste100-writing-rules.zh-CN.md)（3091 行，9 节 53 条规则 + 8 条一般建议）
-> - [asd-ste100-selected-dictionary.zh-CN.md](D:/Projects/learn-ai/asd-ste100-docs/zh-translation/asd-ste100-selected-dictionary.zh-CN.md)（208 行，编者选编，非逐条翻译）
-> - [highlights.md](D:/Projects/learn-ai/asd-ste100-docs/ste100-markdown/front-matter/highlights.md)（Issue 9 相对旧版的全部变更清单）
-> - [general-introduction.md](D:/Projects/learn-ai/asd-ste100-docs/ste100-markdown/front-matter/general-introduction.md)（定位、用途、边界）
-> - [dictionary-introduction.md](D:/Projects/learn-ai/asd-ste100-docs/ste100-markdown/part2-dictionary/dictionary-introduction.md)（词典导言，本报告第二部分的骨架）
-> - [sample-entries.md](D:/Projects/learn-ai/asd-ste100-docs/ste100-markdown/part2-dictionary/sample-entries.md)（A 与 W–Y 各 5 页词条实样）
+> - [asd-ste100-writing-rules.zh-CN.md](reference/ste100/03_中文翻译/zh-translation/asd-ste100-writing-rules.zh-CN.md)（3091 行，9 节 53 条规则 + 8 条一般建议）
+> - [asd-ste100-selected-dictionary.zh-CN.md](reference/ste100/03_中文翻译/zh-translation/asd-ste100-selected-dictionary.zh-CN.md)（208 行，编者选编，非逐条翻译）
+> - [highlights.md](reference/ste100/02_英文提取版/ste100-markdown/front-matter/highlights.md)（Issue 9 相对旧版的全部变更清单）
+> - [general-introduction.md](reference/ste100/02_英文提取版/ste100-markdown/front-matter/general-introduction.md)（定位、用途、边界）
+> - [dictionary-introduction.md](reference/ste100/02_英文提取版/ste100-markdown/part2-dictionary/dictionary-introduction.md)（词典导言，本报告第二部分的骨架）
+> - [sample-entries.md](reference/ste100/02_英文提取版/ste100-markdown/part2-dictionary/sample-entries.md)（A 与 W–Y 各 5 页词条实样）
 >
 > 标注约定：凡引号内英文/中文原句均为材料原文；凡"（分析）"字样为提取者的判断，不是原文。
 

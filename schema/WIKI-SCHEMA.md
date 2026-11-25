@@ -10,7 +10,7 @@
 ## 一、目录结构
 
 ```
-expr-wiki/
+clear-expression/
 ├── raw/                     # 原始来源（只读，LLM 不修改）
 │   ├── articles/            # 网页文章剪藏
 │   ├── papers/              # 学术论文
