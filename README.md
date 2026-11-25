@@ -1,5 +1,8 @@
 # Clear Expression Standard
 
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC_BY_4.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![Python 3](https://img.shields.io/badge/Python-3-3776AB.svg)](https://www.python.org/)
+
 > 简明表达规范。让信息只有一种读法。
 
 基于 **ASD-STE100** 受控语言规范改编的个人知识库系统原型。本库的写作规范定名为 **简明表达规范**，英文名 **Clear Expression Standard**，不设英文缩写。
