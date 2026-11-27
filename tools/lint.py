@@ -493,6 +493,8 @@ def check_vague_words(content):
     """检查模糊词分级（规则 33）。
     强模糊词：出现 1 次即报。
     弱模糊词：同一段落 ≥3 个才报。
+    例外一：明确标注的建议或推荐场景。
+    例外二：同时写了条件与来源的真实不确定性。
     返回 (强模糊词问题列表, 弱模糊词问题列表)。
     """
     text = strip_markdown_structure(content)
@@ -504,12 +506,17 @@ def check_vague_words(content):
         if not line or '❌' in line:
             continue
 
+        advice_context = '（建议' in line or '（推荐' in line
+        has_source = bool(re.search(r'\[\d+\]', line))
+        has_condition = bool(re.search(r'如果|当|若|在.{0,20}时', line))
+        hedged_uncertainty = has_source and has_condition
+
         found_strong = [w for w in STRONG_VAGUE if w in line]
-        if found_strong:
+        if found_strong and not advice_context and not hedged_uncertainty:
             strong_issues.append((line[:80], found_strong))
 
         found_weak = [w for w in WEAK_VAGUE if w in line]
-        if len(found_weak) >= 3:
+        if len(found_weak) >= 3 and not advice_context:
             weak_issues.append((line[:80], found_weak))
 
     return strong_issues, weak_issues
