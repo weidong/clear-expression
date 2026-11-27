@@ -1383,26 +1383,54 @@ Markdown 是一种纯文本标记语言。它用简单符号表示标题、列�
 
           <div style="margin-top: 32px; text-align: left; max-width: 520px; margin-left: auto; margin-right: auto;">
             <h2 style="font-size: 18px; margin-bottom: 12px; color: var(--text);">📁 目录结构</h2>
-            <pre style="background: var(--code-bg); padding: 14px; border-radius: 6px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.6;">
+            <pre style="background: var(--code-bg); padding: 14px; border-radius: 6px; font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; overflow-x: auto;">
 clear-expression/
-├── raw/                    # 原始来源（只读）
-│   └── articles/
-├── wiki/                   # Wiki 页面
-│   ├── concepts/           # 概念页
-│   ├── entities/           # 实体页
-│   ├── how-to/             # 操作指南
-│   ├── comparisons/        # 对比分析
-│   └── synthesis/          # 综合分析
-├── schema/                 # 规范层
-│   ├── RULES.md            #   简明表达规范
+├── raw/                    # 第 1 层：原始来源（只读）
+│   ├── articles/           #   网页文章剪藏
+│   ├── papers/             #   学术论文
+│   └── images/             #   图片素材
+│
+├── reference/              # 外部标准语料（只读参照）
+│   ├── ste100/             #   ASD-STE100：原文、中译与解读
+│   └── writing/            #   写作风格指南
+│
+├── research/               # 规则来源与研究记录
+│   ├── analysis/           #   现状与缺口分析
+│   └── extraction/         #   STE100 规则与词典提取
+│
+├── wiki/                   # 第 2 层：Wiki 页面（LLM 写入，人类阅读）
+│   ├── concepts/           #   概念页面
+│   ├── entities/           #   实体页面
+│   ├── how-to/             #   操作指南页面
+│   ├── comparisons/        #   对比分析页面
+│   └── synthesis/          #   综合分析页面
+│
+├── schema/                 # 第 3 层：规范层
+│   ├── RULES.md            #   简明表达规范（34 条）
 │   ├── DICT.md             #   简明词表
-│   └── WIKI-SCHEMA.md      #   知识库模式
-├── tools/                  # Python 工具
-│   ├── ingest.py           #   摄入
-│   ├── query.py            #   查询
-│   └── lint.py             #   整理
+│   ├── WIKI-SCHEMA.md      #   Wiki 模式规范
+│   └── REWRITE-PROMPT.md   #   改写提示词
+│
+├── tools/                  # Python 工具脚本
+│   ├── wiki_common.py      #   通用函数
+│   ├── ingest.py           #   摄入工具
+│   ├── query.py            #   查询工具
+│   └── lint.py             #   检查工具
+│
+├── viewer/                 # Web 查看器
+│   └── index.html          #   单页 Wiki 浏览器
+│
+├── docs/                   # 说明文档
+│   ├── 简明表达规范和应用手册.md
+│   ├── 搭建方案.md
+│   ├── 原理大白话-为什么一份gist能搭出整套LLM-Wiki.md
+│   └── 资料收拢记录-2026-11-25.md
+│
 ├── index.md                # 内容索引
-└── log.md                  # 操作日志</pre>
+├── log.md                  # 操作日志
+├── AGENTS.md               # AI 工作入口
+├── README.md               # 本文件
+└── LICENSE                 # 许可协议</pre>
           </div>
         </div>
       `;

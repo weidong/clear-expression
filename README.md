@@ -33,47 +33,49 @@ clear-expression/
 ├── raw/                    # 第 1 层：原始来源（只读）
 │   ├── articles/           #   网页文章剪藏
 │   ├── papers/             #   学术论文
-│   ├── books/              #   书籍章节
-│   ├── notes/              #   个人笔记
 │   └── images/             #   图片素材
 │
 ├── reference/              # 外部标准语料（只读参照）
-│   ├── ste100/             #   ASD-STE100：原文 PDF、英文提取、中译、解读、白皮书
-│   └── writing/            #   写作风格指南、4 份参考、3 张场景卡
+│   ├── ste100/             #   ASD-STE100：原文、中译与解读
+│   └── writing/            #   写作风格指南
 │
 ├── research/               # 规则来源与研究记录
-│   ├── analysis/           #   现状分析、缺口分析、外部用法评价、推文整理
-│   └── extraction/         #   STE100 规则与词典的结构化提取
+│   ├── analysis/           #   现状与缺口分析
+│   └── extraction/         #   STE100 规则与词典提取
 │
 ├── wiki/                   # 第 2 层：Wiki 页面（LLM 写入，人类阅读）
 │   ├── concepts/           #   概念页面
-│   ├── entities/           #   实体页面（人/组织/产品/项目）
+│   ├── entities/           #   实体页面
 │   ├── how-to/             #   操作指南页面
 │   ├── comparisons/        #   对比分析页面
 │   └── synthesis/          #   综合分析页面
 │
-├── schema/                 # 第 3 层：规范层（LLM 的"宪法"）
-│   ├── RULES.md            #   简明表达规范（34 条表达规则）
-│   ├── DICT.md             #   简明词表（领域术语表）
-│   └── WIKI-SCHEMA.md      #   Wiki 模式规范
+├── schema/                 # 第 3 层：规范层
+│   ├── RULES.md            #   简明表达规范（34 条）
+│   ├── DICT.md             #   简明词表
+│   ├── WIKI-SCHEMA.md      #   Wiki 模式规范
+│   └── REWRITE-PROMPT.md   #   改写提示词
 │
 ├── tools/                  # Python 工具脚本
-│   ├── wiki_common.py      #   通用工具函数
+│   ├── wiki_common.py      #   通用函数
 │   ├── ingest.py           #   摄入工具
 │   ├── query.py            #   查询工具
-│   └── lint.py             #   整理工具
+│   └── lint.py             #   检查工具
 │
 ├── viewer/                 # Web 查看器
 │   └── index.html          #   单页 Wiki 浏览器
 │
-├── docs/                   # 说明文档（给人读）
-│   ├── 简明表达规范和应用手册.md   #   规范全解与实操指南
+├── docs/                   # 说明文档
+│   ├── 简明表达规范和应用手册.md
 │   ├── 搭建方案.md
-│   └── 原理大白话-为什么一份gist能搭出整套LLM-Wiki.md
+│   ├── 原理大白话-为什么一份gist能搭出整套LLM-Wiki.md
+│   └── 资料收拢记录-2026-11-25.md
 │
-├── index.md                # Wiki 索引（内容导向）
-├── log.md                  # 操作日志（时间导向）
-└── README.md               # 本文件
+├── index.md                # 内容索引
+├── log.md                  # 操作日志
+├── AGENTS.md               # AI 工作入口
+├── README.md               # 本文件
+└── LICENSE                 # 许可协议
 ```
 
 ## 🚀 快速开始

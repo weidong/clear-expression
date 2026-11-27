@@ -5,6 +5,15 @@
 
 ---
 
+## [2026-11-27] update | 目录树同步实际仓库结构
+
+- README 与查看器首页的目录树统一为实际结构，删除不存在的 `raw/books` 与 `raw/notes`。
+- 补 `raw/images`、`reference/`、`research/`、`viewer/`、`docs/`，以及 `schema/REWRITE-PROMPT.md`、`tools/wiki_common.py`、`AGENTS.md`、`LICENSE`。
+- 查看器目录树加横向滚动，避免长文件名溢出。
+- 验证：两处目录树逐字一致，树中路径全部存在。
+
+---
+
 ## [2026-11-27] update | Web 查看器补齐 8 个概念页
 
 - `viewer/index.html` 的 `wikiPages` 从 10 个内容页增至 18 个，补表达模式、智能体、上下文窗口、Token、受控语言、双向链接、Markdown、个人知识库。
